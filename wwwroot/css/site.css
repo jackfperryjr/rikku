@@ -1,0 +1,284 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+#main {
+  display: none;
+}
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Sticky footer styles */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  line-height: 60px; /* Vertically center the text there */
+}
+.img-user {
+  margin:23px auto;
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  object-fit: fill;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border: 2px solid #ffffff;
+}
+.img-user-navbar {
+  border-radius:50%;
+  height:30px;
+  width:30px;
+}
+.img-user-overlay {
+  margin: 32px auto;
+  position: absolute;
+  bottom: 0;
+  height: 200px;
+  width: 200px;
+  transition: .1s ease;
+}
+.fa-camera {
+  color: rgba(0,0,0,.5);
+  font-size: 25px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  /* transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%); */
+  text-align: center;
+}
+.margin-auto {
+  margin: 0 auto;
+}
+.top-margin {
+  margin-top: 60px;
+}
+.bottom-margin {
+  margin-top: 20px;
+}
+.message-input {
+  min-height: 30px;
+  height: 33.5px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  border: transparent;
+  padding: 0 5px 0 5px;
+}
+.message-container {
+  min-height: 450px; 
+  max-height: 450px; 
+  overflow-y: scroll; 
+  list-style-type: none;
+  border-radius: 5px; 
+  padding: 5px 0;
+}
+.user-container {
+  min-height: 450px; 
+  max-height: 600px; 
+  width: 80%;
+  overflow-y: scroll; 
+  list-style-type: none;
+  border-radius: 5px; 
+  padding: 5px 0;
+}
+::placeholder {
+  color: #9e9e9e;
+}
+input:focus::-webkit-input-placeholder { color:transparent; }
+input:focus:-moz-placeholder { color:transparent; } /* FF 4-18 */
+input:focus::-moz-placeholder { color:transparent; } /* FF 19+ */
+input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
+
+.message-compose {
+  background-color: #007bff;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px #9e9e9e;
+  font-size:28px;
+  position:fixed; 
+  bottom: 15%;
+  right: 5%;
+  z-index: 2000;
+}
+.footer-nav {
+  width: 100%;
+  background-color: #ffffff;
+  position: fixed;
+  bottom: 0;
+  font-size: 26px;
+  text-align: center;
+  border-top: 1px solid #9e9e9e;
+  padding: 10px 0 30px 0;
+}
+.footer-nav a {
+  padding: 0 5%;
+}
+.navbar-fixed {
+  width: 100%;
+  height: 60px;
+  background-color: #ffffff;
+  position: fixed;
+  top: 0;
+  font-size: 20px;
+  text-align: center;
+  border-bottom: 1px solid #9e9e9e;
+  padding: 10px 5px 30px 5px;
+  z-index: 2000;
+}
+.btn-logout {
+  height: 30px;
+  width: 30px;
+  background-color: #ff4444;
+  margin-top: 2px;
+  margin-left: 7px;
+  border-radius: 50%;
+  border: none;
+  float: right;
+}
+.search {
+  padding: 5px;
+  width: 100%;
+  background-color:#eceff1;
+  border:1px solid transparent;
+}
+
+@-webkit-keyframes spinning /* Safari and Chrome */ {
+  from {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinning {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.spinning {
+  -webkit-animation: spinning 2.25s linear infinite;
+  -moz-animation: spinning 2.25s linear infinite;
+  -ms-animation: spinning 2.25s linear infinite;
+  -o-animation: spinning 2.25s linear infinite;
+  animation: spinning 2.25s linear infinite;
+}
+
+@-webkit-keyframes slideInRight {
+  from {
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slideInRight {
+  -webkit-animation-name: slideInRight;
+  animation-name: slideInRight;
+}
+
+@-webkit-keyframes slideOutLeft {
+  from {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    visibility: hidden;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    visibility: hidden;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+.slideOutLeft {
+  -webkit-animation-name: slideOutLeft;
+  animation-name: slideOutLeft;
+}

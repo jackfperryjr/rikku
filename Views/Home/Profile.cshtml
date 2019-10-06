@@ -1,0 +1,49 @@
+@model Rikku.Data.ApplicationUser
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+
+<div class="row text-center top-margin" style="height:150px;">
+    <img id="img-output-wallpaper" style="height:150px;width:100%;" src="@Model.Wallpaper" style="cursor:pointer;">
+    <div class="col-md-4" style="margin: -150px auto 0 auto;">
+        <img class="img-user bottom-margin" src="@Model.Picture" title="Picture of user!">
+    </div>
+</div>
+<div class="row top-margin" style="margin-top: 80px;">
+    <div class="col-md-4" style="margin:0 0 10px auto;">
+        <h3 class="text-center">@Model.UserName</h3>
+        <h5 class="text-center">@Model.City, @Model.State</h5>
+        <h5></h5>
+        <h5 style="margin: 20px 0;">@Model.Profile</h5>
+        <h5></h5>
+    </div>
+</div>
+
+<div class="row text-center" style="margin-bottom: 50px;">
+    <a class="btn btn-primary" style="width:45%;margin:0 5px 0 auto;" data-toggle="modal" href="@("#newMessageModal")">Message</a>
+    <a class="btn btn-secondary" style="width:45%;margin:0 auto 0 5px;" asp-action="Friends">Go Back</a>
+    <div class="modal fade top-margin" id="@("newMessageModal")" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                @using(Html.BeginForm("SendMessage","Message"))
+                {
+                    <div class="modal-header">
+                        <h4 class="modal-title text-center">Compose Message</h4>
+                        <button type="button" class="close float-right" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <input id="receiver-id" type="hidden" name="id" value="@Model.Id" />
+                        <h1>@Model.UserName</h1>
+                        <input name="content" class="form-group input-group message-input" placeholder="Type message here..." />
+                        <button type="button" class="btn btn-secondary float-right" style="margin-left: 5px;" data-dismiss="modal">Cancel</button> 
+                        <button class="btn btn-primary float-right">Send</button>
+                        <div class="bottom-margin">&nbsp;</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

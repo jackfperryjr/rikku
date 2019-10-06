@@ -1,0 +1,24 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}    
+<div class="footer-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    <a asp-controller="Home" asp-action="Index" class="transition"><i class="text-primary fas fa-home"></i></a>
+    <a asp-controller="Message" asp-action="Index" class="transition"><i class="text-primary fas fa-envelope-square"></i></a>
+    <a asp-controller="Home" asp-action="Friends" class="transition"><i class="text-primary fas fa-users"></i></a>
+    <a asp-area="Identity" asp-page="/Account/Manage/Index" class="transition"><i class="text-primary fas fa-user-circle"></i></a>
+    @if (User.IsInRole("Admin"))
+    {
+    <a asp-controller="Home" asp-action="Admin" class="transition"><i class="text-primary fas fa-users-cog"></i></a>
+    }
+}
+else
+{
+    <a asp-controller="Home" asp-action="Index"><i class="text-primary fas fa-home"></i></a>
+    <a asp-controller="Home" asp-action="About"><i class="text-primary fas fa-info-circle"></i></a>
+}
+</div>

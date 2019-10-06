@@ -1,0 +1,46 @@
+@model IEnumerable<Rikku.Data.ApplicationUser>
+@using Rikku.Data
+@using Rikku.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+<div class="container">
+    <form asp-controller="Home" asp-action="Friends" method="get">
+        <div class="row" style="position: fixed; top: 70px;width: 330px;background-color: #fff;">
+            <div class="input-group" style="background-color:#fff;">
+                <input class="form-control border-right-0" id="search" type="text" name="SearchString" placeholder='Search...' />
+                <span class="input-group-append">
+                    <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
+                </span>                
+            </div>
+        </div>
+    </form>
+    <div class="container" style="border-radius: 5px;border: 1px solid #ffffff; min-height: 800px; max-height: 1000px; overflow-y: scroll;padding-top:140px;">                        
+        @foreach (var users in Model) 
+        {
+            <a asp-action="Profile" asp-route-id="@users.Id">
+                <div class="row" style="padding-left:15px;margin-bottom:10px;">
+                    <div class="col-xs-5">
+                        <img src="@users.Picture" style="margin-right: 10px;width:70px;height70px;" />
+                    </div>
+                    <div class="col-xs-7">
+                        <span style="font-size: 18px;">@users.UserName</span> <br/>
+                        <span style="font-size: 16px;">@users.City, @users.State</span>
+                    </div>
+                </div>
+            </a>
+        }
+        @if (!Model.Any())
+        {
+            <div class="row">
+                <div class="col-xs-10" style="margin: 0 auto;">
+                    <strong>There's nobody like that here.</strong>
+                </div>
+            </div>
+        }
+        </div>
+    </div>
+</div>

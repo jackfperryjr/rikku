@@ -1,0 +1,61 @@
+@model IEnumerable<Rikku.Models.ApplicationUserMessageViewModel>
+@using Rikku.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+<h4 class="top-margin">Messages</h4>
+    <div class="container">
+        <div class="panel-body">
+            <form method="post" enctype="multipart/form-data">
+            <ul id="contacts" class="list-group message-container">                        
+                @foreach (var users in Model) 
+                {
+                    @if(users.Email != user.Email)
+                    {
+                        <a asp-action="Chat" asp-route-id="@users.Id">
+                            <li>
+                                <img class="img-user-navbar" src="@users.Picture" style="margin-right: 10px;" /> <span style="font-size: 18px;">@users.UserName - @users.CreateDate</span>
+                            </li>
+                        </a>
+                    }
+                }
+            </ul>
+            </form>
+            <a class="message-compose" data-toggle="modal" href="@("#newMessageModal")"><i class="text-white far fa-comment" style="margin:25%;"><span style="font-size: 16px;">&#43;</span></i></a>
+            <div class="modal fade top-margin" id="@("newMessageModal")" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        @using(Html.BeginForm("SendMessage","Message"))
+                        {
+                            <div class="modal-header">
+                                <h4 class="modal-title text-center">Compose Message</h4>
+                                <button type="button" class="close float-right" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <input id="receiver-id" type="hidden" name="id" value="" />
+                                <select id="select-receiver" class="form-group form-control">
+                                    <option>Select user...</option>
+                                    @foreach (var u in @ViewBag.Users) 
+                                    {
+                                        @if (u.Id != user.Id)
+                                        {
+                                            <option value="@u.Id">
+                                                <span><img class="img-user-navbar" src="@u.Picture" /> @u.UserName</span>
+                                            </option>
+                                        }
+                                    }
+                                </select>
+                                <input name="content" class="form-group input-group message-input" placeholder="Type message here..." />
+                                <button type="button" class="btn btn-secondary float-right" style="margin-left: 5px;" data-dismiss="modal">Cancel</button> 
+                                <button class="btn btn-primary float-right">Send</button>
+                                <div class="bottom-margin">&nbsp;</div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

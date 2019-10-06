@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Start of PWA meta elements -->
+    <meta name=”apple-mobile-web-app-capable” content=”yes”>
+    <meta name=”mobile-web-app-capable” content=”yes”>
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="format-detection" content="address=no">    
+    <meta name="apple-mobile-web-app-title" content="FFapp">
+    <meta name="apple-mobile-web-app-orientations" content="portrait">
+    <!-- End of PWA meta elements -->
+    <title>FFapp</title>
+    <!-- Start of PWA icons -->
+    <!-- Home screen icon -->
+    <link rel="apple-touch-icon" href="~/images/icons/whyapp-touch.png">
+    <!-- iPhone Xs Max (1242px x 2688px) --> 
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" href="~/images/icons/whyapp-1242x2688.png">
+    <!-- iPhone Xr (828px x 1792px) --> 
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" href="~/images/icons/whyapp-828x1792.png">
+    <!-- iPhone X, Xs (1125px x 2436px) --> 
+    <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" href="~/images/icons/whyapp-1125x2436.png">
+    <!-- iPhone 8 Plus, 7 Plus, 6s Plus, 6 Plus (1242px x 2208px) --> 
+    <link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" href="~/images/icons/whyapp-1242x2208.png">
+    <!-- iPhone 8, 7, 6s, 6 (750px x 1334px) --> 
+    <link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="~/images/icons/whyapp-750x1334.png">
+    <!-- iPad Pro 12.9" (2048px x 2732px) --> 
+    <link rel="apple-touch-startup-image" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" href="~/images/icons/whyapp-2048x2732.png">
+    <!-- iPad Pro 11” (1668px x 2388px) --> 
+    <link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" href="~/images/icons/whyapp-1668x2388.png">
+    <!-- iPad Pro 10.5" (1668px x 2224px) --> 
+    <link rel="apple-touch-startup-image" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" href="~/images/icons/whyapp-1668x2224.png">
+    <!-- iPad Mini, Air (1536px x 2048px) --> 
+    <link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" href="~/images/icons/whyapp-1536x2048.png">
+    <!-- End of PWA icons -->
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+              crossorigin="anonymous"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"/>
+    </environment>
+    <script src="https://kit.fontawesome.com/451c0be92c.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar-fixed">
+            <partial name="_LoginPartial" />
+        </nav>
+    </header>
+    <div class="container">
+        <main id="main" role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer>
+        <partial name="_FooterMenuPartial" />
+    </footer>
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+        </script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
+        </script>
+    </environment>
+    @RenderSection("Scripts", required: false)
+    <script>
+        $(document).ready(function() {
+            $("#main").fadeIn(200);
+            $("a.transition").click(function(event){
+                event.preventDefault();
+                linkLocation = this.href;
+                $("#main").fadeOut(200, redirectPage);      
+            });
+                
+            function redirectPage() {
+                window.location = linkLocation;
+            }
+        });
+
+        $("#img-input-user").change(function(event) {
+            let imgPath = URL.createObjectURL(event.target.files[0]);
+            $("#img-output-user").fadeIn("fast").attr('src',imgPath); 
+        }); 
+
+        $("#img-input-wallpaper").change(function(event) {
+            let imgPath = URL.createObjectURL(event.target.files[0]);
+            $("#img-output-wallpaper").fadeIn("fast").attr('src',imgPath); 
+        }); 
+
+        $("#select-receiver").change(function() {
+            let id = $(this).val();
+            let target = $('#receiver-id'); 
+            $(target).attr('value', id);
+        });
+    </script>
+</body>
+</html>

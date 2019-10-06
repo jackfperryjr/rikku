@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+@if (SignInManager.IsSignedIn(User))
+{
+    <h1 class="float-left" style="margin-top:-10px;"><img src="~/icons/chocobo/chocobo-hearts.png" style="height:40px; width:auto;"> <span style="font-size:22px;">FFapp</span></h1>
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+        <button type="submit" class="float-right"><i class="text-warning fas fa-sign-out-alt"></i></button>
+    </form>
+    <a class="float-right" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><img class="img-user-navbar" src=@user.Picture /></a>
+}
+else
+{
+    <h1 class="float-left" style="margin-top:-10px;"><img src="~/icons/chocobo/chocobo-hearts.png" style="height:40px; width:auto;"> <span style="font-size:22px;">FFapp</span></h1>
+    <a class="nav-link text-dark float-right" asp-area="Identity" asp-page="/Account/Register"><i class="text-primary fas fa-book-reader"></i></a>
+    <a class="nav-link text-dark float-right" asp-area="Identity" asp-page="/Account/Login"><i class="text-primary fas fa-sign-in-alt"></i></a>
+}
