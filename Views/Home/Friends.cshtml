@@ -9,16 +9,11 @@
 }
 <div class="container">
     <form asp-controller="Home" asp-action="Friends" method="get">
-        <div class="row" style="position: fixed; top: 70px;width: 330px;background-color: #fff;">
-            <div class="input-group" style="background-color:#fff;">
-                <input class="form-control border-right-0" id="search" type="text" name="SearchString" placeholder='Search...' />
-                <span class="input-group-append">
-                    <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
-                </span>                
-            </div>
+        <div class="row" style="position: fixed; top: 70px;width: 330px;">
+            <input class="form-group input-group message-input" id="search" type="text" name="SearchString" placeholder='Search...' />
         </div>
     </form>
-    <div class="container" style="border-radius: 5px;border: 1px solid #ffffff; min-height: 800px; max-height: 1000px; overflow-y: scroll;padding-top:140px;">                        
+    <div class="container" style="min-height: 800px; max-height: 1000px; overflow-y: scroll;padding-top:140px;">                        
         @foreach (var users in Model) 
         {
             <a asp-action="Profile" asp-route-id="@users.Id">

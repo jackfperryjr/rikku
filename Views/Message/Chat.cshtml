@@ -63,8 +63,15 @@
             <input type="hidden" name="id" value="@receiverId" />
         }
         <div class="col-md-6 margin-auto">
-            <input name="content" class="form-group input-group message-input" placeholder="Type message here..." required/>
-            <button class="input-group-button btn btn-primary" style="width:100%;">Send</button>
+            <input id="message-input" name="content" class="form-group input-group message-input" placeholder="Type message here..." required/>
+            <button id="send-button" class="input-group-button btn btn-primary" style="width:100%;">Send</button>
         </div>
     </div>
     }
+<script>
+    let sender = @senderId;
+    let receiver = @receiverId;
+    let user = @user.Id;
+</script>
+<script src="~/lib/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/chat.js"></script>
