@@ -34,6 +34,8 @@ namespace Rikku.Controllers
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            ViewBag.MessageCount = GetMessageCount();
+
             var users = (from user in _context.Users  
                         select new  
                         {  
@@ -68,6 +70,8 @@ namespace Rikku.Controllers
         [Authorize(Roles="Admin")]
         public IActionResult Admin(string searchString)
         {
+            ViewBag.MessageCount = GetMessageCount();
+
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var users = (from user in _context.Users  
@@ -81,7 +85,8 @@ namespace Rikku.Controllers
                             Email = user.Email,
                             City = user.City,
                             State = user.State,
-                            ZipCode = user.ZipCode
+                            ZipCode = user.ZipCode,
+                            RoleName = user.RoleName
                         }).ToList()
                         .Select(u => new ApplicationUser()  
                         {  
@@ -93,7 +98,8 @@ namespace Rikku.Controllers
                             Email = u.Email,
                             City = u.City,
                             State = u.State,
-                            ZipCode = u.ZipCode
+                            ZipCode = u.ZipCode,
+                            RoleName = u.RoleName
                         }).Where(u => u.Id != userId);  
                         
             if (!String.IsNullOrEmpty(searchString))
@@ -156,6 +162,7 @@ namespace Rikku.Controllers
             else 
             {
                 await _userManager.AddToRoleAsync(user, userRole);
+                user.RoleName = userRole;
             }
 
             await _context.SaveChangesAsync();
@@ -179,6 +186,8 @@ namespace Rikku.Controllers
         [Authorize]
         public IActionResult Friends(string searchString)
         {
+            ViewBag.MessageCount = GetMessageCount();
+
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var users = (from user in _context.Users  
@@ -231,6 +240,8 @@ namespace Rikku.Controllers
         [Authorize]
         public async Task<IActionResult> Profile(string id)
         {
+            ViewBag.MessageCount = GetMessageCount();
+
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
  
             return View(user);        
@@ -245,6 +256,21 @@ namespace Rikku.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public int GetMessageCount()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var count = (from message in _context.Messages
+                                    select new
+                                    {
+                                        MessageId = message.MessageId,
+                                        ReceiverId = message.ReceiverId,
+                                        SenderId = message.SenderId,
+                                        CreateDate = message.CreateDate,
+                                        MessageReadFlg = message.MessageReadFlg
+                                    }).Where(m => (m.ReceiverId == userId )&& (m.MessageReadFlg == 0)).Count(); 
+            return count;
         }
     }
 }

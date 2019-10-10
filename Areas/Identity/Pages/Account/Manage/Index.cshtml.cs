@@ -208,7 +208,7 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
                                 filestream.Position = 0;
                                 await newBlob.UploadFromStreamAsync(filestream);
                             }
-                            user.Picture = "https://whyappstorage.blob.core.windows.net/images/User-" + user.Id + extension;
+                            user.Picture = "https://rikku.blob.core.windows.net/images/User-" + user.Id + extension;
                         }
                     }
                 }
@@ -233,7 +233,7 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
                                 filestream.Position = 0;
                                 await newBlob.UploadFromStreamAsync(filestream);
                             }
-                            user.Wallpaper = "https://whyappstorage.blob.core.windows.net/images/User-Wallpaper-" + user.Id + extension;
+                            user.Wallpaper = "https://rikku.blob.core.windows.net/images/User-Wallpaper-" + user.Id + extension;
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -30,6 +31,8 @@ namespace Rikku.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.MessageCount = GetMessageCount();
+
             ViewBag.Users = (from user in _context.Users  
                         select new  
                         {  
@@ -81,6 +84,8 @@ namespace Rikku.Controllers
 
         public IActionResult Chat(string id)
         {    
+            ViewBag.MessageCount = GetMessageCount();
+
             ViewBag.PictureId = id;
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -103,21 +108,38 @@ namespace Rikku.Controllers
                             .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
                                             (c.ReceiverId == userId.ToString() && c.SenderId == id))
                             .OrderBy(c => c.CreateDate);
-
+            
+            foreach (MessageModel message in _context.Messages.Where(c => c.ReceiverId == userId.ToString() && c.SenderId == id))
+            {
+                message.MessageReadFlg = 1;
+            }
+            
+            _context.SaveChanges();
             return View(messages.ToList());
         }
 
-        public IActionResult SendMessage(string id, string content, MessageModel message)
+        public async Task<IActionResult> SendMessage(string id, string content, MessageModel message)
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var character = await _userManager.FindByIdAsync(id);
 
             message.ReceiverId = id;
             message.Content = content;
             message.SenderId = userId;
             message.CreateDate = DateTime.Now;
 
-            _context.Messages.Add(message);
-            _context.SaveChangesAsync();
+            if (character.RoleName == "SuperUser")
+            {
+                message.MessageReadFlg = 1;
+                _context.Messages.Add(message);
+                await _context.SaveChangesAsync();
+                SendResponse(id, userId);
+            }
+            else 
+            {
+                _context.Messages.Add(message);
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction("Chat", new {id = id});
         }
@@ -126,6 +148,42 @@ namespace Rikku.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public int GetMessageCount()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var count = (from message in _context.Messages
+                                    select new
+                                    {
+                                        MessageId = message.MessageId,
+                                        ReceiverId = message.ReceiverId,
+                                        SenderId = message.SenderId,
+                                        CreateDate = message.CreateDate,
+                                        MessageReadFlg = message.MessageReadFlg
+                                    }).Where(m => (m.ReceiverId == userId )&& (m.MessageReadFlg == 0)).Count(); 
+            return count;
+        }
+
+        public IActionResult SendResponse(string id, string userId)
+        {
+            var responses = (from r in _context.Responses select r).Where(r => r.UserId == id);
+
+            var contents = responses.Select(x => x.Content).ToArray();
+            Random random = new Random();
+            int index = random.Next(0, contents.Count());
+
+            MessageModel message = new MessageModel();
+
+            message.ReceiverId = userId;
+            message.Content = contents[index];
+            message.SenderId = id;
+            message.CreateDate = DateTime.Now;
+            _context.Messages.Add(message);
+            _context.SaveChanges();
+
+            return Ok();
         }
     }
 }

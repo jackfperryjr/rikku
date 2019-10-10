@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebEssentials.AspNetCore.Pwa;
 using Rikku.Data;
 using Rikku.Models;
 using Rikku.Hubs;
@@ -37,6 +38,11 @@ namespace Rikku
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddSignalR();
+            // services.AddProgressiveWebApp(new PwaOptions
+            // {
+            //     RoutesToPreCache = "/Shared/_Layout.cshtml, site.min.css, site.css, site.js, chat.js",
+            //     Strategy = ServiceWorkerStrategy.NetworkFirst
+            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

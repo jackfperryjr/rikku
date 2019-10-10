@@ -18,5 +18,6 @@ namespace Rikku.Data
         public string Wallpaper { get; set; }
         [MaxLength(255)]
         public string Profile { get; set; }
+        public string RoleName { get; set; }
     }
 }

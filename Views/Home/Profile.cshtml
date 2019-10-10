@@ -24,21 +24,17 @@
 
 <div class="row text-center" style="margin-bottom: 50px;">
     <a class="btn btn-primary" style="width:45%;margin:0 5px 0 auto;" data-toggle="modal" href="@("#newMessageModal")">Message</a>
-    <a class="btn btn-secondary" style="width:45%;margin:0 auto 0 5px;" onclick="window.history.go(-1); return false;">Go Back</a>
+    <a class="btn btn-warning" style="width:45%;margin:0 auto 0 5px;" onclick="window.history.go(-1); return false;">Go Back</a>
     <div class="modal fade top-margin" id="@("newMessageModal")" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 @using(Html.BeginForm("SendMessage","Message"))
                 {
-                    <div class="modal-header">
-                        <h4 class="modal-title text-center">Compose Message</h4>
-                        <button type="button" class="close float-right" data-dismiss="modal">&times;</button>
-                    </div>
                     <div class="modal-body">
+                        <img style="height:100px;width:100px;margin-bottom:50px;" src="@Model.Picture" title="Picture of user!">
                         <input id="receiver-id" type="hidden" name="id" value="@Model.Id" />
-                        <h1>@Model.UserName</h1>
                         <input name="content" class="form-group input-group message-input" placeholder="Type message here..." />
-                        <button type="button" class="btn btn-secondary float-right" style="margin-left: 5px;" data-dismiss="modal">Cancel</button> 
+                        <button type="button" class="btn btn-warning float-right" style="margin-left: 5px;" data-dismiss="modal">Cancel</button> 
                         <button class="btn btn-primary float-right">Send</button>
                         <div class="bottom-margin">&nbsp;</div>
                     </div>

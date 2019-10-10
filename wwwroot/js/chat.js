@@ -24,7 +24,7 @@ connection.start().then(function () {
     return console.error(err.toString());
 });
 
-document.getElementById("send-button").addEventListener("click", function (event) {
+document.getElementById("send").addEventListener("click", function (event) {
     //let user = document.getElementById("user-input").value;
     let message = document.getElementById("message-input").value;
     connection.invoke("SendMessage", message).catch(function (err) {

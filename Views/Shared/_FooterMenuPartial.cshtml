@@ -8,7 +8,16 @@
 @if (SignInManager.IsSignedIn(User))
 {
     <a asp-controller="Home" asp-action="Index" class="transition"><i class="text-primary fas fa-home"></i></a>
-    <a asp-controller="Message" asp-action="Index" class="transition"><i class="text-primary fas fa-envelope-square"></i></a>
+    <a asp-controller="Message" asp-action="Index" class="transition">
+        <i class="text-primary fas fa-envelope-square">
+            @if (ViewBag.MessageCount > 0)
+            {
+                <i class="badge badge-pill badge-primary" style="font-style:normal;font-size:10px;position:fixed;bottom:50px;left:120px;">
+                    @ViewBag.MessageCount
+                </i>
+            }
+        </i>
+    </a>
     <a asp-controller="Home" asp-action="Friends" class="transition"><i class="text-primary fas fa-users"></i></a>
     <a asp-area="Identity" asp-page="/Account/Manage/Index" class="transition"><i class="text-primary fas fa-user-circle"></i></a>
     @if (User.IsInRole("Admin"))
