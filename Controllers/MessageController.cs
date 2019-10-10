@@ -77,7 +77,6 @@ namespace Rikku.Controllers
                             CreateDate = u.CreateDate
                         });  
                         
-            //users = users.OrderBy(u => u.Email);
             users = users.GroupBy(u => u.Id).Select(u => u.FirstOrDefault());
             return View(users.ToList());
         }

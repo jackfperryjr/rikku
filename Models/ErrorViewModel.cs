@@ -1,5 +1,3 @@
-using System;
-
 namespace Rikku.Models
 {
     public class ErrorViewModel

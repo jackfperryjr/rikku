@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +21,7 @@ namespace Rikku.Controllers
         [HttpGet]
         public List<ResponseModel> GetAll()
         {
-            // This is arbitrary and means nothing right now.
+            // This means nothing right now.
             var responses = from r in _context.Responses select r;
             responses = responses.OrderBy(r => r.UserId);
             return responses.ToList();
@@ -30,13 +29,11 @@ namespace Rikku.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<ResponseModel>> Get(string id) 
+        public ActionResult<ResponseModel> Get(string id) 
         { 
-            var userId = id;
-            // var response = (from r in _context.Responses select r).Where(r => r.UserId == userId);
-           
+            // This means nothing right now.
+            var userId = id;           
             var responses = (from r in _context.Responses select r).Where(r => r.UserId == userId);
-
             var response = responses.FirstOrDefault();
 
             if (response == null)
