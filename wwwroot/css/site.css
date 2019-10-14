@@ -26,8 +26,16 @@ a:visited,
 .modal-header,
 .modal-body,
 .close {
-  background-color:#263238!important;
+  /* background-color:#212121!important; */
+  background-color:#000000!important;
   color:#ffffff!important;
+}
+.footer-nav,
+.footer-nav > a,
+.footer-nav > a:active,
+.footer-nav > a:hover,
+.footer-nav > a:visited {
+    background-color:#212121!important;
 }
 .text-primary {
   color:#ffffff!important;
@@ -45,14 +53,11 @@ a:visited,
   background-color:#FF8800!important;
 }
 input {
-  border: #263238!important;
-  border-top: none!important;
-  border-right: none!important;
-  border-bottom: 1px solid #455a64!important;
-  border-left: none!important;
+  border: 1px solid #455a64!important;
   outline: none!important;
-  border-radius: 0;
-  background-color:#263238!important;
+  border-radius: 5px;
+  /* background-color:#263238!important; */
+  background-color:#000000!important;
   color:#90a4ae!important;
   transition: all .1s ease-in-out;
 }
@@ -66,7 +71,8 @@ textarea {
   border: 1px solid #455a64!important;
   outline: none!important;
   border-radius: 4px;
-  background-color:#263238!important;
+  /* background-color:#263238!important; */
+  background-color:#000000!important;
   color:#90a4ae!important;
   transition: all .1s ease-in-out;
 }
@@ -232,7 +238,7 @@ body {
 }
 .message-container {
   min-height: 450px; 
-  max-height: 450px; 
+  max-height: 490px; 
   overflow-y: scroll; 
   list-style-type: none;
   border-radius: 5px; 
