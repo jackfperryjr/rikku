@@ -10,7 +10,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <div class="container" style="min-height: 700px; max-height: 1000px; overflow-y: scroll;padding-top:80px;">                        
+    <div class="container" style="min-width:350px;max-width:500px;min-height: 700px; max-height: 1000px; overflow-y: scroll;padding-top:80px;">                        
         @foreach (var users in Model) 
         {
             <div style="border-radius:4px;border: 1px solid #b0bec5;margin-bottom:15px;">
