@@ -4,6 +4,9 @@ for details on configuring this project to bundle and minify static web assets. 
 #main {
   display: none;
 }
+::-webkit-scrollbar { 
+  display: none; 
+}
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -22,14 +25,20 @@ a:active,
 a:hover,
 a:visited,
 .navbar-fixed,
-.footer-nav,
-.modal-header,
-.modal-body,
-.close {
+.footer-nav {
   /* background-color:#212121!important; */
   background-color:#000000!important;
   color:#ffffff!important;
 }
+.modal-header,
+.modal-body {
+  background-color:#212121!important;
+}
+.close {
+  background-color:#212121!important;
+  color:#ffffff!important;
+}
+
 .footer-nav,
 .footer-nav > a,
 .footer-nav > a:active,
@@ -40,19 +49,33 @@ a:visited,
 .text-primary {
   color:#ffffff!important;
 }
-.btn-danger {
+
+.btn-danger,
+.btn-danger:hover,
+.btn-danger:visited,
+.btn-danger:focus,
+.btn-danger:active {
   border-color:#b71c1c!important;
   background-color:#b71c1c!important;
 }
-.btn-primary {
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:visited,
+.btn-primary:focus,
+.btn-primary:active {
   border-color:#0d47a1!important;
   background-color:#0d47a1!important;
 }
-.btn-warning {
+.btn-warning,
+.btn-warning:hover,
+.btn-warning:visited,
+.btn-warning:focus,
+.btn-warning:active {
   border-color:#FF8800!important;
   background-color:#FF8800!important;
 }
-input {
+input,
+select {
   border: 1px solid #455a64!important;
   outline: none!important;
   border-radius: 5px;
@@ -61,7 +84,8 @@ input {
   color:#90a4ae!important;
   transition: all .1s ease-in-out;
 }
-input:focus {
+input:focus,
+select:focus {
   outline:none!important;
   border-bottom: 3px solid #90a4ae!important;
   border-radius: 5px;
@@ -237,8 +261,8 @@ body {
   padding: 0 5px 0 5px;
 }
 .message-container {
-  min-height: 450px; 
-  max-height: 490px; 
+  min-height: 70vh; 
+  max-height: 70vh; 
   overflow-y: scroll; 
   list-style-type: none;
   border-radius: 5px; 

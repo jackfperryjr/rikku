@@ -64,6 +64,10 @@ namespace Rikku.Controllers
 
             return View(users.ToList()); 
         }
+        public IActionResult About()
+        {
+            return View();
+        }
 
         [Authorize(Roles="Admin")]
         public IActionResult Admin(string searchString)
@@ -243,11 +247,6 @@ namespace Rikku.Controllers
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
  
             return View(user);        
-        }
-        
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

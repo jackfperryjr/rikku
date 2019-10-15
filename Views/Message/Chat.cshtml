@@ -26,7 +26,7 @@
                     {
                         <div class="row" style="margin: 2px 2px 10px 2px;float:right;">
                             <div class="col-sm-12" style="padding:0;">
-                                <img style="float: right;border-radius: 50%; height: 45px; width: 45px;margin-left:5px;" src="@user.Picture"><span class="float-right bg-primary text-white" style="background-color:#1565c0 !important;font-size:16px;width: auto;border-radius: 7px;padding: 1% 2%;">@message.Content</span>
+                                <img style="float: right;border-radius: 50%; height: 40px; width: 40px;margin-left:5px;" src="@user.Picture"><span class="float-right bg-primary text-white" style="background-color:#1565c0 !important;font-size:16px;width: auto;border-radius: 7px;padding: 1% 2%;">@message.Content</span>
                             </div>
                             <div class="col-sm-12" style="padding:0;">
                                 <span style="color: #bdbdbd;height:15px; font-size:10px; float:right;">Sent @message.CreateDate</span>
@@ -37,7 +37,7 @@
                     {
                         <div class="row" style="margin: 2px 2px 10px 2px;">
                             <div class="col-sm-12" style="padding:0;">
-                                <img style="float: left;border-radius: 50%; height: 45px; width: 45px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-@message.SenderId@png"><span class="float-left bg-success text-white" style="background-color:#558b2f!important;font-size:16px;width: auto;border-radius: 7px;padding: 1% 2%;">@message.Content</span>
+                                <img style="float: left;border-radius: 50%; height: 40px; width: 40px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-@message.SenderId@png"><span class="float-left bg-success text-white" style="background-color:#558b2f!important;font-size:16px;width: auto;border-radius: 7px;padding: 1% 2%;">@message.Content</span>
                             </div>
                             <div class="col-sm-12" style="padding:0;">
                                 <span style="color: #bdbdbd;height:15px;font-size:10px;">Sent @message.CreateDate</span>
@@ -62,9 +62,9 @@
             receiverId = routeId;
             <input type="hidden" name="id" value="@receiverId" />
         }
-        <div class="col-md-6 margin-auto">
-            <input id="message-input" name="content" class="form-group input-group message-input" placeholder="Type message here..." required/>
-            <button id="send-button" class="input-group-button btn btn-primary" style="width:100%;">Send</button>
+        <div class="col-sm-12" style="display:inline-block;position:absolute;bottom:70px;">
+            <input id="message-input" name="content" class="form-group input-group message-input" style="float:left;width:90%;" placeholder="Type message here..." required/>
+            <button id="send-button" class="input-group-button btn btn-link" style="width:10%;font-size:20px;font-weight:bolder;"><i class="fas fa-paper-plane" style="vertical-align:top;#1565c0!important"></i></button>
         </div>
     </div>
     }
