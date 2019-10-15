@@ -33,7 +33,7 @@ namespace Rikku
             services.AddSignalR();
             services.AddProgressiveWebApp(new PwaOptions
             {
-                RoutesToPreCache = "/Shared/_Layout.cshtml, site.min.css, site.min.js",
+                RoutesToPreCache = "/, /Shared/_Layout.cshtml, site.min.css, site.min.js",
                 Strategy = ServiceWorkerStrategy.CacheFirst
             });
         }
