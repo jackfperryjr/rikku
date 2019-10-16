@@ -199,8 +199,8 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
                     {
                         if (files[i].Name == "picture")
                         {
-                            var extension = Path.GetExtension(files[i].FileName);
-                            var newBlob = container.GetBlockBlobReference("User-" + user.Id + extension);
+                            //var extension = Path.GetExtension(files[i].FileName);
+                            var newBlob = container.GetBlockBlobReference("User-" + user.Id + ".png");
 
                             using (var filestream = new MemoryStream())
                             {   
@@ -208,7 +208,7 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
                                 filestream.Position = 0;
                                 await newBlob.UploadFromStreamAsync(filestream);
                             }
-                            user.Picture = "https://rikku.blob.core.windows.net/images/User-" + user.Id + extension;
+                            user.Picture = "https://rikku.blob.core.windows.net/images/User-" + user.Id + ".png";
                         }
                     }
                 }
@@ -224,8 +224,8 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
                     {
                         if (files[i].Name == "wallpaper")
                         {
-                            var extension = Path.GetExtension(files[i].FileName);
-                            var newBlob = container.GetBlockBlobReference("User-Wallpaper-" + user.Id + extension);
+                            //var extension = Path.GetExtension(files[i].FileName);
+                            var newBlob = container.GetBlockBlobReference("User-Wallpaper-" + user.Id + ".jpg");
 
                             using (var filestream = new MemoryStream())
                             {   
@@ -233,7 +233,7 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
                                 filestream.Position = 0;
                                 await newBlob.UploadFromStreamAsync(filestream);
                             }
-                            user.Wallpaper = "https://rikku.blob.core.windows.net/images/User-Wallpaper-" + user.Id + extension;
+                            user.Wallpaper = "https://rikku.blob.core.windows.net/images/User-Wallpaper-" + user.Id + ".jpg";
                         }
                     }
                 }

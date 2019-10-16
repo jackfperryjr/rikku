@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <UserSecretsId>aspnet-Rikku-B6B4DA7A-2F12-459D-A218-1C7A764BD5A7</UserSecretsId>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>

@@ -31,7 +31,7 @@
                 @using(Html.BeginForm("SendMessage","Message"))
                 {
                     <div class="modal-body">
-                        <img style="height:100px;width:100px;margin-bottom:50px;" src="@Model.Picture" title="Picture of user!">
+                        <img style="border-radius:50%;height:100px;width:100px;margin-bottom:50px;" src="@Model.Picture" title="Picture of user!">
                         <input id="receiver-id" type="hidden" name="id" value="@Model.Id" />
                         <input name="content" class="form-group input-group message-input" placeholder="Type message here..." />
                         <button type="button" class="btn btn-warning float-right" style="margin-left: 5px;" data-dismiss="modal">Cancel</button> 
