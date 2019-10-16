@@ -1,8 +1,46 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+ï»¿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
 #main {
   display: none;
+}
+.ffapp {
+  font-family:'Pacifico';
+}
+.ffapp-container {
+  width:300px;
+  height:auto;
+  margin:0 auto;
+}
+.layout-container {
+  min-width:350px;
+  max-width:700px;
+  margin-top:60px;
+  margin-bottom:80px;
+  overflow-y:scroll;
+}
+.home-index-container {
+  min-width:350px;
+  max-width:500px;
+}
+.user-snippet-container {
+  border-radius:5px;
+  border:1px solid #b0bec5;
+  margin-bottom:15px;
+}
+.user-snippet-row-main {
+  padding-left:15px;
+  margin-bottom:10px;
+}
+.user-snippet-row-secondary {
+  margin:0 auto;
+  padding:0 10px;
+}
+.user-img-md {
+  height:70px;
+  width:70px;
+  border-radius:50%;
+  margin:7px;
 }
 ::-webkit-scrollbar { 
   display: none; 
@@ -211,7 +249,7 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
-.img-user {
+.user-img-lg {
   margin:23px auto;
   width:200px;
   height:200px;
@@ -221,12 +259,12 @@ body {
   background-repeat: no-repeat;
   border: 2px solid #ffffff;
 }
-.img-user-navbar {
+.user-img-sm {
   border-radius:50%;
   height:30px;
   width:30px;
 }
-.img-user-overlay {
+.user-img-overlay {
   margin: 32px auto;
   position: absolute;
   bottom: 0;
