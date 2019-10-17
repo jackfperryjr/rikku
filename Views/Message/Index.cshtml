@@ -6,28 +6,24 @@
 @{
     var user = await UserManager.GetUserAsync(User);
 }
-<div class="container margin-auto">
-    <div class="panel-body">
-        <form method="post" enctype="multipart/form-data">
-            <div class="container"> 
-            @foreach (var users in Model) 
+<div class="container">
+    <div class="container"> 
+    @foreach (var users in Model) 
+    {
+        @if(users.Email != user.Email)
             {
-                @if(users.Email != user.Email)
-                    {
-                        <a asp-action="Chat" asp-route-id="@users.Id">
-                            <div class="row" style="padding-left:15px;margin-bottom:10px;">
-                                <div class="col-xs-5">
-                                    <img class="user-img-md" src="@users.Picture" style="border-radius:50%;margin-right: 10px;width:70px;height70px;" />
-                                </div>
-                                <div class="col-xs-7">
-                                    <span style="font-size: 18px;">@users.UserName</span> <br/>
-                                    <span style="font-size: 16px;">@users.CreateDate.ToShortDateString()</span>
-                                </div>
-                            </div>
-                        </a>
-                    }
+                <a asp-action="Chat" asp-route-id="@users.Id">
+                    <div class="row" style="padding-left:15px;margin-bottom:10px;">
+                        <div class="col-xs-5">
+                            <img class="user-img-md" src="@users.Picture" style="border-radius:50%;margin-right: 10px;width:70px;height70px;">
+                        </div>
+                        <div class="col-xs-7">
+                            <span style="font-size: 18px;">@users.UserName</span> <br/>
+                            <span style="font-size: 16px;">@users.CreateDate.ToShortDateString()</span>
+                        </div>
+                    </div>
+                </a>
             }
-            </div>
-        </form>
+    }
     </div>
 </div>
