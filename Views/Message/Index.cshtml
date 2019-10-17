@@ -9,21 +9,25 @@
 <div class="container margin-auto">
     <div class="panel-body">
         <form method="post" enctype="multipart/form-data">
-        <ul id="contacts" class="list-group message-container" style="top:0;left:0;">                        
+            <div class="container"> 
             @foreach (var users in Model) 
             {
                 @if(users.Email != user.Email)
-                {
-                    <a asp-action="Chat" asp-route-id="@users.Id">
-                        <li>
-                            <img class="user-img-md" src="@users.Picture">
-                            <span style="font-size:18px;margin-left:10px;">@users.UserName</span>
-                            <span style="float:right;margin-top:30px;margin-right:10px;">@users.CreateDate.ToShortDateString()</span>
-                        </li>
-                    </a>
-                }
+                    {
+                        <a asp-action="Chat" asp-route-id="@users.Id">
+                            <div class="row" style="padding-left:15px;margin-bottom:10px;">
+                                <div class="col-xs-5">
+                                    <img class="user-img-md" src="@users.Picture" style="border-radius:50%;margin-right: 10px;width:70px;height70px;" />
+                                </div>
+                                <div class="col-xs-7">
+                                    <span style="font-size: 18px;">@users.UserName</span> <br/>
+                                    <span style="font-size: 16px;">@users.CreateDate.ToShortDateString()</span>
+                                </div>
+                            </div>
+                        </a>
+                    }
             }
-        </ul>
+            </div>
         </form>
     </div>
 </div>
