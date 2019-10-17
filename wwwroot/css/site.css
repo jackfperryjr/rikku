@@ -76,7 +76,6 @@ a:visited,
   background-color:#212121!important;
   color:#ffffff!important;
 }
-
 .footer-nav,
 .footer-nav > a,
 .footer-nav > a:active,
@@ -87,7 +86,6 @@ a:visited,
 .text-primary {
   color:#ffffff!important;
 }
-
 .btn-danger,
 .btn-danger:hover,
 .btn-danger:visited,
@@ -144,7 +142,14 @@ textarea:focus {
   transition: all .1s ease-in-out;
 }
 /* End of Dark Mode overrides */
-
+.search-wd {
+  position:fixed;
+  top:60px;
+  left:0;
+  width:100vw;
+  margin:0;
+  padding:0;
+}
 .switch {
   position: relative;
   display: inline-block;
@@ -235,7 +240,6 @@ html {
   position: relative;
   min-height: 100%;
 }
-
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
@@ -292,20 +296,27 @@ body {
   margin-top: 20px;
 }
 .message-input {
+  position:fixed;
+  bottom:70px;
+  left:0;
+  width:100vw;
   font-size:16px;
   min-height: 30px;
-  height: 33.5px;
+  height: 40px;
   border-radius: 5px;
   border: 1px solid #455a64;
   padding: 0 7px 0 7px;
 }
 .message-container {
-  min-height: 70vh; 
-  max-height: 70vh; 
+  position: absolute;
+  top:150px;
+  left:0;
+  margin-bottom:120px;
   overflow-y: scroll; 
   list-style-type: none;
   border-radius: 5px; 
   padding: 5px 0;
+  height:80vh;
 }
 .user-container {
   min-height: 450px; 

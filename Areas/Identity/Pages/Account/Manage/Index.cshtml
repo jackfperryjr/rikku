@@ -8,7 +8,7 @@
     var user = await UserManager.GetUserAsync(User); 
 }
 
-<h4 class="top-margin"></h4>
+<h4></h4>
 <partial name="_StatusMessage" for="StatusMessage" />
 <form id="profile-form" method="post" enctype="multipart/form-data">
     <div class="row text-center" style="height: 150px;position:relative;">
@@ -19,8 +19,8 @@
         </label>
         <div class="col-md-4" style="margin: -150px auto 0 auto;">
             <label>
-                <img id="img-output-user" class="img-user bottom-margin" src="@user.Picture" title="Picture of you!" style="cursor:pointer;">
-                <div class="img-user-overlay">
+                <img id="img-output-user" class="user-img-lg bottom-margin" src="@user.Picture" title="Picture of you!" style="cursor:pointer;">
+                <div class="user-img-overlay">
                     <i class="fas fa-camera" title="Change Image" style="cursor:pointer;"></i> 
                 </div>
                 <input asp-for="Input.Picture" id="img-input-user" type="file" accept="image/*" name="picture" style="display:none;" multiple/>

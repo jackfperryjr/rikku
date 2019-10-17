@@ -10,9 +10,9 @@
     var routeId = @ViewContext.RouteData.Values["id"].ToString();
     var png = ".png";
 }
-<div class="row top-margin">
-    <div class="col-md-2" style="width:80px;margin:0 auto;padding:0;">
-        <img style="border-radius: 50%; height: 80px; width: 80px" src="https://rikku.blob.core.windows.net/images/User-@ViewBag.PictureId@png">
+<div class="row">
+    <div class="col-md-2" style="position:fixed;top:60px;text-align:center;background-color: rgba(0,0,0,.9);z-index: 100;">
+        <img class="user-img-md" src="https://rikku.blob.core.windows.net/images/User-@ViewBag.PictureId@png">
     </div>
 </div>
 <form method="post" enctype="multipart/form-data">
@@ -61,8 +61,8 @@
             <input type="hidden" name="id" value="@receiverId" />
         }
         <div class="col-sm-12" style="display:inline-block;position:absolute;bottom:70px;">
-            <input id="message-input" name="content" class="form-group input-group message-input" style="float:left;width:90%;" placeholder="Type message here..." required/>
-            <button id="send-button" class="input-group-button btn btn-link" style="width:10%;font-size:20px;font-weight:bolder;"><i class="fas fa-paper-plane" style="vertical-align:top;#1565c0!important"></i></button>
+            <input id="message-input" name="content" class="form-group input-group message-input" placeholder="Type message here..." required/>
+            <button id="send-button" class="input-group-button btn btn-link" style="position:fixed;right:10px;bottom:82px;font-size:20px;color:#ffc107;z-index:100;">Send</button>
         </div>
     </div>
     }

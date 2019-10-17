@@ -6,7 +6,7 @@
 }
 @if (SignInManager.IsSignedIn(User))
 {
-    <h2 class="float-left fapp">ffapp</h2>
+    <h2 class="float-left ffapp">ffapp</h2>
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
         <button type="submit" class="float-right btn btn-link"><i class="text-warning fas fa-sign-out-alt" style="font-size:24px;"></i></button>
     </form>
