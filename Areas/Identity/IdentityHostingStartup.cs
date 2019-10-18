@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rikku.Data;
+using Rikku.Models;
 
 [assembly: HostingStartup(typeof(Rikku.Areas.Identity.IdentityHostingStartup))]
 namespace Rikku.Areas.Identity

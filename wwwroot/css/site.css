@@ -295,9 +295,32 @@ body {
 .bottom-margin {
   margin-top: 20px;
 }
-.message-input {
+.message-input-chat {
   position:fixed;
   bottom:70px;
+  left:0;
+  width:100vw;
+  font-size:16px;
+  min-height: 30px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #455a64;
+  padding: 0 7px 0 7px;
+}
+.message-input-profile {
+  position:absolute;
+  bottom:30px;
+  left:0;
+  font-size:16px;
+  min-height: 30px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #455a64;
+  padding: 0 7px 0 7px;
+}
+.message-input-friend {
+  position:fixed;
+  bottom:0;
   left:0;
   width:100vw;
   font-size:16px;

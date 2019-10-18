@@ -15,5 +15,6 @@ namespace Rikku.Data
         }
         public DbSet<MessageModel> Messages { get; set; }
         public DbSet<ResponseModel> Responses { get; set; }
+        public DbSet<FriendModel> Friends { get; set; }
     }
 }

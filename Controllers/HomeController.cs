@@ -192,10 +192,13 @@ namespace Rikku.Controllers
 
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var users = (from user in _context.Users  
+            var friends = (from user in _context.Users  
+                        join f in _context.Friends on user.Id equals f.FriendId
                         select new  
                         {  
-                            UserId = user.Id,    
+                            Id = user.Id,
+                            UserId = f.UserId,
+                            FriendId = f.FriendId,
                             UserName = user.UserName,                                    
                             FirstName = user.FirstName,  
                             LastName = user.LastName,
@@ -204,10 +207,10 @@ namespace Rikku.Controllers
                             City = user.City,
                             State = user.State,
                             ZipCode = user.ZipCode
-                        }).ToList()
-                        .Select(u => new ApplicationUser()  
+                        }).Where(u => userId == u.UserId).ToList()
+                        .Select(u => new ApplicationUserViewModel()  
                         {  
-                            Id = u.UserId,  
+                            Id = u.Id,  
                             UserName = u.UserName,
                             FirstName = u.FirstName, 
                             LastName = u.LastName, 
@@ -216,12 +219,12 @@ namespace Rikku.Controllers
                             City = u.City,
                             State = u.State,
                             ZipCode = u.ZipCode
-                        }).Where(u => u.Id != userId);  
+                        });  
 
             if (!String.IsNullOrEmpty(searchString))
             {
                 searchString = searchString.ToLower();
-                users = users.Where(u => {
+                friends = friends.Where(u => {
                                             try 
                                             {
                                                 return u.UserName.Contains(searchString)
@@ -236,7 +239,20 @@ namespace Rikku.Controllers
                                     ); 
             }
 
-            return View(users.ToList()); 
+            return View(friends.ToList()); 
+        }
+
+        [Authorize]
+        public async Task<IActionResult> AddFriend(string id, FriendModel friend)
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            friend.UserId = userId;
+            friend.FriendId = id;
+            _context.Friends.Add(friend);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Friends");
         }
         
         [Authorize]

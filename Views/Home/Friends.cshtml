@@ -1,4 +1,4 @@
-@model IEnumerable<Rikku.Data.ApplicationUser>
+@model IEnumerable<Rikku.Models.ApplicationUserViewModel>
 @using Rikku.Data
 @using Rikku.Models
 @using Microsoft.AspNetCore.Identity
@@ -10,13 +10,13 @@
 <div class="container">
     <form asp-controller="Home" asp-action="Friends" method="get">
         <div class="row search-wd">
-            <input class="form-group input-group message-input" id="search" type="text" name="SearchString" placeholder='Search...' />
+            <input class="form-group input-group message-input-friend" id="search" type="text" name="SearchString" placeholder='Search...' />
         </div>
     </form>
-    <div class="container">                        
+    <div class="container" style="margin-top:50px;">                        
         @foreach (var users in Model) 
         {
-            <a asp-action="Profile" asp-route-id="@users.Id">
+            <a asp-action="Profile" asp-route-id="@users.FriendId">
                 <div class="row" style="padding-left:15px;margin-bottom:10px;">
                     <div class="col-xs-5">
                         <img class="user-img-md" src="@users.Picture" style="border-radius:50%;margin-right: 10px;width:70px;height70px;">

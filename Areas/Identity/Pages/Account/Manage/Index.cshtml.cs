@@ -2,7 +2,11 @@ using System;
 using System.IO;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +24,7 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
     [ValidateAntiForgeryToken]
     public partial class IndexModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private IConfiguration _configuration;
@@ -27,11 +32,13 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
         //private readonly IEmailSender _emailSender;
 
         public IndexModel(
+            ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration)
             //IEmailSender emailSender)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
@@ -72,6 +79,7 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
+            ViewData["MessageCount"] = GetMessageCount();
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -243,6 +251,22 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated!";
             return RedirectToPage();
+        }
+
+        public int GetMessageCount()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var count = (from message in _context.Messages
+                                    select new
+                                    {
+                                        MessageId = message.MessageId,
+                                        ReceiverId = message.ReceiverId,
+                                        SenderId = message.SenderId,
+                                        CreateDate = message.CreateDate,
+                                        MessageReadFlg = message.MessageReadFlg
+                                    }).Where(m => (m.ReceiverId == userId )&& (m.MessageReadFlg == 0)).Count(); 
+            return count;
         }
 
         public async Task<IActionResult> OnPostSendVerificationEmailAsync()

@@ -3,8 +3,9 @@ using System;
 
 namespace Rikku.Models
 {
-    public class ApplicationUserMessageViewModel : IdentityUser
+    public class ApplicationUserViewModel : IdentityUser
     {
+        public string FriendId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string City { get; set; }

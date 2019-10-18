@@ -12,15 +12,15 @@
 <form asp-controller="Home" asp-action="Admin" method="get">
     <div class="row" style="position: fixed; top: 70px;width: 330px;">
         <div class="input-group">
-            <input class="form-control" id="search" type="text" name="SearchString" placeholder='Search...' />             
+            <input class="form-control" id="search" type="text" name="SearchString" placeholder='Search...' />
         </div>
     </div>
 </form>
-<div class="container" style="height:100%; overflow-y: scroll;padding-top:100px;">
+<div class="container" style="height:100%; overflow-y: scroll;s">
     @foreach (var user in Model)
     { 
     <div class="row" style="margin-top:10px;">
-        <a class="btn btn-link" style="font-size: 18px;" data-toggle="modal" href="@("#EditModal" + user.Id)"><img class="img-user-navbar" src="@user.Picture" style="margin-right: 10px;" /> @user.Email</a>
+        <a class="btn btn-link" style="font-size: 18px;" data-toggle="modal" href="@("#EditModal" + user.Id)"><img class="user-img-md" src="@user.Picture" style="margin-right: 10px;" /> @user.UserName</a>
         <div class="modal fade top-margin" id="@("EditModal" + user.Id)" tabindex="-1" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content text-center">

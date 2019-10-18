@@ -64,7 +64,7 @@ namespace Rikku.Controllers
                             State = user.State,
                             CreateDate = m.CreateDate
                         }).Where(m => (userId == m.ReceiverId) || (userId == m.SenderId)).ToList().OrderByDescending(m => m.CreateDate)
-                        .Select(u => new ApplicationUserMessageViewModel()  
+                        .Select(u => new ApplicationUserViewModel()  
                         {  
                             Id = u.UserId, 
                             UserName = u.UserName, 
@@ -120,14 +120,14 @@ namespace Rikku.Controllers
         public async Task<IActionResult> SendMessage(string id, string content, MessageModel message)
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var character = await _userManager.FindByIdAsync(id);
+            var friend = await _userManager.FindByIdAsync(id);
 
             message.ReceiverId = id;
             message.Content = content;
             message.SenderId = userId;
             message.CreateDate = DateTime.Now;
 
-            if (character.RoleName == "SuperUser")
+            if (friend.RoleName == "SuperUser")
             {
                 message.MessageReadFlg = 1;
                 _context.Messages.Add(message);

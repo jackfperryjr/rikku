@@ -25,6 +25,13 @@
 <div class="row text-center" style="margin-bottom: 50px;">
     <a class="btn btn-primary" style="width:45%;margin:0 5px 0 auto;" data-toggle="modal" href="@("#newMessageModal")">Message</a>
     <a class="btn btn-warning" style="width:45%;margin:0 auto 0 5px;" onclick="window.history.go(-1); return false;">Go Back</a>
+    @using(Html.BeginForm("AddFriend", "Home"))
+    {
+        <div class="row">
+            <input id="id" type="hidden" name="id" value="@Model.Id" />
+            <button class="btn btn-success" style="width:168.75px;margin:5px auto 0 30px;" >Add Friend</button>
+        </div>
+    }
     <div class="modal fade top-margin" id="@("newMessageModal")" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -33,9 +40,9 @@
                     <div class="modal-body">
                         <img style="border-radius:50%;height:100px;width:100px;margin-bottom:50px;" src="@Model.Picture" title="Picture of user!">
                         <input id="receiver-id" type="hidden" name="id" value="@Model.Id" />
-                        <input name="content" class="form-group input-group message-input" placeholder="Type message here..." />
-                        <button type="button" class="btn btn-warning float-right" style="margin-left: 5px;" data-dismiss="modal">Cancel</button> 
-                        <button class="btn btn-primary float-right">Send</button>
+                        <input name="content" class="form-group input-group message-input-profile" placeholder="Type message here..." />
+                        <button type="button" class="btn btn-warning" style="color:#ffffff;position:absolute;right:30vw;bottom:5px;" data-dismiss="modal">Cancel</button> 
+                        <button class="btn btn-primary" style="position:absolute;right:50vw;bottom:5px;">Send</button>
                         <div class="bottom-margin">&nbsp;</div>
                     </div>
                 }
