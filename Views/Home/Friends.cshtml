@@ -16,7 +16,7 @@
     <div class="container">                        
         @foreach (var users in Model) 
         {
-            <a asp-action="Profile" asp-route-id="@users.FriendId">
+            <a asp-action="Profile" asp-route-id="@users.Id">
                 <div class="row" style="padding-left:15px;margin-bottom:10px;">
                     <div class="col-xs-5">
                         <img class="user-img-md" src="@users.Picture" style="border-radius:50%;margin-right: 10px;width:70px;height70px;">
