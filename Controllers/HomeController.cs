@@ -247,10 +247,54 @@ namespace Rikku.Controllers
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            friend.UserId = userId;
-            friend.FriendId = id;
-            _context.Friends.Add(friend);
-            await _context.SaveChangesAsync();
+            var friends = (from u in _context.Users  
+                                join f in _context.Friends on u.Id equals f.FriendId
+                                select new  
+                                {  
+                                    Id = u.Id,
+                                    UserId = f.UserId,
+                                    FriendId = f.FriendId,
+                                    UserName = u.UserName,                                    
+                                    FirstName = u.FirstName,  
+                                    LastName = u.LastName,
+                                    Picture = u.Picture,
+                                    Email = u.Email,
+                                    City = u.City,
+                                    State = u.State,
+                                    ZipCode = u.ZipCode
+                                }).Where(u => userId == u.UserId).ToList()
+                                .Select(u => new ApplicationUserViewModel()  
+                                {  
+                                    Id = u.Id,  
+                                    UserName = u.UserName,
+                                    FirstName = u.FirstName, 
+                                    LastName = u.LastName, 
+                                    Picture = u.Picture,
+                                    Email = u.Email,
+                                    City = u.City,
+                                    State = u.State,
+                                    ZipCode = u.ZipCode
+                                });  
+
+            if (!friends.Any(c => c.Id == id))
+            {
+                friend.UserId = userId;
+                friend.FriendId = id;
+                _context.Friends.Add(friend);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Friends");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> DeleteFriend(string id)
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var friend = await _context.Friends.SingleOrDefaultAsync(f => (f.FriendId == id) && (f.UserId == userId));
+            _context.Friends.Remove(friend);
+             await _context.SaveChangesAsync();
 
             return RedirectToAction("Friends");
         }

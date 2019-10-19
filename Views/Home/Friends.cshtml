@@ -8,7 +8,7 @@
     var user = await UserManager.GetUserAsync(User);
 }
 <h3 class="ffapp" style="position:fixed;left:0;background-color:#000000;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);">friends</h3>
-<div class="container" style="padding-top:30px;">
+<div class="container" style="padding-top:40px;">
     <!-- <form asp-controller="Home" asp-action="Friends" method="get">
         <div class="row search-wd">
             <input class="form-group input-group message-input-friend" id="search" type="text" name="SearchString" placeholder='Search...' />
@@ -18,7 +18,7 @@
         @foreach (var users in Model) 
         {
             <a asp-action="Profile" asp-route-id="@users.Id">
-                <div class="row" style="padding-left:15px;margin-bottom:10px;">
+                <div class="row" style="margin-bottom:10px;">
                     <div class="col-xs-5">
                         <img class="user-img-md" src="@users.Picture" style="border-radius:50%;margin-right: 10px;width:70px;height70px;">
                     </div>

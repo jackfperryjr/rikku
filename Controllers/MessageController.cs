@@ -50,7 +50,8 @@ namespace Rikku.Controllers
                             City = user.City,
                             State = user.State,
                             CreateDate = m.CreateDate,
-                            MessageReadFlg = m.MessageReadFlg
+                            MessageReadFlg = m.MessageReadFlg,
+                            Content = m.Content
                         }).Where(m => (userId == m.ReceiverId) || (userId == m.SenderId)).ToList().OrderByDescending(m => m.CreateDate)
                         .Select(u => new ApplicationUserViewModel()  
                         {  
@@ -63,7 +64,8 @@ namespace Rikku.Controllers
                             City = u.City,
                             State = u.State,
                             CreateDate = u.CreateDate,
-                            MessageReadFlg = u.MessageReadFlg
+                            MessageReadFlg = u.MessageReadFlg,
+                            Content = u.Content
                         });  
                         
             users = users.GroupBy(u => u.Id).Select(u => u.FirstOrDefault());

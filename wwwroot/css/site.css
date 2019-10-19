@@ -117,7 +117,7 @@ select {
   border-radius: 5px;
   /* background-color:#263238!important; */
   background-color:#000000!important;
-  color:#90a4ae!important;
+  color:#ffffff!important;
   transition: all .1s ease-in-out;
 }
 input:focus,
@@ -133,7 +133,7 @@ textarea {
   border-radius: 4px;
   /* background-color:#263238!important; */
   background-color:#000000!important;
-  color:#90a4ae!important;
+  color:#ffffff!important;
   transition: all .1s ease-in-out;
 }
 textarea:focus {

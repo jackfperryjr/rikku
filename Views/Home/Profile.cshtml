@@ -14,7 +14,7 @@
         {
             <div class="row">
                 <input id="id" type="hidden" name="id" value="@Model.Id" />
-                <button style="border:none!important;font-size:30px;position:absolute;bottom:20px;right:100px;background-color:transparent!important;">
+                <button style="border:none!important;font-size:30px;position:absolute;bottom:20px;right:80px;background-color:transparent!important;">
                 @if(ViewBag.IsFriend == 1)
                 {
                     <i class="fas fa-heart text-danger"></i>
@@ -41,7 +41,20 @@
 <div class="row text-center" style="margin-bottom: 50px;">
     <a class="btn btn-primary" style="width:45%;margin:0 5px 0 auto;" data-toggle="modal" href="@("#newMessageModal")">Message</a>
     <a class="btn btn-warning" style="width:45%;margin:0 auto 0 5px;" onclick="window.history.go(-1); return false;">Go Back</a>
-
+    @if(ViewBag.IsFriend == 1)
+    {
+        @using(Html.BeginForm("DeleteFriend", "Home"))
+        {
+            <div class="row text-center" style="margin:50px auto;width:100vw;">
+                <input id="id" type="hidden" name="id" value="@Model.Id" />
+                <span style="margin:0 auto;">
+                    <button style="border:none!important;font-size:15px;background-color:transparent!important;">
+                        <i class="fas fa-heart-broken text-danger" style="font-size:30px;" aria-hidden="true"></i>
+                    </button> Remove friend?
+                </span>
+            </div>
+        }
+    }
     <div class="modal fade top-margin" id="@("newMessageModal")" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">

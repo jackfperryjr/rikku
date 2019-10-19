@@ -14,5 +14,6 @@ namespace Rikku.Models
         public string Picture { get; set; }
         public DateTime CreateDate { get; set; }
         public int MessageReadFlg { get; set; }
+        public string Content { get; set; }
     }
 }
