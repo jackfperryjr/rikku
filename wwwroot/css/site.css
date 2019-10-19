@@ -55,6 +55,9 @@ a.navbar-brand {
 html {
   font-size: 14px;
 }
+.active {
+  color:#0277bd!important;
+}
 /* Dark Mode overrides */
 body,
 span,

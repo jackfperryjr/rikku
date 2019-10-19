@@ -8,7 +8,7 @@
 {
     <h2 class="float-left ffapp">ffapp</h2>
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-        <button type="submit" class="float-right btn btn-link"><i class="text-warning fas fa-sign-out-alt" style="font-size:24px;"></i></button>
+        <button type="submit" class="float-right btn btn-link"><i class="fas fa-sign-out-alt" style="color:#0277bd;font-size:24px;"></i></button>
     </form>
     <a class="float-right" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><img class="user-img-sm" src=@user.Picture></a>
 }

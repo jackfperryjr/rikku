@@ -49,8 +49,8 @@
                             <button id="SuperUserBtn" type="submit" class="btn btn-primary" name="role" value=2>SUPERUSER</button>
                             <button id="UserBtn" type="submit" class="btn btn-primary" name="role" value=3>USER</button>
                             <p style="margin-top:5px;">Ban or delete?</p>
-                            <button id="BlockBtn" type="submit" class="btn btn-warning" name="role" value=4>BAN</button>
-                            <button id="DeleteBtn" type="submit" class="btn btn-warning" name="role" value=5>DELETE</button>
+                            <button id="BlockBtn" type="submit" class="btn btn-secondary" name="role" value=4>BAN</button>
+                            <button id="DeleteBtn" type="submit" class="btn btn-secondary" name="role" value=5>DELETE</button>
                         </div>
                     }
                     </div>
@@ -68,7 +68,7 @@
             }
             @if(user.RoleName == "User")
             {
-                <span class="btn btn-warning">@user.RoleName</span>
+                <span class="btn btn-secondary" style="background-color:#6c757d!important;">@user.RoleName</span>
             }
         </div>
     </div>
