@@ -13,5 +13,6 @@ namespace Rikku.Models
         public string ZipCode { get; set; }
         public string Picture { get; set; }
         public DateTime CreateDate { get; set; }
+        public int MessageReadFlg { get; set; }
     }
 }

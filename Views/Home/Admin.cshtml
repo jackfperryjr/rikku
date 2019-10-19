@@ -7,15 +7,15 @@
 @{
     var you = await UserManager.GetUserAsync(User);
 }
-
-<div class="container">
-<form asp-controller="Home" asp-action="Admin" method="get">
+<h3 class="ffapp" style="position:fixed;left:0;background-color:#000000;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);">admin</h3>
+<div class="container" style="padding-top:20px;">
+<!-- <form asp-controller="Home" asp-action="Admin" method="get">
     <div class="row" style="position: fixed; top: 70px;width: 330px;">
         <div class="input-group">
             <input class="form-control" id="search" type="text" name="SearchString" placeholder='Search...' />
         </div>
     </div>
-</form>
+</form> -->
 <div class="container" style="height:100%; overflow-y: scroll;s">
     @foreach (var user in Model)
     { 

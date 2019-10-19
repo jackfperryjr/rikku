@@ -305,7 +305,7 @@ body {
   height: 40px;
   border-radius: 5px;
   border: 1px solid #455a64;
-  padding: 0 7px 0 7px;
+  padding: 0 70px 0 7px;
 }
 .message-input-profile {
   position:absolute;
@@ -334,12 +334,12 @@ body {
   position: absolute;
   top:150px;
   left:0;
-  margin-bottom:120px;
+  right:0;
   overflow-y: scroll; 
   list-style-type: none;
   border-radius: 5px; 
   padding: 5px 0;
-  height:80vh;
+  height:65vh;
 }
 .user-container {
   min-height: 450px; 

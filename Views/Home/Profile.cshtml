@@ -10,6 +10,22 @@
     <img id="img-output-wallpaper" style="height:150px;width:100%;" src="@Model.Wallpaper" style="cursor:pointer;">
     <div class="col-md-4" style="margin: -150px auto 0 auto;">
         <img class="user-img-lg bottom-margin" src="@Model.Picture" title="Picture of user!">
+        @using(Html.BeginForm("AddFriend", "Home"))
+        {
+            <div class="row">
+                <input id="id" type="hidden" name="id" value="@Model.Id" />
+                <button style="border:none!important;font-size:30px;position:absolute;bottom:20px;right:100px;background-color:transparent!important;">
+                @if(ViewBag.IsFriend == 1)
+                {
+                    <i class="fas fa-heart text-danger"></i>
+                }
+                else
+                {
+                    <i class="far fa-heart text-danger"></i>
+                }
+                </button>
+            </div>
+        }
     </div>
 </div>
 <div class="row top-margin" style="margin-top: 80px;">
@@ -25,13 +41,7 @@
 <div class="row text-center" style="margin-bottom: 50px;">
     <a class="btn btn-primary" style="width:45%;margin:0 5px 0 auto;" data-toggle="modal" href="@("#newMessageModal")">Message</a>
     <a class="btn btn-warning" style="width:45%;margin:0 auto 0 5px;" onclick="window.history.go(-1); return false;">Go Back</a>
-    @using(Html.BeginForm("AddFriend", "Home"))
-    {
-        <div class="row">
-            <input id="id" type="hidden" name="id" value="@Model.Id" />
-            <button class="btn btn-success" style="width:168.75px;margin:5px auto 0 30px;" >Add Friend</button>
-        </div>
-    }
+
     <div class="modal fade top-margin" id="@("newMessageModal")" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">

@@ -258,7 +258,47 @@ namespace Rikku.Controllers
         [Authorize]
         public async Task<IActionResult> Profile(string id)
         {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             ViewBag.MessageCount = GetMessageCount();
+            
+            var friends = (from u in _context.Users  
+                                join f in _context.Friends on u.Id equals f.FriendId
+                                select new  
+                                {  
+                                    Id = u.Id,
+                                    UserId = f.UserId,
+                                    FriendId = f.FriendId,
+                                    UserName = u.UserName,                                    
+                                    FirstName = u.FirstName,  
+                                    LastName = u.LastName,
+                                    Picture = u.Picture,
+                                    Email = u.Email,
+                                    City = u.City,
+                                    State = u.State,
+                                    ZipCode = u.ZipCode
+                                }).Where(u => userId == u.UserId).ToList()
+                                .Select(u => new ApplicationUserViewModel()  
+                                {  
+                                    Id = u.Id,  
+                                    UserName = u.UserName,
+                                    FirstName = u.FirstName, 
+                                    LastName = u.LastName, 
+                                    Picture = u.Picture,
+                                    Email = u.Email,
+                                    City = u.City,
+                                    State = u.State,
+                                    ZipCode = u.ZipCode
+                                });  
+
+            if (friends.Any(c => c.Id == id))
+            {
+                ViewBag.IsFriend = 1;
+            }
+            else 
+            {
+                ViewBag.IsFriend = 0;
+            } 
 
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
  

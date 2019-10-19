@@ -33,21 +33,8 @@ namespace Rikku.Controllers
         {
             ViewBag.MessageCount = GetMessageCount();
 
-            ViewBag.Users = (from user in _context.Users  
-                        select new  
-                        {  
-                            UserId = user.Id,   
-                            UserName = user.UserName
-                        })
-                        .Distinct()
-                        .Select(u => new ApplicationUser()  
-                        {  
-                            Id = u.UserId, 
-                            UserName = u.UserName
-                        })
-                        .ToList();  
-
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var users = (from user in _context.Users  
                         join m in _context.Messages on user.Id equals m.SenderId
                         select new  
@@ -62,7 +49,8 @@ namespace Rikku.Controllers
                             Email = user.Email,
                             City = user.City,
                             State = user.State,
-                            CreateDate = m.CreateDate
+                            CreateDate = m.CreateDate,
+                            MessageReadFlg = m.MessageReadFlg
                         }).Where(m => (userId == m.ReceiverId) || (userId == m.SenderId)).ToList().OrderByDescending(m => m.CreateDate)
                         .Select(u => new ApplicationUserViewModel()  
                         {  
@@ -74,7 +62,8 @@ namespace Rikku.Controllers
                             Email = u.Email,
                             City = u.City,
                             State = u.State,
-                            CreateDate = u.CreateDate
+                            CreateDate = u.CreateDate,
+                            MessageReadFlg = u.MessageReadFlg
                         });  
                         
             users = users.GroupBy(u => u.Id).Select(u => u.FirstOrDefault());

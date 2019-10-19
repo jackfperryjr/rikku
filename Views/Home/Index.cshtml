@@ -10,7 +10,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <div class="container home-index-container">                        
+    <div class="container home-index-container" style="padding-top:5px;">                        
         @foreach (var users in Model) 
         {
             <div class="user-snippet-container">
@@ -44,6 +44,7 @@ else
         <h3 class="ffapp">ffapp</h3>
         <div>
             <p>Explore and chat with the Final Fantasy characters you love! Or chat with others that enjoy the same characters as you! In this beta version there's no machine learning to analyze the messages you send to characters and predict their responses. But that's coming next!</p>
+            <p>Also, this app was designed to be used on your phone. If you're using Safari on iOS you can add it to your home screen and use it just like a native app. You can do so using Chrome on Android, too. And you may even get prompted to do so.</p>
         </div>
     </div>
 }
