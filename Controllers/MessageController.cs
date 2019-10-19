@@ -97,7 +97,7 @@ namespace Rikku.Controllers
                             })
                             .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
                                             (c.ReceiverId == userId.ToString() && c.SenderId == id))
-                            .OrderBy(c => c.CreateDate);
+                            .OrderBy(c => c.MessageId);
             
             foreach (MessageModel message in _context.Messages.Where(c => c.ReceiverId == userId.ToString() && c.SenderId == id))
             {
