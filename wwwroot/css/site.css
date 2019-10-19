@@ -62,8 +62,7 @@ a,
 a:active,
 a:hover,
 a:visited,
-.navbar-fixed,
-.footer-nav {
+.navbar-fixed {
   /* background-color:#212121!important; */
   background-color:#000000!important;
   color:#ffffff!important;
@@ -81,7 +80,7 @@ a:visited,
 .footer-nav > a:active,
 .footer-nav > a:hover,
 .footer-nav > a:visited {
-    background-color:#212121!important;
+    background-color:#1a1a1a!important;
 }
 .text-primary {
   color:#ffffff!important;

@@ -14,28 +14,29 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Rikku.Data;
+using Rikku.Models;
 
 namespace Rikku.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
-        //private readonly IEmailSender _emailSender;
 
 
         public RegisterModel(
+            ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger)
-            //IEmailSender emailSender)
         {
+            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
-            //_emailSender = emailSender;
         }
 
         [BindProperty]
@@ -89,6 +90,9 @@ namespace Rikku.Areas.Identity.Pages.Account
                 
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+                var userId = user.Id;
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -103,12 +107,14 @@ namespace Rikku.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, "User");
                     }
                     
-                    // var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    // var callbackUrl = Url.Page(
-                    //     "/Account/ConfirmEmail",
-                    //     pageHandler: null,
-                    //     values: new { userId = user.Id, code = code },
-                    //     protocol: Request.Scheme);
+                    // Sending welcome message to a new user.
+                    MessageModel message = new MessageModel();
+                    message.ReceiverId = userId;
+                    message.Content = "Hey! Welcome to the app. If you have any questions or suggestions reach out!";
+                    message.SenderId = "e7f72e6a-5c23-4dcd-81e6-327c64177b95";
+                    message.CreateDate = DateTime.Now;
+                    _context.Messages.Add(message);
+                    await _context.SaveChangesAsync();
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnUrl);
