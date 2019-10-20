@@ -16,5 +16,5 @@
     ],
     "display": "standalone",
     "orientation": "portrait",
-    "start_url": "/"
+    "start_url": "https://rikku.azurewebsites.net"
   }
