@@ -3,9 +3,6 @@ using System.IO;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Diagnostics;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Auth;
 using Rikku.Data;
-using Rikku.Models;
 
 namespace Rikku.Areas.Identity.Pages.Account.Manage
 {
@@ -29,20 +25,17 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
         private readonly SignInManager<ApplicationUser> _signInManager;
         private IConfiguration _configuration;
         
-        //private readonly IEmailSender _emailSender;
 
         public IndexModel(
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IConfiguration configuration)
-            //IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
-            //_emailSender = emailSender;
         }
 
         public bool IsEmailConfirmed { get; set; }
@@ -267,38 +260,6 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
                                         MessageReadFlg = message.MessageReadFlg
                                     }).Where(m => (m.ReceiverId == userId )&& (m.MessageReadFlg == 0)).Count(); 
             return count;
-        }
-
-        public async Task<IActionResult> OnPostSendVerificationEmailAsync()
-        {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-
-            var userId = await _userManager.GetUserIdAsync(user);
-            var email = await _userManager.GetEmailAsync(user);
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var callbackUrl = Url.Page(
-                "/Account/ConfirmEmail",
-                pageHandler: null,
-                values: new { userId = userId, code = code },
-                protocol: Request.Scheme);
-
-            // await _emailSender.SendEmailAsync(
-            //     email,
-            //     "Confirm your email",
-            //     $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
-            StatusMessage = "Verification email sent. Please check your email.";
-            return RedirectToPage();
         }
     }
 }
