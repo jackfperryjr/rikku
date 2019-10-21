@@ -131,7 +131,43 @@ namespace Rikku.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Chat", new {id = id});
+            return RedirectToAction("Chat", new { id });
+        }
+
+        public IActionResult DeleteChat(string id)
+        {    
+            ViewBag.MessageCount = GetMessageCount();
+
+            ViewBag.PictureId = id;
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var messages = (from message in _context.Messages
+                            select new   
+                            { 
+                                MessageId = message.MessageId,
+                                SenderId = message.SenderId,
+                                ReceiverId = message.ReceiverId,
+                                Content = message.Content,
+                                CreateDate = message.CreateDate
+                            }).Select(m => new MessageModel()  
+                            {  
+                                MessageId = m.MessageId,
+                                SenderId = m.SenderId,
+                                ReceiverId = m.ReceiverId,
+                                Content = m.Content,
+                                CreateDate = m.CreateDate
+                            })
+                            .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
+                                            (c.ReceiverId == userId.ToString() && c.SenderId == id))
+                            .OrderBy(c => c.MessageId);
+            
+            foreach (MessageModel message in _context.Messages.Where(c => c.ReceiverId == userId.ToString() && c.SenderId == id))
+            {
+                _context.Messages.Remove(message);
+            }
+            
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

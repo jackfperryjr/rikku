@@ -284,6 +284,7 @@ namespace Rikku.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            //return RedirectToAction("Profile", new { id });
             return RedirectToAction("Friends");
         }
 
@@ -296,6 +297,7 @@ namespace Rikku.Controllers
             _context.Friends.Remove(friend);
              await _context.SaveChangesAsync();
 
+            //return RedirectToAction("Profile", new { id });
             return RedirectToAction("Friends");
         }
         
