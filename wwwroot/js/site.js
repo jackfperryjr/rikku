@@ -10,7 +10,19 @@
         window.location = linkLocation;
     }
 
-    $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
+    if (window.location.href.indexOf("Chat") > -1) { // These are only needed on the Chat screen.
+        $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
+
+        $(".message-input-chat").focus( function() {
+            $(".footer-nav").hide();
+            $("#send-button").addClass("move-bottom");
+        });
+        
+        $(".message-input-chat").blur( function() {
+            $(".footer-nav").show();
+            $("#send-button").removeClass("move-bottom");
+        });
+    }
 });
 
 $("#img-input-user").change(function(event) {

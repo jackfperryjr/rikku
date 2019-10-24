@@ -5,40 +5,51 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     var user = await UserManager.GetUserAsync(User);
+    var color = "#000000";
 }
 <h3 class="ffapp" style="position:fixed;left:0;background-color:#000000;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);">messages</h3>
-<div class="container" style="padding-top:40px;">
-    <div class="container"> 
-    @foreach (var users in Model) 
+<div class="container" style="padding:40px 0 0 0;">
+    <div class="container" style="padding:0;"> 
+    @foreach(var users in Model) 
     {
-        @if(users.Email != user.Email)
-            {
-                
-                <div class="row" style="margin-bottom:10px;">
-                    <div class="col-xs-2" style="margin:0;">
-                    @if(users.MessageReadFlg == 0)
-                    {
-                        <i class="fas fa-circle" style="color:#1e88e5;padding-top:25px;"></i>
-                    }
-                    @if(users.MessageReadFlg == 1) 
-                    {
-                        <i class="far fa-circle" style="color:#ffffff;padding-top:25px;"></i>
-                    }
-                    </div>
-                    <div class="col-xs-3" style="margin:0 auto;">
-                        <a asp-action="Chat" asp-route-id="@users.Id" style="display:inline;">
+        @if(users.MessageReadFlg == 0)
+        {
+            color = "#101010";
+        }
+        else 
+        {
+            color = "#000000";
+        }
 
-                            <img class="user-img-md" src="@users.Picture" style="border-radius:50%;margin-right: 10px;width:70px;height70px;">
+        @if(users.Email != user.Email)
+        {
+            @if(users.DeletedBy1 != user.Id || users.DeletedBy2 != user.Id)
+            {    
+                
+                <div class="row" style="margin:0 0 10px 0;background-color:@color;">
+                    <div class="col-xs-4" style="margin:0 20px 0 0;padding-left:10px;">
+                        <a asp-action="Chat" asp-route-id="@users.Id">
+                            @if(users.MessageReadFlg == 0)
+                            {
+                                <div style="position:relative;border-radius:50%;height:55px;width:55px;background-image:linear-gradient(to bottom right, #fff,#0d47a1,#9933CC);">
+                                    <img src="@users.Picture" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">
+                                </div>
+                            } 
+                            else 
+                            {
+                                <img src="@users.Picture" style="border-radius:50%;width:50px;height:50px;">
+                            }
                         </a>
                     </div>
-                    <div class="col-xs-6" style="margin:0 auto;padding-top:15px">
+                    <div class="col-xs-6" style="margin:0;padding-top:5px;text-align:left;">
                         <a asp-action="Chat" asp-route-id="@users.Id" style="display:inline;">
-                            <span style="font-size: 16px;">@users.CreateDate.ToShortDateString()</span>
+                            <span style="font-size: 14px;">@users.UserName</span><br/>
+                            <span style="font-size: 12px;">@users.CreateDate.ToShortDateString()</span>
                         </a>
                     </div>
-                   
-                    <div class="col-xs-2" style="margin:0 auto;padding-top:15px">
-                        <a class="btn btn-link bg-danger" style="border-radius:50%;" data-toggle="modal" href="@("#deleteModal" + users.Id)"><i class="fas fa-trash" style="color:#ffffff!important;"></i></a>
+                    
+                    <div class="col-xs-2" style="margin:0 0 0 auto;padding-top:5px;padding-right:10px;">
+                        <a class="btn btn-link bg-danger" style="font-size:14px;border-radius:50%;" data-toggle="modal" href="@("#deleteModal" + users.Id)"><i class="fas fa-trash" style="color:#ffffff!important;"></i></a>
                         <div class="modal fade top-margin" id="@("deleteModal" + users.Id)" tabindex="-1" role="dialog">
                             <div class="modal-dialog">
                                 <div class="modal-content text-center">
@@ -63,6 +74,7 @@
                     </div>
                 </div>
             }
+        }
     }
     </div>
 </div>

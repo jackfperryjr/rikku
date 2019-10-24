@@ -16,5 +16,7 @@ namespace Rikku.Models
         public DateTime CreateDate { get; set; }
         public virtual ApplicationUser MessageSender { get; set; }
         public int MessageReadFlg { get; set; } = 0;
+        public string DeletedBy1 { get; set; }
+        public string DeletedBy2 { get; set; }
     }
 }

@@ -6,7 +6,7 @@
     var user = await UserManager.GetUserAsync(User);
 }
 
-<div class="row text-center" style="height:150px;">
+<div class="row text-center" style="height:150px;margin:0;">
     <img id="img-output-wallpaper" style="height:150px;width:100%;" src="@Model.Wallpaper" style="cursor:pointer;">
     <div class="col-md-4" style="margin: -150px auto 0 auto;">
         <img class="user-img-lg bottom-margin" src="@Model.Picture" title="Picture of user!">
@@ -28,8 +28,8 @@
         }
     </div>
 </div>
-<div class="row top-margin" style="margin-top: 80px;">
-    <div class="col-md-4" style="margin:0 0 10px auto;">
+<div class="row top-margin" style="margin:80px 0 0 0;">
+    <div class="col-md-4" style="margin:0 0 10px 0;">
         <h3 class="text-center">@Model.UserName</h3>
         <h5 class="text-center">@Model.City, @Model.State</h5>
         <h5></h5>
@@ -38,7 +38,7 @@
     </div>
 </div>
 
-<div class="row text-center" style="margin-bottom: 50px;">
+<div class="row text-center" style="margin:0 0 50px 0;">
     <a class="btn btn-primary" style="width:45%;margin:0 5px 0 auto;" data-toggle="modal" href="@("#newMessageModal")">Message</a>
     <a class="btn btn-secondary" style="background-color:#6c757d!important;width:45%;margin:0 auto 0 5px;" onclick="window.history.go(-1); return false;">Go Back</a>
     @if(ViewBag.IsFriend == 1)

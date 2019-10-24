@@ -18,23 +18,31 @@ for details on configuring this project to bundle and minify static web assets. 
   margin-top:60px;
   margin-bottom:80px;
   overflow-y:scroll;
+  padding: 0;
 }
 .home-index-container {
   min-width:350px;
   max-width:500px;
+  margin:0;
+  padding:0;
 }
 .user-snippet-container {
-  border-radius:5px;
-  border:1px solid #b0bec5;
-  margin-bottom:15px;
+  margin-bottom:30px;
+  background-color:#101010;
+  padding:20px 0;
 }
 .user-snippet-row-main {
-  padding-left:15px;
-  margin-bottom:10px;
+  padding-left:5px;
+  margin:0 0 10px 0;
 }
 .user-snippet-row-secondary {
   margin:0 auto;
   padding:0 10px;
+}
+.user-snippet-container span,
+.user-snippet-row-main span,
+.user-snippet-row-secondary span {
+  background-color:#101010!important;
 }
 .user-img-md {
   height:70px;
@@ -83,7 +91,7 @@ a:visited,
 .footer-nav > a:active,
 .footer-nav > a:hover,
 .footer-nav > a:visited {
-    background-color:#1a1a1a!important;
+    background-color:#101010!important;
 }
 .btn-danger,
 .btn-danger:hover,
@@ -294,6 +302,18 @@ body {
 .bottom-margin {
   margin-top: 20px;
 }
+#send-button {
+  position:fixed;
+  right:10px;
+  bottom:82px;
+  font-size:20px;
+  color:#ffffff;
+  z-index:100;
+  font-weight:bolder;
+}
+.move-bottom {
+  bottom: 15px!important;
+}
 .message-input-chat {
   position:fixed;
   bottom:70px;
@@ -305,6 +325,9 @@ body {
   border-radius: 5px;
   border: 1px solid #455a64;
   padding: 0 70px 0 7px;
+}
+.message-input-chat:focus {
+  bottom:0;
 }
 .message-input-profile {
   position:absolute;
@@ -375,7 +398,7 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
 }
 .footer-nav {
   width: 100%;
-  background-color: #ffffff;
+  background-color: #0d0d0d;
   color:#263238;
   position: fixed;
   bottom: 0;

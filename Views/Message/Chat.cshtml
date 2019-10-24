@@ -24,23 +24,23 @@
                 {
                     @if(@message.SenderId == @user.Id) 
                     {
-                        <div class="row" style="width:100vw;margin:0;padding-bottom:10px;">
+                        <div class="row" style="width:100vw;margin:0;padding-bottom:20px;">
                             <div class="col-sm-12" style="padding:0;">
                                 <img style="float: right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="@user.Picture"><span class="float-right bg-primary text-white" style="background-color:#1565c0 !important;font-size:16px;width: auto;border-radius: 7px;padding: 1% 2%;">@message.Content</span>
                             </div>
                             <div class="col-sm-12" style="padding:0;">
-                                <span style="color: #bdbdbd;height:15px; font-size:10px; float:right;">Sent @message.CreateDate</span>
+                                <span style="color: #bdbdbd;height:15px; font-size:10px; float:right;">Sent @message.CreateDate.ToShortDateString()</span>
                             </div>
                         </div>
                     }
                     else 
                     {
-                        <div class="row" style="width:100vw;margin:0;padding-bottom:10px;">
+                        <div class="row" style="width:100vw;margin:0;padding-bottom:20px;">
                             <div class="col-sm-12" style="padding:0;">
                                 <img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-@message.SenderId@png"><span class="float-left bg-success text-white" style="background-color:#558b2f!important;font-size:16px;width: auto;border-radius: 7px;padding: 1% 2%;">@message.Content</span>
                             </div>
                             <div class="col-sm-12" style="padding:0;">
-                                <span style="color: #bdbdbd;height:15px;font-size:10px;">Sent @message.CreateDate</span>
+                                <span style="color: #bdbdbd;height:15px;font-size:10px;">Sent @message.CreateDate.ToShortDateString()</span>
                             </div>
                         </div>
                     }
@@ -64,7 +64,7 @@
         }
         <div class="col-sm-12" style="display:inline-block;position:absolute;bottom:70px;">
             <input id="message-input" name="content" class="form-group input-group message-input-chat" placeholder="Type message here..." required/>
-            <button id="send-button" class="input-group-button btn btn-link" style="position:fixed;right:10px;bottom:82px;font-size:20px;color:#ffffff;z-index:100;font-weight:bolder;">Send</button>
+            <button id="send-button" class="input-group-button btn btn-link">Send</button>
         </div>
     </div>
     }

@@ -51,8 +51,14 @@ namespace Rikku.Controllers
                             State = user.State,
                             CreateDate = m.CreateDate,
                             MessageReadFlg = m.MessageReadFlg,
-                            Content = m.Content
-                        }).Where(m => (userId == m.ReceiverId) || (userId == m.SenderId)).ToList().OrderByDescending(m => m.CreateDate)
+                            Content = m.Content,
+                            DeletedBy1 = m.DeletedBy1,
+                            DeletedBy2 = m.DeletedBy2
+                        })
+                        .Where(m => (userId == m.ReceiverId) || (userId == m.SenderId))
+                        .Where(m => (m.DeletedBy1 != m.SenderId) || (m.DeletedBy2 != m.SenderId))
+                        .Where(m => (m.DeletedBy1 != m.ReceiverId) || (m.DeletedBy2 != m.ReceiverId))
+                        .ToList().OrderByDescending(m => m.CreateDate)
                         .Select(u => new ApplicationUserViewModel()  
                         {  
                             Id = u.UserId, 
@@ -65,10 +71,12 @@ namespace Rikku.Controllers
                             State = u.State,
                             CreateDate = u.CreateDate,
                             MessageReadFlg = u.MessageReadFlg,
-                            Content = u.Content
+                            Content = u.Content,
+                            DeletedBy1 = u.DeletedBy1,
+                            DeletedBy2 = u.DeletedBy2
                         });  
                         
-            users = users.GroupBy(u => u.Id).Select(u => u.FirstOrDefault());
+            users = users.Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId)).GroupBy(u => u.Id).Select(u => u.FirstOrDefault());
             return View(users.ToList());
         }
 
@@ -86,17 +94,23 @@ namespace Rikku.Controllers
                                 SenderId = message.SenderId,
                                 ReceiverId = message.ReceiverId,
                                 Content = message.Content,
-                                CreateDate = message.CreateDate
+                                CreateDate = message.CreateDate,
+                                DeletedBy1 = message.DeletedBy1,
+                                DeletedBy2 = message.DeletedBy2
                             }).Select(m => new MessageModel()  
                             {  
                                 MessageId = m.MessageId,
                                 SenderId = m.SenderId,
                                 ReceiverId = m.ReceiverId,
                                 Content = m.Content,
-                                CreateDate = m.CreateDate
+                                CreateDate = m.CreateDate,
+                                DeletedBy1 = m.DeletedBy1,
+                                DeletedBy2 = m.DeletedBy2
                             })
-                            .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
-                                            (c.ReceiverId == userId.ToString() && c.SenderId == id))
+                            .Where(c => ((c.ReceiverId == id && c.SenderId == userId.ToString()) &&
+                                        (c.DeletedBy1 != userId || c.DeletedBy2 != userId)) || 
+                                        ((c.ReceiverId == userId.ToString() && c.SenderId == id) && 
+                                        (c.DeletedBy1 != userId || c.DeletedBy2 != userId)))
                             .OrderBy(c => c.MessageId);
             
             foreach (MessageModel message in _context.Messages.Where(c => c.ReceiverId == userId.ToString() && c.SenderId == id))
@@ -148,22 +162,34 @@ namespace Rikku.Controllers
                                 SenderId = message.SenderId,
                                 ReceiverId = message.ReceiverId,
                                 Content = message.Content,
-                                CreateDate = message.CreateDate
+                                CreateDate = message.CreateDate,
+                                DeletedBy1 = message.DeletedBy1,
+                                DeletedBy2 = message.DeletedBy2
                             }).Select(m => new MessageModel()  
                             {  
                                 MessageId = m.MessageId,
                                 SenderId = m.SenderId,
                                 ReceiverId = m.ReceiverId,
                                 Content = m.Content,
-                                CreateDate = m.CreateDate
+                                CreateDate = m.CreateDate,
+                                DeletedBy1 = m.DeletedBy1,
+                                DeletedBy2 = m.DeletedBy2
                             })
                             .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
-                                            (c.ReceiverId == userId.ToString() && c.SenderId == id))
+                                            (c.ReceiverId == userId.ToString() && c.SenderId == id)
+                                            && (c.DeletedBy1 != userId || c.DeletedBy2 != userId))
                             .OrderBy(c => c.MessageId);
             
-            foreach (MessageModel message in _context.Messages.Where(c => c.ReceiverId == userId.ToString() && c.SenderId == id))
+            foreach (MessageModel message in _context.Messages.Where(c => (c.ReceiverId == userId.ToString() && c.SenderId == id) || (c.SenderId == userId.ToString() && c.ReceiverId == id)))
             {
-                _context.Messages.Remove(message);
+                if (message.DeletedBy1 != userId.ToString())
+                {
+                    message.DeletedBy1 = userId.ToString();
+                }
+                else 
+                {
+                    message.DeletedBy2 = userId.ToString();
+                }
             }
             
             _context.SaveChanges();
