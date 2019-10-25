@@ -78,6 +78,9 @@ a:visited,
   background-color:#000000!important;
   color:#ffffff!important;
 }
+a:focus {
+  text-decoration:none;
+}
 .modal-header,
 .modal-body {
   background-color:#212121!important;
@@ -130,7 +133,6 @@ select {
 input:focus,
 select:focus {
   outline:none!important;
-  border-bottom: 3px solid #90a4ae!important;
   border-radius: 5px;
   transition: all .1s ease-in-out;
 }
