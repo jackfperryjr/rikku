@@ -78,8 +78,12 @@ a:visited,
   background-color:#000000!important;
   color:#ffffff!important;
 }
+a,
+a:active,
+a:hover,
+a:visited,
 a:focus {
-  text-decoration:none;
+  text-decoration:none!important;
 }
 .modal-header,
 .modal-body {

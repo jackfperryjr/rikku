@@ -1,16 +1,16 @@
 {
-    "name": "ffapp",
-    "short_name": "ffapp",
-    "description": "ffapp",
+    "name": "ffriendster",
+    "short_name": "ffriendster",
+    "description": "ffriendster",
     "background_color": "#000000",
     "theme_color": "#000000",
     "icons": [
       {
-        "src": "/icons/ffapp/ffapp-192.png",
+        "src": "/icons/ffapp/ff-circle-192.png",
         "sizes": "192x192"
       },
       {
-        "src": "/icons/ffapp/ffapp-512.png",
+        "src": "/icons/ffapp/ff-circle-512.png",
         "sizes": "512x512"
       }
     ],

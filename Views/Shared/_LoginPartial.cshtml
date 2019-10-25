@@ -6,7 +6,7 @@
 }
 @if (SignInManager.IsSignedIn(User))
 {
-    <h2 class="float-left ffapp">ffapp</h2>
+    <h2 class="float-left ffapp">ffriendster</h2>
     <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
         <button type="submit" class="float-right btn btn-link"><i class="fas fa-sign-out-alt" style="color:#ffffff;font-size:24px;"></i></button>
     </form>
@@ -14,7 +14,7 @@
 }
 else
 {
-    <h2 class="float-left ffapp">ffapp</h2>
+    <h2 class="float-left ffapp">ffriendster</h2>
     <a class="nav-link float-right" asp-area="Identity" asp-page="/Account/Register"><i class="fas fa-book-reader"></i></a>
     <a class="nav-link float-right" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i></a>
 }
