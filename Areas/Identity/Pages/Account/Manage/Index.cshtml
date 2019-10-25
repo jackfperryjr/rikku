@@ -9,7 +9,7 @@
 }
 <partial name="_StatusMessage" for="StatusMessage" />
 <form id="profile-form" method="post" enctype="multipart/form-data">
-    <div class="row text-center" style="height: 150px;position:relative;">
+    <div class="row text-center" style="height: 150px;position:relative;margin:0;">
         <label>
             <img id="img-output-wallpaper" style="height:150px;width:100%;" src="@user.Wallpaper" style="cursor:pointer;">
             <i class="fas fa-camera" title="Change Image" style="color:rgba(255,255,255,.7);cursor:pointer;position:absolute;bottom:3px;right:3px;z-index:200;"></i> 
@@ -26,8 +26,8 @@
             <span asp-validation-for="Input.Picture" class="text-danger"></span>
         </div>
     </div>
-    <div class="row top-margin">
-        <div class="col-md-4" style="margin:10px 0 0 auto;">
+    <div class="row top-margin" style="margin-right:0!important;margin-left:0!important;">
+        <div class="col-md-4" style="margin:10px 0 0 0;">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="Input.UserName" class="form-control" />
@@ -50,7 +50,7 @@
                 <span asp-validation-for="Input.ZipCode" class="text-danger"></span>
             </div>
         </div>
-        <div class="col-md-4" style="margin:0 auto 0 0;">
+        <div class="col-md-4" style="margin:0;">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <div class="form-inline">

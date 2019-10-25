@@ -14,7 +14,7 @@
     {
         @if(users.MessageReadFlg == 0)
         {
-            color = "#101010";
+            color = "#212121";
         }
         else 
         {
@@ -26,7 +26,7 @@
             @if(users.DeletedBy1 != user.Id || users.DeletedBy2 != user.Id)
             {    
                 
-                <div class="row" style="margin:0 0 10px 0;background-color:@color;">
+                <div class="row" style="margin:0 0 20px 0;background-color:@color;">
                     <div class="col-xs-4" style="margin:0 20px 0 0;padding-left:10px;">
                         <a asp-action="Chat" asp-route-id="@users.Id">
                             @if(users.MessageReadFlg == 0)
