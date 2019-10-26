@@ -42,9 +42,9 @@
                         </a>
                     </div>
                     <div class="col-xs-6" style="margin:0;padding-top:5px;text-align:left;">
-                        <a asp-action="Chat" asp-route-id="@users.Id" style="display:inline;">
-                            <span style="font-size: 14px;">@users.UserName</span><br/>
-                            <span style="font-size: 12px;">@users.CreateDate.ToShortDateString()</span>
+                        <a asp-action="Chat" asp-route-id="@users.Id" style="display:inline;background-color:@color;">
+                            <span style="font-size: 14px;background-color:@color;">@users.UserName</span><br/>
+                            <span style="font-size: 12px;background-color:@color;">@users.CreateDate.ToShortDateString()</span>
                         </a>
                     </div>
                     

@@ -10,6 +10,8 @@
         window.location = linkLocation;
     }
 
+
+
     if (window.location.href.indexOf("Chat") > -1) { // These are only needed on the Chat screen.
         $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
 
@@ -23,6 +25,10 @@
             $("#send-button").removeClass("move-bottom");
         });
     }
+    (function runForever(){
+        getMessageCount();
+        setTimeout(runForever, 3000)
+      })()
 });
 
 $("#img-input-user").change(function(event) {
@@ -40,3 +46,13 @@ $("#select-receiver").change(function() {
     let target = $('#receiver-id'); 
     $(target).attr('value', id);
 });
+
+function getMessageCount() {
+    $.get("/MessageApi/GetMessageCount", function (data) {
+        if (data > 0) {
+            $("#message-count").empty();
+            $("#message-count").html(data);
+            $("#message-count").show();
+        }
+    }, "json");
+}

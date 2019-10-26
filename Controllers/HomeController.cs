@@ -32,8 +32,6 @@ namespace Rikku.Controllers
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            ViewBag.MessageCount = GetMessageCount();
-
             var users = (from user in _context.Users  
                         select new  
                         {  
@@ -72,8 +70,6 @@ namespace Rikku.Controllers
         [Authorize(Roles="Admin")]
         public IActionResult Admin(string searchString)
         {
-            ViewBag.MessageCount = GetMessageCount();
-
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var users = (from user in _context.Users  
@@ -188,8 +184,6 @@ namespace Rikku.Controllers
         [Authorize]
         public IActionResult Friends(string searchString)
         {
-            ViewBag.MessageCount = GetMessageCount();
-
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var friends = (from user in _context.Users  
@@ -305,8 +299,6 @@ namespace Rikku.Controllers
         public async Task<IActionResult> Profile(string id)
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            ViewBag.MessageCount = GetMessageCount();
             
             var friends = (from u in _context.Users  
                                 join f in _context.Friends on u.Id equals f.FriendId
@@ -355,21 +347,6 @@ namespace Rikku.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-        public int GetMessageCount()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var count = (from message in _context.Messages
-                                    select new
-                                    {
-                                        MessageId = message.MessageId,
-                                        ReceiverId = message.ReceiverId,
-                                        SenderId = message.SenderId,
-                                        CreateDate = message.CreateDate,
-                                        MessageReadFlg = message.MessageReadFlg
-                                    }).Where(m => (m.ReceiverId == userId )&& (m.MessageReadFlg == 0)).Count(); 
-            return count;
         }
     }
 }

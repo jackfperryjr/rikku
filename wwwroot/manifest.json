@@ -6,11 +6,11 @@
     "theme_color": "#000000",
     "icons": [
       {
-        "src": "/icons/ffapp/ff-circle-192.png",
+        "src": "/icons/ffapp/ff-square-192.png",
         "sizes": "192x192"
       },
       {
-        "src": "/icons/ffapp/ff-circle-512.png",
+        "src": "/icons/ffapp/ff-square-512.png",
         "sizes": "512x512"
       }
     ],

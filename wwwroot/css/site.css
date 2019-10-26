@@ -318,7 +318,7 @@ body {
   font-weight:bolder;
 }
 .move-bottom {
-  bottom: 15px!important;
+  bottom: 12px!important;
 }
 .message-input-chat {
   position:fixed;
@@ -328,12 +328,13 @@ body {
   font-size:16px;
   min-height: 30px;
   height: 40px;
-  border-radius: 15px;
+  border-radius: 25px;
   border: 1px solid #455a64;
   padding: 0 70px 0 7px;
 }
 .message-input-chat:focus {
   bottom:0;
+  border-radius: 25px;
 }
 .message-input-profile {
   position:absolute;

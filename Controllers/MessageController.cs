@@ -31,8 +31,6 @@ namespace Rikku.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.MessageCount = GetMessageCount();
-
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var users = (from user in _context.Users  
@@ -55,8 +53,8 @@ namespace Rikku.Controllers
                             DeletedBy1 = m.DeletedBy1,
                             DeletedBy2 = m.DeletedBy2
                         })
-                        .Where(m => (userId == m.ReceiverId) || (userId == m.SenderId))
-                        .Where(m => (m.DeletedBy1 != m.SenderId) || (m.DeletedBy2 != m.SenderId))
+                        .Where(m => (m.ReceiverId == userId) || (m.SenderId == userId))
+                        // .Where(m => (m.DeletedBy1 != m.SenderId) || (m.DeletedBy2 != m.SenderId))
                         .Where(m => (m.DeletedBy1 != m.ReceiverId) || (m.DeletedBy2 != m.ReceiverId))
                         .ToList().OrderByDescending(m => m.CreateDate)
                         .Select(u => new ApplicationUserViewModel()  
@@ -82,8 +80,6 @@ namespace Rikku.Controllers
 
         public IActionResult Chat(string id)
         {    
-            ViewBag.MessageCount = GetMessageCount();
-
             ViewBag.PictureId = id;
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -150,8 +146,6 @@ namespace Rikku.Controllers
 
         public IActionResult DeleteChat(string id)
         {    
-            ViewBag.MessageCount = GetMessageCount();
-
             ViewBag.PictureId = id;
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -164,7 +158,8 @@ namespace Rikku.Controllers
                                 Content = message.Content,
                                 CreateDate = message.CreateDate,
                                 DeletedBy1 = message.DeletedBy1,
-                                DeletedBy2 = message.DeletedBy2
+                                DeletedBy2 = message.DeletedBy2,
+                                MessageReadFlg = message.MessageReadFlg
                             }).Select(m => new MessageModel()  
                             {  
                                 MessageId = m.MessageId,
@@ -173,7 +168,8 @@ namespace Rikku.Controllers
                                 Content = m.Content,
                                 CreateDate = m.CreateDate,
                                 DeletedBy1 = m.DeletedBy1,
-                                DeletedBy2 = m.DeletedBy2
+                                DeletedBy2 = m.DeletedBy2,
+                                MessageReadFlg = m.MessageReadFlg
                             })
                             .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
                                             (c.ReceiverId == userId.ToString() && c.SenderId == id)
@@ -190,6 +186,7 @@ namespace Rikku.Controllers
                 {
                     message.DeletedBy2 = userId.ToString();
                 }
+                message.MessageReadFlg = 1;
             }
             
             _context.SaveChanges();
@@ -200,22 +197,6 @@ namespace Rikku.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        public int GetMessageCount()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var count = (from message in _context.Messages
-                                    select new
-                                    {
-                                        MessageId = message.MessageId,
-                                        ReceiverId = message.ReceiverId,
-                                        SenderId = message.SenderId,
-                                        CreateDate = message.CreateDate,
-                                        MessageReadFlg = message.MessageReadFlg
-                                    }).Where(m => (m.ReceiverId == userId )&& (m.MessageReadFlg == 0)).Count(); 
-            return count;
         }
 
         public IActionResult SendResponse(string id, string userId)
