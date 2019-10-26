@@ -14,11 +14,11 @@
     {
         @if(users.MessageReadFlg == 0)
         {
-            color = "#212121";
+            color = "#212121!important";
         }
         else 
         {
-            color = "#000000";
+            color = "#000000!important";
         }
 
         @if(users.Email != user.Email)
@@ -56,14 +56,14 @@
                                     @using(Html.BeginForm("DeleteChat", "Message"))
                                     {
                                     <input type="hidden" value="@users.Id" name="id" />
-                                    <div class="modal-header">
+                                    <div class="modal-header" style="border:none!important;border:none!important;border-bottom-top-radius:0!important;border-top-left-radius:0!important;">
                                         <h4 class="modal-title">Confirm</h4>
                                         <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
                                     </div>
-                                    <div class="modal-body" style="background-color:#212121!important;">
+                                    <div class="modal-body" style="border:none!important;background-color:#212121!important;">
                                         <p>Are you sure you want to delete these messages?</p>
                                     </div>
-                                    <div class="modal-footer" style="background-color:#212121!important;">
+                                    <div class="modal-footer" style="border:none!important;border-bottom-right-radius:0!important;border-bottom-left-radius:0!important;background-color:#212121!important;">
                                         <button type="submit" class="btn btn-danger">Yes</button>
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                     </div>
