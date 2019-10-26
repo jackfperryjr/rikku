@@ -74,7 +74,7 @@ namespace Rikku.Controllers
                             DeletedBy2 = u.DeletedBy2
                         });  
                         
-            users = users.Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId)).GroupBy(u => u.Id).Select(u => u.FirstOrDefault());
+            users = users.Where(m => m.DeletedBy1 != userId || m.DeletedBy2 != userId).GroupBy(u => u.Id).Select(u => u.FirstOrDefault());
             return View(users.ToList());
         }
 
@@ -178,7 +178,7 @@ namespace Rikku.Controllers
             
             foreach (MessageModel message in _context.Messages.Where(c => (c.ReceiverId == userId.ToString() && c.SenderId == id) || (c.SenderId == userId.ToString() && c.ReceiverId == id)))
             {
-                if (message.DeletedBy1 != userId.ToString())
+                if (message.DeletedBy1 == null || message.DeletedBy1 != userId.ToString())
                 {
                     message.DeletedBy1 = userId.ToString();
                 }

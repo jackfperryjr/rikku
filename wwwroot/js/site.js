@@ -10,7 +10,9 @@
         window.location = linkLocation;
     }
 
-
+    if (window.location.href.indexOf("Profile") > -1) {
+        isFriend();
+    }
 
     if (window.location.href.indexOf("Chat") > -1) { // These are only needed on the Chat screen.
         $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
@@ -25,10 +27,11 @@
             $("#send-button").removeClass("move-bottom");
         });
     }
+    
     (function runForever(){
         getMessageCount();
         setTimeout(runForever, 3000)
-      })()
+      })();
 });
 
 $("#img-input-user").change(function(event) {
@@ -48,11 +51,61 @@ $("#select-receiver").change(function() {
 });
 
 function getMessageCount() {
-    $.get("/MessageApi/GetMessageCount", function (data) {
+    $.get("/FfriendsterApi/GetMessageCount", function (data) {
         if (data > 0) {
             $("#message-count").empty();
             $("#message-count").html(data);
             $("#message-count").show();
         }
     }, "json");
+}
+
+function addFriend() {
+    let url = window.location.href;
+    let obj = new Object();
+    obj.id = url.split('/').pop();
+    $.ajax(
+        {
+            type: "POST",
+            url: "/FfriendsterApi/AddFriend", 
+            data: obj,
+            success: function() {
+                isFriend();
+        }
+    });
+}
+
+function deleteFriend() {
+    let url = window.location.href;
+    let obj = new Object();
+    obj.id = url.split('/').pop();
+    $.ajax(
+        {
+            type: "DELETE",
+            url: "/FfriendsterApi/DeleteFriend", 
+            data: obj,
+            success: function() {
+                isFriend();
+        }
+    });
+}
+
+function isFriend() {
+    let url = window.location.href;
+    let obj = new Object();
+    obj.id = url.split('/').pop();
+    $.ajax(
+        {
+            url: "/FfriendsterApi/IsFriend", 
+            data: obj,
+            success: function(response) {
+                if (response == 1) {
+                    $("#add-friend").html('<i class="fas fa-heart text-danger"></i>');
+                    $("#delete-friend").show();
+                } else {
+                    $("#add-friend").html('<i class="far fa-heart text-danger"></i>');
+                    $("#delete-friend").hide();
+                }
+        }
+    });
 }

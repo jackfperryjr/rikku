@@ -16,6 +16,15 @@
     <!-- Start of PWA icons -->
     <!-- Home screen icon -->
     <link rel="apple-touch-icon" href="~/icons/ffapp/apple-touch-icon-square.png">
+    <!-- Pinned Tab  -->
+    <link href="favicon.ico" rel="mask-icon" size="any">
+    <!-- Android  -->
+    <link href="~/icons/ffapp/apple-touch-icon-circle.png" rel="icon" sizes="192x192">
+    <!-- Others -->
+    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <!-- UC Browser  -->
+    <link href="~/icons/ffapp/apple-touch-icon-circle.png" rel="apple-touch-icon-precomposed" sizes="57x57">
+    <link href="~/icons/ffapp/apple-touch-icon-circle.png" rel="apple-touch-icon" sizes="72x72">
     <!-- iPhone Xs Max (1242px x 2688px) --> 
    <!-- <link href="~/icons/ffapp/splashscreens/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
    <link href="~/icons/ffapp/splashscreens/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
@@ -48,6 +57,9 @@
         <partial name="_FooterMenuPartial" />
     </footer>
     <script src="~/js/site.min.js"></script>
+    <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.9/pwacompat.min.js"
+    integrity="sha384-VcI6S+HIsE80FVM1jgbd6WDFhzKYA0PecD/LcIyMQpT4fMJdijBh0I7Iblaacawc"
+    crossorigin="anonymous"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
