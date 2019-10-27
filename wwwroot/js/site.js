@@ -10,6 +10,20 @@
         window.location = linkLocation;
     }
 
+    if (window.location.href.indexOf("Message") > -1) {
+        $("#fa-envelope").addClass("active").siblings().removeClass("active");
+    } else if (window.location.href.indexOf("Friends") > -1) {
+        $("#fa-users").addClass("active").siblings().removeClass("active");
+    } else if (window.location.href.indexOf("Manage") > -1) {
+        $("#fa-user").addClass("active").siblings().removeClass("active");
+    } else if (window.location.href.indexOf("Admin") > -1) {
+        $("#fa-users-cog").addClass("active").siblings().removeClass("active");
+    } else if (window.location.href.indexOf("About") > -1) {
+        $("#fa-info").addClass("active").siblings().removeClass("active");
+    } else {
+        $("#fa-home").addClass("active").siblings().removeClass("active");
+    }
+
     if (window.location.href.indexOf("Profile") > -1) {
         isFriend();
     }
@@ -27,7 +41,7 @@
             $("#send-button").removeClass("move-bottom");
         });
     }
-    
+
     (function runForever(){
         getMessageCount();
         setTimeout(runForever, 3000)
