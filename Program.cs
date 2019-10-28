@@ -15,9 +15,9 @@ namespace Rikku
 
             using (var scope = host.Services.CreateScope())
             {
-                var provider = scope.ServiceProvider;
-				provider.GetService<ApplicationDbContext>().Database.Migrate();
-                ApplicationRole.CreateRoles(provider, Startup.Configuration); // This is used on the first build.
+                //var provider = scope.ServiceProvider;
+				//provider.GetService<ApplicationDbContext>().Database.Migrate();
+                //ApplicationRole.CreateRoles(provider, Startup.Configuration); // This is used on the first build.
             }
             host.Run();
         }

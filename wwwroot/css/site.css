@@ -101,7 +101,7 @@ a:focus {
 .footer-nav > a:hover,
 .footer-nav > a:visited {
     background-color:#101010!important;
-    color:#E8E8E8!important;
+    color:#ffffff!important;
     transition: all .1s ease-in-out;
 }
 .btn-danger,

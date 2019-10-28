@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebEssentials.AspNetCore.Pwa;
 using Rikku.Data;
-using Rikku.Hubs;
 
 namespace Rikku
 {
@@ -67,7 +66,6 @@ namespace Rikku
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapHub<ChatHub>("/ChatHub");
             });
         }
     }
