@@ -64,7 +64,7 @@ html {
   font-size: 14px;
 }
 .active {
-  color:#929fba!important;
+  color:#ffffff!important;
 }
 /* Dark Mode overrides */
 body,
@@ -99,7 +99,7 @@ a:focus {
 .footer-nav > a:hover,
 .footer-nav > a:visited {
     background-color:#101010!important;
-    color:#ffffff!important;
+    color:#F5F5F5!important;
 }
 .btn-danger,
 .btn-danger:hover,
