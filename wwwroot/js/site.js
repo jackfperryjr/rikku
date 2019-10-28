@@ -42,9 +42,9 @@
         });
     }
 
-    (function runForever(){
+    (function mailChecker(){
         getMessageCount();
-        setTimeout(runForever, 3000)
+        setTimeout(mailChecker, 3000)
       })();
 });
 
@@ -104,21 +104,31 @@ function deleteFriend() {
     });
 }
 
-function isFriend() {
-    let url = window.location.href;
+function isFriend(id) {
     let obj = new Object();
-    obj.id = url.split('/').pop();
+    if (window.location.href.indexOf("Profile") > -1) {
+        let url = window.location.href;
+        obj.id = url.split('/').pop();
+    } else {
+        obj.id = id;
+    }
     $.ajax(
         {
             url: "/FfriendsterApi/IsFriend", 
             data: obj,
             success: function(response) {
                 if (response == 1) {
-                    $("#add-friend").html('<i class="fas fa-heart text-danger"></i>');
-                    $("#delete-friend").show();
+                    if (window.location.href.indexOf("Profile") > -1) {
+                        $("#add-friend").html('<i class="fas fa-heart text-danger"></i>');
+                        $("#delete-friend").show();
+                    } else {
+                        $("#friend-heart").show();
+                    }
                 } else {
-                    $("#add-friend").html('<i class="far fa-heart text-danger"></i>');
-                    $("#delete-friend").hide();
+                    if (window.location.href.indexOf("Profile") > -1) {
+                        $("#add-friend").html('<i class="far fa-heart text-danger"></i>');
+                        $("#delete-friend").hide();
+                    }
                 }
         }
     });

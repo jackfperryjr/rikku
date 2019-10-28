@@ -342,7 +342,7 @@ body {
 }
 .message-input-profile {
   position:absolute;
-  bottom:30px;
+  bottom:10px;
   left:0;
   font-size:16px;
   min-height: 30px;
