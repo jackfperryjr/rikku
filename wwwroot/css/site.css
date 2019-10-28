@@ -65,6 +65,8 @@ html {
 }
 .active {
   color:#ffffff!important;
+  transition: all .1s ease-in-out;
+  font-size:34px;
 }
 /* Dark Mode overrides */
 body,
@@ -100,6 +102,7 @@ a:focus {
 .footer-nav > a:visited {
     background-color:#101010!important;
     color:#E8E8E8!important;
+    transition: all .1s ease-in-out;
 }
 .btn-danger,
 .btn-danger:hover,
