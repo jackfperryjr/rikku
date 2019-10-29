@@ -68,6 +68,13 @@ function redirectPage() {
 
 function getUsers() {
     $.get("/FfriendsterApi/GetUsers", function (data) {
+        for (i = 0; i < data.length; i++) {
+            let isFriendFlg = isFriend(data[i].userId);
+            console.log(isFriendFlg);
+            if (isFriendFlg == 1) {
+                data[i].isFriendFlg = 1;
+            }
+        }
         console.log(data);
     }, "json");
 }
@@ -130,12 +137,15 @@ function isFriend(id) {
                         $("#add-friend").html('<i class="fas fa-heart text-danger"></i>');
                         $("#delete-friend").show();
                     } else {
-                        $("#friend-heart").show();
+                        return response;
+                        //$("#friend-heart").show();
                     }
                 } else {
                     if (window.location.href.indexOf("Profile") > -1) {
                         $("#add-friend").html('<i class="far fa-heart text-danger"></i>');
                         $("#delete-friend").hide();
+                    } else {
+                        return response;
                     }
                 }
         }

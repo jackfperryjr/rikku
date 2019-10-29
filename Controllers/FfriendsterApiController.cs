@@ -183,16 +183,6 @@ namespace Rikku.Controllers
                             IsFriendFlg = 0
                         }).Where(u => u.UserId != userId);   
 
-            foreach (ApplicationUserViewModel u in users)
-            {
-                var isFriend = IsFriend(u.UserId);
-                if (isFriend == 1)
-                {
-                    u.IsFriendFlg = 1;  
-                }
-            }
-            _context.SaveChanges();
-
             return users.ToList(); 
         }
 
@@ -221,7 +211,6 @@ namespace Rikku.Controllers
                         {  
                             Id = u.Id,  
                             UserId = u.UserId,
-                            FriendId = u.FriendId,
                             UserName = u.UserName,
                             FirstName = u.FirstName, 
                             LastName = u.LastName, 
