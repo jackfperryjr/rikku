@@ -148,5 +148,91 @@ namespace Rikku.Controllers
 
             return Ok();
         }
+
+        [HttpGet]
+        public List<ApplicationUserViewModel> GetUsers()
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var users = (from user in _context.Users  
+                        select new  
+                        {  
+                            Id = user.Id,    
+                            UserName = user.UserName,                                    
+                            FirstName = user.FirstName,  
+                            LastName = user.LastName,
+                            Picture = user.Picture,
+                            Email = user.Email,
+                            City = user.City,
+                            State = user.State,
+                            ZipCode = user.ZipCode,
+                            Profile = user.Profile
+                        }).ToList()
+                        .Select(u => new ApplicationUserViewModel()  
+                        {  
+                            UserId = u.Id,  
+                            UserName = u.UserName,
+                            FirstName = u.FirstName, 
+                            LastName = u.LastName, 
+                            Picture = u.Picture,
+                            Email = u.Email,
+                            City = u.City,
+                            State = u.State,
+                            ZipCode = u.ZipCode,
+                            Profile = u.Profile,
+                            IsFriendFlg = 0
+                        }).Where(u => u.UserId != userId);   
+
+            foreach (ApplicationUserViewModel u in users)
+            {
+                var isFriend = IsFriend(u.UserId);
+                if (isFriend == 1)
+                {
+                    u.IsFriendFlg = 1;  
+                }
+            }
+            _context.SaveChanges();
+
+            return users.ToList(); 
+        }
+
+        [HttpGet]
+        public List<ApplicationUserViewModel> GetFriends()
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var friends = (from user in _context.Users  
+                        join f in _context.Friends on user.Id equals f.FriendId
+                        select new  
+                        {  
+                            Id = user.Id,
+                            UserId = f.UserId,
+                            FriendId = f.FriendId,
+                            UserName = user.UserName,                                    
+                            FirstName = user.FirstName,  
+                            LastName = user.LastName,
+                            Picture = user.Picture,
+                            Email = user.Email,
+                            City = user.City,
+                            State = user.State,
+                            ZipCode = user.ZipCode
+                        }).Where(u => userId == u.UserId).ToList()
+                        .Select(u => new ApplicationUserViewModel()  
+                        {  
+                            Id = u.Id,  
+                            UserId = u.UserId,
+                            FriendId = u.FriendId,
+                            UserName = u.UserName,
+                            FirstName = u.FirstName, 
+                            LastName = u.LastName, 
+                            Picture = u.Picture,
+                            Email = u.Email,
+                            City = u.City,
+                            State = u.State,
+                            ZipCode = u.ZipCode
+                        });  
+            
+            return friends.ToList();
+        }
     }
 }

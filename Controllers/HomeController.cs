@@ -62,6 +62,7 @@ namespace Rikku.Controllers
 
             return View(users.ToList()); 
         }
+        
         public IActionResult About()
         {
             return View();

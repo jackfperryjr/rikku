@@ -5,10 +5,6 @@
         linkLocation = this.href;
         $("#main").fadeOut(200, redirectPage);      
     });
-        
-    function redirectPage() {
-        window.location = linkLocation;
-    }
 
     if (window.location.href.indexOf("Message") > -1) {
         $("#fa-envelope").addClass("active").siblings().removeClass("active");
@@ -46,6 +42,8 @@
         getMessageCount();
         setTimeout(mailChecker, 3000)
       })();
+    
+    getUsers();
 });
 
 $("#img-input-user").change(function(event) {
@@ -63,6 +61,16 @@ $("#select-receiver").change(function() {
     let target = $('#receiver-id'); 
     $(target).attr('value', id);
 });
+
+function redirectPage() {
+    window.location = linkLocation;
+}
+
+function getUsers() {
+    $.get("/FfriendsterApi/GetUsers", function (data) {
+        console.log(data);
+    }, "json");
+}
 
 function getMessageCount() {
     $.get("/FfriendsterApi/GetMessageCount", function (data) {
