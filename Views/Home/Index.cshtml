@@ -10,27 +10,8 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <div class="container home-index-container">                        
-        @foreach (var users in Model) 
-        {
-            <div class="user-snippet-container">
-                <a asp-action="Profile" asp-route-id="@users.Id">
-                    <div class="row user-snippet-row-main">
-                        <div class="col-xs-5">
-                            <img class="user-img-md" src="@users.Picture">
-                        </div>
-                        <div class="col-xs-7">
-                            <span style="font-size: 18px;">@users.UserName</span> <br/>
-                            <span style="font-size: 16px;">@users.City, @users.State</span>
-                            <span id="friend-heart" style="display:none;"><i class="fas fa-heart text-danger"></i></span>
-                        </div>
-                    </div>
-                    <div class="row user-snippet-row-secondary">
-                        <span>@users.Profile</span>
-                    </div>
-                </a>
-            </div>
-        }
+    <div id="home-index-container" class="container home-index-container">                        
+        
     </div>
 }
 else

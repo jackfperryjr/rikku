@@ -1,13 +1,7 @@
 ﻿$(document).ready(function() {
-    $("#main").fadeIn(200);
-    $("a.transition").click(function(event){
-        event.preventDefault();
-        linkLocation = this.href;
-        $("#main").fadeOut(200, redirectPage);      
-    });
-
     if (window.location.href.indexOf("Message") > -1) {
         $("#fa-envelope").addClass("active").siblings().removeClass("active");
+        getMessages();
     } else if (window.location.href.indexOf("Friends") > -1) {
         $("#fa-users").addClass("active").siblings().removeClass("active");
     } else if (window.location.href.indexOf("Manage") > -1) {
@@ -18,6 +12,7 @@
         $("#fa-info").addClass("active").siblings().removeClass("active");
     } else {
         $("#fa-home").addClass("active").siblings().removeClass("active");
+        getUsers();
     }
 
     if (window.location.href.indexOf("Profile") > -1) {
@@ -42,8 +37,6 @@
         getMessageCount();
         setTimeout(mailChecker, 3000)
       })();
-    
-    getUsers();
 });
 
 $("#img-input-user").change(function(event) {
@@ -62,31 +55,129 @@ $("#select-receiver").change(function() {
     $(target).attr('value', id);
 });
 
-function redirectPage() {
-    window.location = linkLocation;
+function getUsers() {
+    $("#overlay").show();
+    $.ajax({
+        type: "GET",
+        url: "/FfriendsterApi/GetUsers", 
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            let data = response;
+            let container = '';
+            for (i = 0; i < data.length; i++) {
+                container += '<div class="user-snippet-container">';
+                container += '  <a href="/Home/Profile/'+data[i]["userId"]+'">';
+                container += '    <div class="row user-snippet-row-main">';
+                container += '      <div class="col-xs-5">';
+                container += '        <img class="user-img-md" src="'+data[i]["picture"]+'">';
+                container += '      </div>';
+                container += '      <div class="col-xs-7">';
+                container += '        <span style="font-size: 18px;">'+data[i]["userName"]+'</span> <br/>';
+                container += '        <span style="font-size: 16px;">'+data[i]["city"]+', '+data[i]["state"]+'</span>';
+                container += '        <span id="friend-heart" style="display:none;">';
+                container += '          <i class="fas fa-heart text-danger"></i>';
+                container += '        </span>';
+                container += '      </div>';
+                container += '    </div>';
+                container += '    <div class="row user-snippet-row-secondary">';
+                container += '      <span>'+data[i]["profile"]+'</span>';
+                container += '    </div>';
+                container += '  </a>';
+                container += '</div>';
+            }
+            $("#home-index-container").html(container);
+            $("#overlay").hide();
+        }
+    });
 }
 
-function getUsers() {
-    $.get("/FfriendsterApi/GetUsers", function (data) {
-        for (i = 0; i < data.length; i++) {
-            let isFriendFlg = isFriend(data[i].userId);
-            console.log(isFriendFlg);
-            if (isFriendFlg == 1) {
-                data[i].isFriendFlg = 1;
+function getMessages() {
+    $("#overlay").show();
+    $.ajax({
+        type: "GET",
+        url: "/FfriendsterApi/GetMessages", 
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            let data = response;
+             let container = "";
+             let color = "#000000!important";
+             for (i = 0; i < data.length; i++) {
+                if (data[i]["messageReadFlg"] == 0) {
+                    color = "#212121!important";
+                } 
+                container += '<div class="row" style="margin:0 0 20px 0;background-color:'+color+';">';
+                container += '  <div class="col-xs-4" style="margin:0 20px 0 0;padding-left:10px;">';
+                container += '    <a href="/Message/Chat/'+data[i]["id"]+'">';
+                if (data[i]["messageReadFlg"] == 0) {
+                    container += '  <div style="position:relative;border-radius:50%;height:55px;width:55px;background-image:linear-gradient(to bottom right, #fff,#0d47a1,#9933CC);">';
+                    container += '    <img src="'+data[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
+                    container += '  </div>';
+                } else {
+                    container += '    <img src="'+data[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;">';
+                }       
+                container += '    </a>';
+                container += '  </div>';
+                container += '  <div class="col-xs-6" style="margin:0;padding-top:5px;text-align:left;">';
+                container += '    <a asp-action="Chat" asp-route-id="@users.Id" style="display:inline;background-color:'+color+';">';
+                container += '      <span style="font-size: 14px;background-color:'+color+';">'+data[i]["userName"]+'</span><br/>';
+                let date = data[i]["createDate"];
+                date = new Date(date).toLocaleDateString();
+                container += '      <span style="font-size: 12px;background-color:'+color+';">'+date+'</span>';
+                container += '    </a>';
+                container += '  </div>';
+                container += '  <div class="col-xs-2" style="margin:0 0 0 auto;padding-top:5px;padding-right:10px;">';
+                container += '    <a class="btn btn-link bg-danger" style="font-size:14px;border-radius:50%;" data-toggle="modal" href="#deleteModal'+data[i]["id"]+'"><i class="fas fa-trash" style="color:#ffffff!important;"></i></a>';
+                console.log(data[i]["id"]);
+                container += '    <div class="modal fade top-margin" id="deleteModal'+data[i]["id"]+'" tabindex="-1" role="dialog">';
+                container += '      <div class="modal-dialog">';
+                container += '        <div class="modal-content text-center">';
+                //                     @using(Html.BeginForm("DeleteChat", "Message"))
+
+                //                     TODO: add in the delete chat functionality
+
+                //                     <input type="hidden" value="@users.Id" name="id" />
+                container += '          <div class="modal-header" style="border:none!important;border:none!important;border-bottom-top-radius:0!important;border-top-left-radius:0!important;">';
+                container += '            <h4 class="modal-title">Confirm</h4>';
+                container += '              <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>';
+                container += '            </div>';
+                container += '            <div class="modal-body" style="border:none!important;background-color:#212121!important;">';
+                container += '              <p>Are you sure you want to delete these messages?</p>';
+                container += '            </div>';
+                container += '            <div class="modal-footer" style="border:none!important;border-bottom-right-radius:0!important;border-bottom-left-radius:0!important;background-color:#212121!important;">';
+                container += '              <button type="submit" class="btn btn-danger">Yes</button>';
+                container += '              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>';
+                container += '            </div>';
+                container += '          </div>';
+                container += '        </div>';
+                container += '      </div>';
+                container += '    </div>';
+                container += '  </div>';
+                container += '</div>';
             }
+            $("#mailbox").empty();
+            $("#mailbox").html(container);
+            $("#overlay").hide();
         }
-        console.log(data);
-    }, "json");
+    });
 }
 
 function getMessageCount() {
-    $.get("/FfriendsterApi/GetMessageCount", function (data) {
-        if (data > 0) {
-            $("#message-count").empty();
-            $("#message-count").html(data);
-            $("#message-count").show();
+    $.ajax({
+        type: "GET",
+        url: "/FfriendsterApi/GetMessageCount", 
+        success: function(data) {
+            if (data > 0) {
+                if (window.location.href.indexOf("Message") > -1) {
+                    getMessages();
+                }
+                $("#message-count").empty();
+                $("#message-count").html(data);
+                $("#message-count").show();
+            }
         }
-    }, "json");
+    });
 }
 
 function addFriend() {
@@ -137,7 +228,8 @@ function isFriend(id) {
                         $("#add-friend").html('<i class="fas fa-heart text-danger"></i>');
                         $("#delete-friend").show();
                     } else {
-                        return response;
+                        let flag = response;
+                        return flag;
                         //$("#friend-heart").show();
                     }
                 } else {
@@ -145,7 +237,8 @@ function isFriend(id) {
                         $("#add-friend").html('<i class="far fa-heart text-danger"></i>');
                         $("#delete-friend").hide();
                     } else {
-                        return response;
+                        let flag = response;
+                        return flag;
                     }
                 }
         }
