@@ -170,12 +170,17 @@ function getMessageCount() {
         url: "/FfriendsterApi/GetMessageCount", 
         success: function(data) {
             if (data > 0) {
-                if (window.location.href.indexOf("Message") > -1) {
-                    getMessages();
+                let count = $("#message-count").val();
+                console.log(count);
+                if (data > count) {
+                    $("#message-count").empty();
+                    $("#message-count").val(data);
+                    $("#message-count").show();
+                
+                    if (window.location.href.indexOf("Message") > -1) {
+                        getMessages();
+                    }
                 }
-                $("#message-count").empty();
-                $("#message-count").html(data);
-                $("#message-count").show();
             }
         }
     });
