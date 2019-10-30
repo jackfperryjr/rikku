@@ -106,7 +106,9 @@ function getMessages() {
              for (i = 0; i < data.length; i++) {
                 if (data[i]["messageReadFlg"] == 0) {
                     color = "#212121!important";
-                } 
+                } else {
+                    color = "#000000!important";
+                }
                 container += '<div class="row" style="margin:0 0 20px 0;background-color:'+color+';">';
                 container += '  <div class="col-xs-4" style="margin:0 20px 0 0;padding-left:10px;">';
                 container += '    <a href="/Message/Chat/'+data[i]["id"]+'">';
