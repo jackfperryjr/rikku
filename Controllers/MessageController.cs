@@ -30,52 +30,8 @@ namespace Rikku.Controllers
         }
 
         public IActionResult Index()
-        {
-            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var users = (from user in _context.Users  
-                        join m in _context.Messages on user.Id equals m.SenderId
-                        select new  
-                        {  
-                            UserId = user.Id,  
-                            ReceiverId = m.ReceiverId,  
-                            SenderId = m.SenderId,  
-                            UserName = user.UserName,                                    
-                            FirstName = user.FirstName,  
-                            LastName = user.LastName,
-                            Picture = user.Picture,
-                            Email = user.Email,
-                            City = user.City,
-                            State = user.State,
-                            CreateDate = m.CreateDate,
-                            MessageReadFlg = m.MessageReadFlg,
-                            Content = m.Content,
-                            DeletedBy1 = m.DeletedBy1,
-                            DeletedBy2 = m.DeletedBy2
-                        })
-                        .Where(m => (m.ReceiverId == userId) || (m.SenderId == userId))
-                        // .Where(m => (m.DeletedBy1 != m.SenderId) || (m.DeletedBy2 != m.SenderId))
-                        .Where(m => (m.DeletedBy1 != m.ReceiverId) || (m.DeletedBy2 != m.ReceiverId))
-                        .ToList().OrderByDescending(m => m.CreateDate)
-                        .Select(u => new ApplicationUserViewModel()  
-                        {  
-                            Id = u.UserId, 
-                            UserName = u.UserName, 
-                            FirstName = u.FirstName, 
-                            LastName = u.LastName, 
-                            Picture = u.Picture,
-                            Email = u.Email,
-                            City = u.City,
-                            State = u.State,
-                            CreateDate = u.CreateDate,
-                            MessageReadFlg = u.MessageReadFlg,
-                            Content = u.Content,
-                            DeletedBy1 = u.DeletedBy1,
-                            DeletedBy2 = u.DeletedBy2
-                        });  
-                        
-            users = users.Where(m => m.DeletedBy1 != userId || m.DeletedBy2 != userId).GroupBy(u => u.Id).Select(u => u.FirstOrDefault());
-            return View(users.ToList());
+        {            
+            return View();
         }
 
         public IActionResult Chat(string id)

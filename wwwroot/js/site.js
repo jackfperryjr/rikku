@@ -4,6 +4,7 @@
         getMessages();
     } else if (window.location.href.indexOf("Friends") > -1) {
         $("#fa-users").addClass("active").siblings().removeClass("active");
+        getFriends();
     } else if (window.location.href.indexOf("Manage") > -1) {
         $("#fa-user").addClass("active").siblings().removeClass("active");
     } else if (window.location.href.indexOf("Admin") > -1) {
@@ -110,8 +111,8 @@ function getMessages() {
                     color = "#000000!important";
                 }
                 container += '<div class="row" style="margin:0 0 20px 0;background-color:'+color+';">';
+                container += '<a href="/Message/Chat/'+data[i]["id"]+'" style="display:inherit;">';
                 container += '  <div class="col-xs-4" style="margin:0 20px 0 0;padding-left:10px;">';
-                container += '    <a href="/Message/Chat/'+data[i]["id"]+'">';
                 if (data[i]["messageReadFlg"] == 0) {
                     container += '  <div style="position:relative;border-radius:50%;height:55px;width:55px;background-image:linear-gradient(to bottom right, #fff,#0d47a1,#9933CC);">';
                     container += '    <img src="'+data[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
@@ -119,16 +120,14 @@ function getMessages() {
                 } else {
                     container += '    <img src="'+data[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;">';
                 }       
-                container += '    </a>';
                 container += '  </div>';
-                container += '  <div class="col-xs-6" style="margin:0;padding-top:5px;text-align:left;">';
-                container += '    <a asp-action="Chat" asp-route-id="@users.Id" style="display:inline;background-color:'+color+';">';
+                container += '  <div class="col-xs-6" style="margin:0;padding-top:5px;padding-right:100%;text-align:left;">';
                 container += '      <span style="font-size: 14px;background-color:'+color+';">'+data[i]["userName"]+'</span><br/>';
                 let date = data[i]["createDate"];
                 date = new Date(date).toLocaleDateString();
                 container += '      <span style="font-size: 12px;background-color:'+color+';">'+date+'</span>';
-                container += '    </a>';
                 container += '  </div>';
+                container += '</a>';
                 container += '  <div class="col-xs-2" style="margin:0 0 0 auto;padding-top:5px;padding-right:10px;">';
                 container += '    <a class="btn btn-link bg-danger" style="font-size:14px;border-radius:50%;" data-toggle="modal" href="#deleteModal'+data[i]["id"]+'"><i class="fas fa-trash" style="color:#ffffff!important;"></i></a>';
                 container += '    <div class="modal fade top-margin" id="deleteModal'+data[i]["id"]+'" tabindex="-1" role="dialog">';
@@ -171,7 +170,6 @@ function getMessageCount() {
         success: function(data) {
             if (data > 0) {
                 let count = $("#message-count").val();
-                console.log(count);
                 if (data > count) {
                     $("#message-count").empty();
                     $("#message-count").val(data);
@@ -247,6 +245,43 @@ function isFriend(id) {
                         return flag;
                     }
                 }
+        }
+    });
+}
+
+function getFriends() {
+    $("#overlay").show();
+    $.ajax({
+        type: "GET",
+        url: "/FfriendsterApi/GetFriends", 
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(response) {
+            let data = response;
+            let container = '';
+            if (data.length > 0) {
+                for (i = 0; i < data.length; i++) {
+                    container += '  <a href="/Home/Profile/'+data[i]["id"]+'">';
+                    container += '    <div class="row" style="margin-bottom:10px;">';
+                    container += '      <div class="col-xs-5">';
+                    container += '        <img class="user-img-md" src="'+data[i]["picture"]+'" style="border-radius:50%;margin-right: 10px;width:70px;height70px;">';
+                    container += '      </div>';
+                    container += '      <div class="col-xs-7">';
+                    container += '        <span style="font-size: 18px;">'+data[i]["userName"]+'</span> <br/>';
+                    container += '        <span style="font-size: 16px;">'+data[i]["city"]+', '+data[i]["state"]+'</span>';
+                    container += '      </div>';
+                    container += '    </div>';
+                    container += '  </a>';
+                }
+            } else {
+                container += '    <div class="row" style="margin: 0 auto;">';
+                container += '      <div class="col-xs-10">';
+                container += '        <strong>Nobody like that here.</strong>';
+                container += '      </div>';
+                container += '    </div>';
+            }
+            $("#friend-container").html(container);
+            $("#overlay").hide();
         }
     });
 }
