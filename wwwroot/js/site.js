@@ -131,7 +131,6 @@ function getMessages() {
                 container += '  </div>';
                 container += '  <div class="col-xs-2" style="margin:0 0 0 auto;padding-top:5px;padding-right:10px;">';
                 container += '    <a class="btn btn-link bg-danger" style="font-size:14px;border-radius:50%;" data-toggle="modal" href="#deleteModal'+data[i]["id"]+'"><i class="fas fa-trash" style="color:#ffffff!important;"></i></a>';
-                console.log(data[i]["id"]);
                 container += '    <div class="modal fade top-margin" id="deleteModal'+data[i]["id"]+'" tabindex="-1" role="dialog">';
                 container += '      <div class="modal-dialog">';
                 container += '        <div class="modal-content text-center">';
