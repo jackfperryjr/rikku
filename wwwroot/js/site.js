@@ -11,7 +11,17 @@
         $("#fa-users-cog").addClass("active").siblings().removeClass("active");
     } else if (window.location.href.indexOf("About") > -1) {
         $("#fa-info").addClass("active").siblings().removeClass("active");
-    } else {
+    } else if (window.location.href.indexOf("Chat") > -1) {
+        $("#message-input").on("paste input", function () {
+            if ($(this).outerHeight() > this.scrollHeight){
+                $(this).height(1)
+            }
+            while ($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))){
+                $(this).height($(this).height() + 1)
+            }
+        });
+    } 
+    else {
         $("#fa-home").addClass("active").siblings().removeClass("active");
         getUsers();
     }
@@ -56,11 +66,17 @@ $("#select-receiver").change(function() {
     $(target).attr('value', id);
 });
 
+/////////////////////////
+//
+//         GET
+//
+/////////////////////////
+
 function getUsers() {
     $("#overlay").show();
     $.ajax({
         type: "GET",
-        url: "/FfriendsterApi/GetUsers", 
+        url: "/Api/GetUsers", 
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
@@ -97,7 +113,7 @@ function getMessages() {
     $("#overlay").show();
     $.ajax({
         type: "GET",
-        url: "/FfriendsterApi/GetMessages", 
+        url: "/Api/GetMessages", 
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
@@ -110,9 +126,10 @@ function getMessages() {
                 } else {
                     color = "#000000!important";
                 }
+                let id = data[i]["id"];
                 container += '<div class="row" style="margin:0 0 20px 0;background-color:'+color+';">';
-                container += '<a href="/Message/Chat/'+data[i]["id"]+'" style="display:inherit;">';
-                container += '  <div class="col-xs-4" style="margin:0 20px 0 0;padding-left:10px;">';
+                container += '<a onclick="getChat('+'"'+id+'"'+')" style="display:inherit;background-color:'+color+';">';
+                container += '  <div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;">';
                 if (data[i]["messageReadFlg"] == 0) {
                     container += '  <div style="position:relative;border-radius:50%;height:55px;width:55px;background-image:linear-gradient(to bottom right, #fff,#0d47a1,#9933CC);">';
                     container += '    <img src="'+data[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
@@ -121,7 +138,7 @@ function getMessages() {
                     container += '    <img src="'+data[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;">';
                 }       
                 container += '  </div>';
-                container += '  <div class="col-xs-6" style="margin:0;padding-top:5px;padding-right:100%;text-align:left;">';
+                container += '  <div class="col-xs-6" style="background-color:'+color+';margin:0;padding-top:5px;padding-right:100px;text-align:left;">';
                 container += '      <span style="font-size: 14px;background-color:'+color+';">'+data[i]["userName"]+'</span><br/>';
                 let date = data[i]["createDate"];
                 date = new Date(date).toLocaleDateString();
@@ -133,20 +150,15 @@ function getMessages() {
                 container += '    <div class="modal fade top-margin" id="deleteModal'+data[i]["id"]+'" tabindex="-1" role="dialog">';
                 container += '      <div class="modal-dialog">';
                 container += '        <div class="modal-content text-center">';
-                //                     @using(Html.BeginForm("DeleteChat", "Message"))
-
-                //                     TODO: add in the delete chat functionality
-
-                //                     <input type="hidden" value="@users.Id" name="id" />
                 container += '          <div class="modal-header" style="border:none!important;border:none!important;border-bottom-top-radius:0!important;border-top-left-radius:0!important;">';
                 container += '            <h4 class="modal-title">Confirm</h4>';
                 container += '              <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>';
                 container += '            </div>';
                 container += '            <div class="modal-body" style="border:none!important;background-color:#212121!important;">';
-                container += '              <p>Are you sure you want to delete these messages?</p>';
+                container += '              <p>Are you sure you want sto delete these messages?</p>';
                 container += '            </div>';
                 container += '            <div class="modal-footer" style="border:none!important;border-bottom-right-radius:0!important;border-bottom-left-radius:0!important;background-color:#212121!important;">';
-                container += '              <button type="submit" class="btn btn-danger">Yes</button>';
+                container += '              <button onclick="deleteMessage('+'"'+id+'"'+')" type="button" class="btn btn-danger" data-dismiss="modal">Yes</button>';
                 container += '              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>';
                 container += '            </div>';
                 container += '          </div>';
@@ -163,10 +175,23 @@ function getMessages() {
     });
 }
 
+function getChat(id) {
+    let obj = new Object();
+    obj.id = id;
+    console.log(id);
+    $.ajax({
+        type: "GET",
+        url: "/Api/GetChat", 
+        success: function(data) {
+            console.log(data);
+        }
+    });
+}
+
 function getMessageCount() {
     $.ajax({
         type: "GET",
-        url: "/FfriendsterApi/GetMessageCount", 
+        url: "/Api/GetMessageCount", 
         success: function(data) {
             if (data > 0) {
                 let count = $("#message-count").val();
@@ -184,36 +209,6 @@ function getMessageCount() {
     });
 }
 
-function addFriend() {
-    let url = window.location.href;
-    let obj = new Object();
-    obj.id = url.split('/').pop();
-    $.ajax(
-        {
-            type: "POST",
-            url: "/FfriendsterApi/AddFriend", 
-            data: obj,
-            success: function() {
-                isFriend();
-        }
-    });
-}
-
-function deleteFriend() {
-    let url = window.location.href;
-    let obj = new Object();
-    obj.id = url.split('/').pop();
-    $.ajax(
-        {
-            type: "DELETE",
-            url: "/FfriendsterApi/DeleteFriend", 
-            data: obj,
-            success: function() {
-                isFriend();
-        }
-    });
-}
-
 function isFriend(id) {
     let obj = new Object();
     if (window.location.href.indexOf("Profile") > -1) {
@@ -224,7 +219,8 @@ function isFriend(id) {
     }
     $.ajax(
         {
-            url: "/FfriendsterApi/IsFriend", 
+            type: "GET",
+            url: "/Api/IsFriend", 
             data: obj,
             success: function(response) {
                 if (response == 1) {
@@ -253,7 +249,7 @@ function getFriends() {
     $("#overlay").show();
     $.ajax({
         type: "GET",
-        url: "/FfriendsterApi/GetFriends", 
+        url: "/Api/GetFriends", 
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
@@ -284,4 +280,62 @@ function getFriends() {
             $("#overlay").hide();
         }
     });
+}
+
+/////////////////////////
+//
+//         POST
+//
+/////////////////////////
+
+function addFriend() {
+    let url = window.location.href;
+    let obj = new Object();
+    obj.id = url.split('/').pop();
+    $.ajax(
+        {
+            type: "POST",
+            url: "/Api/AddFriend", 
+            data: obj,
+            success: function() {
+                isFriend();
+        }
+    });
+}
+
+/////////////////////////
+//
+//        DELETE
+//
+/////////////////////////
+
+function deleteFriend() {
+    let url = window.location.href;
+    let obj = new Object();
+    obj.id = url.split('/').pop();
+    $.ajax(
+        {
+            type: "DELETE",
+            url: "/Api/DeleteFriend", 
+            data: obj,
+            success: function() {
+                isFriend();
+        }
+    });
+}
+
+function deleteMessage(id) {
+    let obj = new Object();
+    obj.id = id;
+    console.log(id);
+    // $.ajax(
+    //     {
+    //         type: "DELETE",
+    //         url: "/Api/DeleteMessage", 
+    //         data: obj,
+    //         success: function() {
+    //             getMessages();
+    //             console.log("Deleted and fetched messages again.");
+    //     }
+    // });
 }

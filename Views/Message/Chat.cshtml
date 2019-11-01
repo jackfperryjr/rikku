@@ -63,7 +63,7 @@
             <input type="hidden" name="id" value="@receiverId" />
         }
         <div class="col-sm-12" style="display:inline-block;position:absolute;bottom:70px;">
-            <input id="message-input" name="content" class="form-group input-group message-input-chat" placeholder="Type message here..." style="border-radius:25px!important;" required />
+            <textarea id="message-input" name="content" class="form-group input-group message-input-chat" placeholder="Type message here..." style="border-radius:25px!important;" required></textarea>
             <button id="send-button" class="input-group-button btn btn-link">Send</button>
         </div>
     </div>
@@ -73,5 +73,3 @@
     //let receiver = @receiverId;
     //let user = @user.Id;
 </script>
-<script src="~/lib/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/chat.js"></script>

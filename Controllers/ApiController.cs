@@ -15,13 +15,13 @@ namespace Rikku.Controllers
 {
 
     [Authorize]
-    public class FfriendsterApiController : ControllerBase
+    public class ApiController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public FfriendsterApiController(
+        public ApiController(
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
@@ -270,6 +270,95 @@ namespace Rikku.Controllers
                         });  
                         
             messages = messages.Where(m => m.Id != userId).Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId)).GroupBy(u => u.Id).Select(u => u.FirstOrDefault());
+            return messages.ToList();
+        }
+
+        [HttpDelete]
+        public IActionResult DeleteMessage(string id)
+        {    
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var messages = (from message in _context.Messages
+                            select new   
+                            { 
+                                MessageId = message.MessageId,
+                                SenderId = message.SenderId,
+                                ReceiverId = message.ReceiverId,
+                                Content = message.Content,
+                                CreateDate = message.CreateDate,
+                                DeletedBy1 = message.DeletedBy1,
+                                DeletedBy2 = message.DeletedBy2,
+                                MessageReadFlg = message.MessageReadFlg
+                            }).Select(m => new MessageModel()  
+                            {  
+                                MessageId = m.MessageId,
+                                SenderId = m.SenderId,
+                                ReceiverId = m.ReceiverId,
+                                Content = m.Content,
+                                CreateDate = m.CreateDate,
+                                DeletedBy1 = m.DeletedBy1,
+                                DeletedBy2 = m.DeletedBy2,
+                                MessageReadFlg = m.MessageReadFlg
+                            })
+                            .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
+                                            (c.ReceiverId == userId.ToString() && c.SenderId == id))
+                            .OrderBy(c => c.MessageId);
+            
+            foreach (MessageModel message in messages.Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
+            (c.ReceiverId == userId.ToString() && c.SenderId == id)))
+            {
+                if (message.DeletedBy1 == null || message.DeletedBy1 != userId.ToString())
+                {
+                    message.DeletedBy1 = userId.ToString();
+                }
+                else 
+                {
+                    message.DeletedBy2 = userId.ToString();
+                }
+                message.MessageReadFlg = 1;
+            }
+            
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpGet]
+        public List<MessageModel> GetChat(string id)
+        {    
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var messages = (from message in _context.Messages
+                            select new   
+                            { 
+                                MessageId = message.MessageId,
+                                SenderId = message.SenderId,
+                                ReceiverId = message.ReceiverId,
+                                Content = message.Content,
+                                CreateDate = message.CreateDate,
+                                DeletedBy1 = message.DeletedBy1,
+                                DeletedBy2 = message.DeletedBy2
+                            }).Select(m => new MessageModel()  
+                            {  
+                                MessageId = m.MessageId,
+                                SenderId = m.SenderId,
+                                ReceiverId = m.ReceiverId,
+                                Content = m.Content,
+                                CreateDate = m.CreateDate,
+                                DeletedBy1 = m.DeletedBy1,
+                                DeletedBy2 = m.DeletedBy2
+                            })
+                            .Where(c => ((c.ReceiverId == id && c.SenderId == userId.ToString()) &&
+                                        (c.DeletedBy1 != userId || c.DeletedBy2 != userId)) || 
+                                        ((c.ReceiverId == userId.ToString() && c.SenderId == id) && 
+                                        (c.DeletedBy1 != userId || c.DeletedBy2 != userId)))
+                            .OrderBy(c => c.MessageId);
+            
+            foreach (MessageModel message in _context.Messages.Where(c => c.ReceiverId == userId.ToString() && c.SenderId == id))
+            {
+                message.MessageReadFlg = 1;
+            }
+            
+            _context.SaveChanges();
             return messages.ToList();
         }
     }
