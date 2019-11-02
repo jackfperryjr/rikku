@@ -11,42 +11,12 @@
     var png = ".png";
 }
 <div class="row">
-    <div class="col-md-2" style="position:fixed;top:60px;text-align:left;background-color: rgba(0,0,0,.9);z-index: 100;">
-        <a asp-controller="Home" asp-action="Profile" asp-route-id="@ViewBag.PictureId">
-            <img class="user-img-md" src="https://rikku.blob.core.windows.net/images/User-@ViewBag.PictureId@png">
-        </a>
+    <div id="chat-picture" class="col-md-2" style="position:fixed;top:60px;text-align:left;background-color: rgba(0,0,0,.9);z-index: 100;">
     </div>
 </div>
 <form method="post" enctype="multipart/form-data">
     <div class="form-group" style="width:100%;">
-            <div id="message-container" class="message-container">                        
-                @foreach (var message in Model) 
-                {
-                    @if(@message.SenderId == @user.Id) 
-                    {
-                        <div class="row" style="width:100vw;margin:0;padding-bottom:20px;">
-                            <div class="col-sm-12" style="padding:0;">
-                                <img style="float: right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="@user.Picture"><span class="float-right bg-primary text-white" style="background-color:#263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">@message.Content</span>
-                            </div>
-                            <div class="col-sm-12" style="padding:0;">
-                                <span style="color: #bdbdbd;height:15px; font-size:10px; float:right;">Sent @message.CreateDate.ToShortDateString()</span>
-                            </div>
-                        </div>
-                    }
-                    else 
-                    {
-                        <div class="row" style="width:100vw;margin:0;padding-bottom:20px;">
-                            <div class="col-sm-12" style="padding:0;">
-                                <img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-@message.SenderId@png"><span class="float-left bg-success text-white" style="border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">@message.Content</span>
-                            </div>
-                            <div class="col-sm-12" style="padding:0;">
-                                <span style="color: #bdbdbd;height:15px;font-size:10px;">Sent @message.CreateDate.ToShortDateString()</span>
-                            </div>
-                        </div>
-                    }
-                    receiverId = @message.ReceiverId;
-                    senderId = @message.SenderId;
-                }
+            <div id="message-container" class="message-container"> 
             </div>
     </div>
 </form>

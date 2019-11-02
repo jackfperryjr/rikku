@@ -11,17 +11,7 @@
         $("#fa-users-cog").addClass("active").siblings().removeClass("active");
     } else if (window.location.href.indexOf("About") > -1) {
         $("#fa-info").addClass("active").siblings().removeClass("active");
-    } else if (window.location.href.indexOf("Chat") > -1) {
-        $("#message-input").on("paste input", function () {
-            if ($(this).outerHeight() > this.scrollHeight){
-                $(this).height(1)
-            }
-            while ($(this).outerHeight() < this.scrollHeight + parseFloat($(this).css("borderTopWidth")) + parseFloat($(this).css("borderBottomWidth"))){
-                $(this).height($(this).height() + 1)
-            }
-        });
-    } 
-    else {
+    } else {
         $("#fa-home").addClass("active").siblings().removeClass("active");
         getUsers();
     }
@@ -31,7 +21,7 @@
     }
 
     if (window.location.href.indexOf("Chat") > -1) { // These are only needed on the Chat screen.
-        $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
+        getChat();
 
         $(".message-input-chat").focus( function() {
             $(".footer-nav").hide();
@@ -73,7 +63,7 @@ $("#select-receiver").change(function() {
 /////////////////////////
 
 function getUsers() {
-    $("#overlay").show();
+    //$("#overlay").show();
     $.ajax({
         type: "GET",
         url: "/Api/GetUsers", 
@@ -104,13 +94,13 @@ function getUsers() {
                 container += '</div>';
             }
             $("#home-index-container").html(container);
-            $("#overlay").hide();
+            //$("#overlay").hide();
         }
     });
 }
 
 function getMessages() {
-    $("#overlay").show();
+    //$("#overlay").show();
     $.ajax({
         type: "GET",
         url: "/Api/GetMessages", 
@@ -118,9 +108,9 @@ function getMessages() {
         dataType: "json",
         success: function(response) {
             let data = response;
-             let container = "";
-             let color = "#000000!important";
-             for (i = 0; i < data.length; i++) {
+            let container = "";
+            let color = "#000000!important";
+            for (i = 0; i < data.length; i++) {
                 if (data[i]["messageReadFlg"] == 0) {
                     color = "#212121!important";
                 } else {
@@ -128,7 +118,7 @@ function getMessages() {
                 }
                 let id = data[i]["id"];
                 container += '<div class="row" style="margin:0 0 20px 0;background-color:'+color+';">';
-                container += '<a onclick="getChat('+'"'+id+'"'+')" style="display:inherit;background-color:'+color+';">';
+                container += '<a href="/Message/Chat/'+id+'" style="display:inherit;background-color:'+color+';">';
                 container += '  <div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;">';
                 if (data[i]["messageReadFlg"] == 0) {
                     container += '  <div style="position:relative;border-radius:50%;height:55px;width:55px;background-image:linear-gradient(to bottom right, #fff,#0d47a1,#9933CC);">';
@@ -170,20 +160,60 @@ function getMessages() {
             }
             $("#mailbox").empty();
             $("#mailbox").html(container);
-            $("#overlay").hide();
+            //$("#overlay").hide();
         }
     });
 }
 
-function getChat(id) {
+function getChat() {
+    let url = window.location.href;
     let obj = new Object();
-    obj.id = id;
-    console.log(id);
+    obj.id = url.split('/').pop();
     $.ajax({
         type: "GET",
         url: "/Api/GetChat", 
-        success: function(data) {
-            console.log(data);
+        data: obj,
+        success: function(response) {
+            let url = window.location.href;
+            let picture = url.split('/').pop();
+            $("#chat-picture").html(
+                '<a href="/Home/Profile/'+picture+'"><img class="user-img-md" src="https://rikku.blob.core.windows.net/images/User-'+picture+'.png"></a>'
+            );
+            let data = response;
+            let container = "";
+            for (i = 0; i < data.length; i++) {
+                let userId = data[i]["userId"];
+                let senderId = data[i]["senderId"];
+                let receiverId = data[i]["receiverId"];
+                if (senderId == userId) {
+                    container += '<div class="row" style="width:100vw;margin:0;padding-bottom:20px;">';
+                    container += '<div class="col-sm-12" style="padding:0;">';
+                    container += '    <img style="float:right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><span class="float-right bg-primary text-white" style="background-color:#263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+data[i]["content"]+'</span>';
+                    container += '</div>';
+                    container += '<div class="col-sm-12" style="padding:0;">';
+                    let date = data[i]["createDate"];
+                    date = new Date(date).toLocaleDateString();
+                    container += '   <span style="color: #bdbdbd;height:15px; font-size:10px; float:right;">Sent '+date+'</span>';
+                    container += '</div>';
+                    container += '</div>';
+                } 
+                if (receiverId == userId) {
+                    container += '<div class="row" style="width:100vw;margin:0;padding-bottom:20px;">';
+                    container += '<div class="col-sm-12" style="padding:0;">';
+                    container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+picture+'.png"><span class="float-left bg-success text-white" style="border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+data[i]["content"]+'</span>';
+                    container += '</div>';
+                    container += '<div class="col-sm-12" style="padding:0;">';
+                    let date = data[i]["createDate"];
+                    date = new Date(date).toLocaleDateString();
+                    container += '<span style="color: #bdbdbd;height:15px;font-size:10px;">Sent '+date+'</span>';
+                    container += '</div>';
+                    container += '</div>';
+                }
+            //    receiverId = @message.ReceiverId;
+            //    senderId = @message.SenderId;
+            }
+            $("#message-container").html(container);
+            $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
         }
     });
 }
@@ -204,6 +234,9 @@ function getMessageCount() {
                         getMessages();
                     }
                 }
+            }
+            if (window.location.href.indexOf("Chat") > -1) {
+                getChat();
             }
         }
     });
@@ -228,17 +261,14 @@ function isFriend(id) {
                         $("#add-friend").html('<i class="fas fa-heart text-danger"></i>');
                         $("#delete-friend").show();
                     } else {
-                        let flag = response;
-                        return flag;
-                        //$("#friend-heart").show();
+                        return response;
                     }
                 } else {
                     if (window.location.href.indexOf("Profile") > -1) {
                         $("#add-friend").html('<i class="far fa-heart text-danger"></i>');
                         $("#delete-friend").hide();
                     } else {
-                        let flag = response;
-                        return flag;
+                        return response;
                     }
                 }
         }
@@ -246,7 +276,7 @@ function isFriend(id) {
 }
 
 function getFriends() {
-    $("#overlay").show();
+    //$("#overlay").show();
     $.ajax({
         type: "GET",
         url: "/Api/GetFriends", 
@@ -277,7 +307,7 @@ function getFriends() {
                 container += '    </div>';
             }
             $("#friend-container").html(container);
-            $("#overlay").hide();
+            //$("#overlay").hide();
         }
     });
 }

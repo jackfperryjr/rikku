@@ -37,41 +37,8 @@ namespace Rikku.Controllers
         public IActionResult Chat(string id)
         {    
             ViewBag.PictureId = id;
-            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var messages = (from message in _context.Messages
-                            select new   
-                            { 
-                                MessageId = message.MessageId,
-                                SenderId = message.SenderId,
-                                ReceiverId = message.ReceiverId,
-                                Content = message.Content,
-                                CreateDate = message.CreateDate,
-                                DeletedBy1 = message.DeletedBy1,
-                                DeletedBy2 = message.DeletedBy2
-                            }).Select(m => new MessageModel()  
-                            {  
-                                MessageId = m.MessageId,
-                                SenderId = m.SenderId,
-                                ReceiverId = m.ReceiverId,
-                                Content = m.Content,
-                                CreateDate = m.CreateDate,
-                                DeletedBy1 = m.DeletedBy1,
-                                DeletedBy2 = m.DeletedBy2
-                            })
-                            .Where(c => ((c.ReceiverId == id && c.SenderId == userId.ToString()) &&
-                                        (c.DeletedBy1 != userId || c.DeletedBy2 != userId)) || 
-                                        ((c.ReceiverId == userId.ToString() && c.SenderId == id) && 
-                                        (c.DeletedBy1 != userId || c.DeletedBy2 != userId)))
-                            .OrderBy(c => c.MessageId);
             
-            foreach (MessageModel message in _context.Messages.Where(c => c.ReceiverId == userId.ToString() && c.SenderId == id))
-            {
-                message.MessageReadFlg = 1;
-            }
-            
-            _context.SaveChanges();
-            return View(messages.ToList());
+            return View();
         }
 
         public async Task<IActionResult> SendMessage(string id, string content, MessageModel message)

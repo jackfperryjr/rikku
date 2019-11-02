@@ -331,6 +331,7 @@ namespace Rikku.Controllers
                             select new   
                             { 
                                 MessageId = message.MessageId,
+                                UserId = message.UserId,
                                 SenderId = message.SenderId,
                                 ReceiverId = message.ReceiverId,
                                 Content = message.Content,
@@ -340,6 +341,7 @@ namespace Rikku.Controllers
                             }).Select(m => new MessageModel()  
                             {  
                                 MessageId = m.MessageId,
+                                UserId = userId,
                                 SenderId = m.SenderId,
                                 ReceiverId = m.ReceiverId,
                                 Content = m.Content,

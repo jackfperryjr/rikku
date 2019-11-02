@@ -10,6 +10,7 @@ namespace Rikku.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MessageId { get; set; }
+        public string UserId { get; set; }
         public string SenderId { get; set; }
         public string ReceiverId { get; set; }
         public string Content { get; set; }
