@@ -8,18 +8,27 @@
 <div class="footer-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <a asp-controller="Home" asp-action="Index"><i id="fa-home" class="fas fa-home"></i></a>
-    <a asp-controller="Message" asp-action="Index" class="transition">
-        <i id="fa-envelope" class="fas fa-envelope" style="position:relative;">
-            <input id="message-count" style="font-size:12px!important;text-align:center!important;border-radius:50%!important;border:1px solid #4285F4!important;width:18px!important;height:18px!imporant;position:absolute;font-style:normal;font-size:10px;top:-5px;right:-10px;display:none;background-color:#4285F4!important;cursor:not-allowed" />
-        </i>
-    </a>
-    <a asp-controller="Home" asp-action="Friends" class="transition"><i id="fa-users" class="fas fa-users"></i></a>
-    <a asp-area="Identity" asp-page="/Account/Manage/Index" class="transition"><i id="fa-user" class="fas fa-user-circle"></i></a>
-    @if (User.IsInRole("Admin"))
-    {
-    <a asp-controller="Home" asp-action="Admin" class="transition"><i id="fa-users-cog" class="fas fa-users-cog"></i></a>
-    }
+    <div id="extra-nav" class="row" style="display:none;">
+        <a class="transition"><i id="fa-cog" class="fas fa-cog"></i></a>
+        <a asp-area="Identity" asp-page="/Account/Manage/Index" class="transition"><i id="fa-user" class="fas fa-user-circle"></i></a>
+        @if (User.IsInRole("Admin"))
+        {
+        <a asp-controller="Home" asp-action="Admin" class="transition"><i id="fa-users-cog" class="fas fa-users-cog"></i></a>
+        }
+        <form style="display:inline;" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <button type="submit" class="btn btn-link"><i class="fas fa-sign-out-alt" style="color:#ffffff;font-size:26px;"></i></button>
+        </form>
+    </div>
+    <div class="row">
+        <a asp-controller="Home" asp-action="Index"><i id="fa-home" class="fas fa-home"></i></a>
+        <a asp-controller="Message" asp-action="Index" class="transition">
+            <i id="fa-comment" class="fas fa-comment" style="position:relative;">
+                <input id="message-count" style="font-size:12px!important;text-align:center!important;border-radius:50%!important;border:1px solid #4285F4!important;width:20px!important;height:20px!imporant;position:absolute;font-style:normal;font-size:10px;top:-5px;right:-10px;display:none;background-color:#4285F4!important;cursor:not-allowed;" />
+            </i>
+        </a>
+        <a asp-controller="Home" asp-action="Friends" class="transition"><i id="fa-users" class="fas fa-users"></i></a>
+        <a id="expand-menu"><i id="fa-bar" class="fas fa-bars"></i></a>
+    </div>
 }
 else
 {

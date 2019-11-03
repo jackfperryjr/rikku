@@ -353,7 +353,7 @@ namespace Rikku.Controllers
                                         (c.DeletedBy1 != userId || c.DeletedBy2 != userId)) || 
                                         ((c.ReceiverId == userId.ToString() && c.SenderId == id) && 
                                         (c.DeletedBy1 != userId || c.DeletedBy2 != userId)))
-                            .OrderByDescending(c => c.MessageId);
+                            .OrderBy(c => c.MessageId);
             
             foreach (MessageModel message in _context.Messages.Where(c => c.ReceiverId == userId.ToString() && c.SenderId == id))
             {

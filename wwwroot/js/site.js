@@ -1,49 +1,69 @@
 ﻿$(document).ready(function() { // Activating icon related to navigated screen upon load.
     if (window.location.href.indexOf("Message") > -1) {
-        $("#fa-envelope").addClass("active").siblings().removeClass("active");
+        $("#fa-comment").addClass("active").siblings().removeClass("active");
+        $("#nav-back-btn").css("color", "#ffffff");
         getMessages();
         checkResponse();
     } else if (window.location.href.indexOf("Friends") > -1) {
         $("#fa-users").addClass("active").siblings().removeClass("active");
+        $("#nav-back-btn").css("color", "#ffffff");
         getFriends();
         checkResponse();
     } else if (window.location.href.indexOf("Manage") > -1) {
         $("#fa-user").addClass("active").siblings().removeClass("active");
+        $("#nav-back-btn").css("color", "#ffffff");
         checkResponse();
     } else if (window.location.href.indexOf("Admin") > -1) {
         $("#fa-users-cog").addClass("active").siblings().removeClass("active");
+        $("#nav-back-btn").css("color", "#ffffff");
         checkResponse();
     } else if (window.location.href.indexOf("About") > -1) {
         $("#fa-info").addClass("active").siblings().removeClass("active");
+        $("#nav-back-btn").css("color", "#ffffff");
         checkResponse();
     } else {
         $("#fa-home").addClass("active").siblings().removeClass("active");
+        $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
         getUsers();
         checkResponse();
     }
 
     if (window.location.href.indexOf("Profile") > -1) {
+        $("#nav-back-btn").css("color", "#ffffff");
         isFriend(); // Checking if a user if in friend list.
         checkResponse();
     }
 
     if (window.location.href.indexOf("Chat") > -1) { 
+        $("#nav-back-btn").css("color", "#ffffff");
         getChat();
         $(".message-input-chat").focus(function() { // Hides navigation when text input is focused.
             $(".footer-nav").hide();
             $("#send-button").addClass("move-bottom");
+            $(this).height((this.scrollHeight - 7) + "px");
         });
         $(".message-input-chat").blur(function() { // Shows navigation when text input is no longer focused.
             $(".footer-nav").show();
             $("#send-button").removeClass("move-bottom");
+            $(this).height(30);
+            $(".message-input-chat").scrollTop($(".message-input-chat")[0].scrollHeight);
         });
-        $(".message-input-chat").keyup(function(e) {
-            if(e.keyCode == 13) {
-                $(".message-input-chat").blur();
-                sendMessage();
-            }
-        });
+        // $(".message-input-chat").keyup(function(e) {
+        //     if(e.keyCode == 13) {
+        //         $(".message-input-chat").blur();
+        //         sendMessage();
+        //     }
+        // });
     }
+
+    $("#expand-menu").click(function(){
+        if(!$("#fa-bar").hasClass("active")){
+            $("#fa-bar").addClass("active").siblings().removeClass("active");
+        } else {
+            $("#fa-bar").removeClass("active");
+        }
+        $("#extra-nav").toggle("fast");
+    });
 
     (function mailChecker(){ // Self executing function that runs every 3 seconds.
         getMessageCount(); // Quick function to check for new messages.
@@ -101,7 +121,6 @@ function formatDate(d) {
 /////////////////////////
 
 function getUsers() { // Gets list of all registered users.
-    //$("#overlay").show();
     $.ajax({
         type: "GET",
         url: "/Api/GetUsers", 
@@ -218,11 +237,11 @@ function getChat() { // Gets list of chat messages between two users.
                 let senderId = response[i]["senderId"];
                 let receiverId = response[i]["receiverId"];
                 if (senderId == userId) {
-                    container += '<div class="row" style="width:100vw;margin:0;padding-bottom:20px;">';
-                    container += '<div class="col-sm-12" style="padding:0;">';
+                    container += '<div class="row message-container-row">';
+                    container += '<div class="col-sm-12" style="margin:0;padding:0;">';
                     container += '    <img style="float:right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><span class="float-right bg-primary text-white" style="background-color:#263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'</span>';
                     container += '</div>';
-                    container += '<div class="col-sm-12" style="padding:0;">';
+                    container += '<div class="col-sm-12" style="padding:0 0 20px 0;">';
                     let date = response[i]["createDate"];
                     date = formatDate(date);
                     container += '   <span style="color: #bdbdbd;height:15px; font-size:10px; float:right;">Sent '+date+'</span>';
@@ -230,11 +249,11 @@ function getChat() { // Gets list of chat messages between two users.
                     container += '</div>';
                 } 
                 if (receiverId == userId) {
-                    container += '<div class="row" style="width:100vw;margin:0;padding-bottom:20px;">';
-                    container += '<div class="col-sm-12" style="padding:0;">';
+                    container += '<div class="row message-container-row">';
+                    container += '<div class="col-sm-12" style="margin:0;padding:0;">';
                     container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+picture+'.png"><span class="float-left bg-success text-white" style="border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'</span>';
                     container += '</div>';
-                    container += '<div class="col-sm-12" style="padding:0;">';
+                    container += '<div class="col-sm-12" style="padding:0 0 20px 0;">';
                     let date = response[i]["createDate"];
                     date = formatDate(date);
                     container += '<span style="color: #bdbdbd;height:15px;font-size:10px;">Sent '+date+'</span>';
@@ -243,6 +262,7 @@ function getChat() { // Gets list of chat messages between two users.
                 }
             }
             $("#message-container").html(container);
+            $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
         }
     });
 }
@@ -252,8 +272,8 @@ function getMessageCount() { // Gets a count of unread messages.
         type: "GET",
         url: "/Api/GetMessageCount", 
         success: function(response) {
+            let count = $("#message-count").val();
             if (response > 0) {
-                let count = $("#message-count").val();
                 if (response > count) {
                     $("#message-count").empty();
                     $("#message-count").val(response);
@@ -265,7 +285,9 @@ function getMessageCount() { // Gets a count of unread messages.
                 }
             }
             if (window.location.href.indexOf("Chat") > -1) { // If in the chat, get the new messages.
-                getChat();
+                if (response > 0) {
+                    getChat();
+                }
             }
         }
     });

@@ -16,12 +16,12 @@
         </div>
     </div>
 </form> -->
-<div class="container" style="height:100%; overflow-y: scroll;s">
+<div class="container" style="height:100%; overflow-y: scroll;">
     @foreach (var user in Model)
     { 
     <div class="row" style="margin-top:10px;">
         <div class="col-xs-7">
-            <a class="btn btn-link" style="font-size: 18px;" data-toggle="modal" href="@("#EditModal" + user.Id)"><img class="user-img-md" src="@user.Picture" style="margin-right: 10px;" /> @user.UserName </a>
+            <a class="btn btn-link" style="font-size: 18px;color:#ffffff!important;" data-toggle="modal" href="@("#EditModal" + user.Id)"><img class="user-img-md" src="@user.Picture" style="margin-right: 10px;" /> @user.UserName </a>
             <div class="modal fade top-margin" id="@("EditModal" + user.Id)" tabindex="-1" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content text-center">
