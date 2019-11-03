@@ -62,7 +62,7 @@
         } else {
             $("#fa-bar").removeClass("active");
         }
-        $("#extra-nav").toggle("fast");
+        $("#extra-nav").slideToggle(150);
     });
 
     (function mailChecker(){ // Self executing function that runs every 3 seconds.
