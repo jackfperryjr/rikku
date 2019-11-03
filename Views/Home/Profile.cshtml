@@ -35,19 +35,15 @@
             </button>
         </span>
     </div>
-    <div class="modal fade top-margin" id="@("newMessageModal")" tabindex="-1" role="dialog">
+    <div class="modal fade top-margin" id="newMessageModal" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                @using(Html.BeginForm("SendMessage","Message"))
-                {
-                    <div class="modal-body">
-                        <img style="border-radius:50%;height:100px;width:100px;margin-bottom:50px;" src="@Model.Picture" title="Picture of user!">
-                        <input id="receiver-id" type="hidden" name="id" value="@Model.Id" />
-                        <input name="content" class="form-group input-group message-input-profile" placeholder="Type message here..." style="border-radius:25px!important;" maxlength=40 required />
-                        <button class="btn btn-link" style="font-size:20px;z-index:100;font-weight:bolder;color:#ffffff;position:absolute;right:10px;bottom:5.5vh;">Send</button>
-                        <div class="bottom-margin">&nbsp;</div>
-                    </div>
-                }
+                <div class="modal-body">
+                    <img style="border-radius:50%;height:100px;width:100px;margin-bottom:50px;" src="@Model.Picture" title="Picture of user!">
+                    <input id="message-input" class="form-group input-group message-input-profile" placeholder="Type message here..." style="border-radius:25px!important;" maxlength=40 required />
+                    <button class="btn btn-link" style="font-size:20px;z-index:100;font-weight:bolder;color:#ffffff;position:absolute;right:10px;bottom:5.5vh;" onclick="sendMessage();">Send</button>
+                    <div class="bottom-margin">&nbsp;</div>
+                </div>
             </div>
         </div>
     </div>

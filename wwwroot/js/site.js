@@ -48,12 +48,6 @@
             $(this).height(30);
             $(".message-input-chat").scrollTop($(".message-input-chat")[0].scrollHeight);
         });
-        // $(".message-input-chat").keyup(function(e) {
-        //     if(e.keyCode == 13) {
-        //         $(".message-input-chat").blur();
-        //         sendMessage();
-        //     }
-        // });
         $("#send-button").mousedown(function(){
             sendMessage();
         });
@@ -127,7 +121,6 @@ function getUsers() { // Gets list of all registered users.
     $.ajax({
         type: "GET",
         url: "/Api/GetUsers", 
-        contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) { 
             let container = '';
@@ -161,7 +154,6 @@ function getMessages() { // Gets list of messages from users.
     $.ajax({
         type: "GET",
         url: "/Api/GetMessages", 
-        contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
             let container = "";
@@ -173,9 +165,9 @@ function getMessages() { // Gets list of messages from users.
                     color = "#000000!important";
                 }
                 let id = response[i]["id"];
-                container += '<div class="row" style="margin:0 0 20px 0;background-color:'+color+';">';
-                container += '<a href="/Message/Chat/'+id+'" style="display:inherit;background-color:'+color+';">';
-                container += '  <div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;">';
+                container += '<div class="row" style="margin:0 0 20px 0;background-color:'+color+';border-radius:40px;padding:5px;">';
+                container += '<a href="/Message/Chat/'+id+'" style="display:inherit;background-color:'+color+';border-radius:50%;">';
+                container += '  <div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;border-radius:50%;">';
                 if (response[i]["messageReadFlg"] == 0) { // Adds color gradient around user image of unread messages.
                     container += '  <div style="position:relative;border-radius:50%;height:55px;width:55px;background-image:linear-gradient(to bottom right, #fff,#0d47a1,#9933CC);">';
                     container += '    <img src="'+response[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
@@ -191,7 +183,7 @@ function getMessages() { // Gets list of messages from users.
                 container += '      <span style="font-size: 12px;background-color:'+color+';">'+date+'</span>';
                 container += '  </div>';
                 container += '</a>';
-                container += '  <div class="col-xs-2" style="margin:0 0 0 auto;padding-top:5px;padding-right:10px;">';
+                container += '  <div class="col-xs-2" style="margin:0 0 0 auto;padding-top:5px;padding-right:10px;border-radius:50%;">';
                 container += '    <a class="btn btn-link bg-danger" style="font-size:14px;border-radius:50%;" response-toggle="modal" href="#deleteModal'+response[i]["id"]+'"><i class="fas fa-trash" style="color:#ffffff!important;"></i></a>';
                 container += '    <div class="modal fade top-margin" id="deleteModal'+response[i]["id"]+'" tabindex="-1" role="dialog">';
                 container += '      <div class="modal-dialog">';
@@ -332,7 +324,6 @@ function getFriends() { // Gets a list of users in friend list.
     $.ajax({
         type: "GET",
         url: "/Api/GetFriends", 
-        contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function(response) {
             let container = '';
@@ -390,12 +381,14 @@ function sendMessage() {
     $("#message-input").val("");
     $(".message-input-chat").height(30);
     if (obj.content.length != 0) {
-      
         $.ajax({
             type: "POST",
             url: "/Api/SendMessage", 
             data: obj,
             success: function(response) {
+                if (window.location.href.indexOf("Profile") > -1) {
+                    $("#newMessageModal").modal("hide");
+                }
                 if (window.location.href.indexOf("Chat") > -1) { // If in the chat, get the new messages.
                     getChat();
                 }
