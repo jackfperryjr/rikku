@@ -5,41 +5,18 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     var user = await UserManager.GetUserAsync(User);
-    var receiverId = "";
-    var senderId = "";
-    var routeId = @ViewContext.RouteData.Values["id"].ToString();
-    var png = ".png";
 }
 <div class="row">
     <div id="chat-picture" class="col-md-2" style="position:fixed;top:60px;text-align:left;background-color: rgba(0,0,0,.9);z-index: 100;">
     </div>
 </div>
-<form method="post" enctype="multipart/form-data">
-    <div class="form-group" style="width:100%;">
-            <div id="message-container" class="message-container"> 
-            </div>
-    </div>
-</form>
-    @using(Html.BeginForm("SendMessage","Message"))
-    {
-    <div class="row form-group">
-        @if (user.Id == @receiverId)
-        {
-            <input type="hidden" name="id" value="@senderId" />
-        }
-        else 
-        {
-            receiverId = routeId;
-            <input type="hidden" name="id" value="@receiverId" />
-        }
-        <div class="col-sm-12" style="display:inline-block;position:absolute;bottom:70px;">
-            <textarea id="message-input" name="content" class="form-group input-group message-input-chat" placeholder="Type message here..." style="border-radius:25px!important;" required></textarea>
-            <button id="send-button" class="input-group-button btn btn-link">Send</button>
+<div class="form-group" style="width:100%;">
+        <div id="message-container" class="message-container"> 
         </div>
+</div>
+<div class="row form-group">
+    <div class="col-sm-12" style="display:inline-block;position:absolute;bottom:70px;">
+        <textarea id="message-input" name="content" class="form-group input-group message-input-chat" placeholder="Type message here..." style="border-radius:25px!important;" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' maxlength=120 required></textarea>
+        <button id="send-button" class="input-group-button btn btn-link" onclick="sendMessage();">Send</button>
     </div>
-    }
-<script>
-    //let sender = @senderId;
-    //let receiver = @receiverId;
-    //let user = @user.Id;
-</script>
+</div>

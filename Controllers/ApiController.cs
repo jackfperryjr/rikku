@@ -353,7 +353,7 @@ namespace Rikku.Controllers
                                         (c.DeletedBy1 != userId || c.DeletedBy2 != userId)) || 
                                         ((c.ReceiverId == userId.ToString() && c.SenderId == id) && 
                                         (c.DeletedBy1 != userId || c.DeletedBy2 != userId)))
-                            .OrderBy(c => c.MessageId);
+                            .OrderByDescending(c => c.MessageId);
             
             foreach (MessageModel message in _context.Messages.Where(c => c.ReceiverId == userId.ToString() && c.SenderId == id))
             {
@@ -362,6 +362,58 @@ namespace Rikku.Controllers
             
             _context.SaveChanges();
             return messages.ToList();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SendMessage(string id, string content, MessageModel message)
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var friend = await _userManager.FindByIdAsync(id);
+
+            message.ReceiverId = id;
+            message.Content = content;
+            message.SenderId = userId;
+            message.UserId = userId;
+            var date = DateTime.Now;
+            message.CreateDate = date.ToLocalTime();
+
+            if (friend.RoleName == "SuperUser")
+            {
+                message.MessageReadFlg = 1;
+                _context.Messages.Add(message);
+                await _context.SaveChangesAsync();
+                return Ok(1);
+            }
+            else 
+            {
+                _context.Messages.Add(message);
+                await _context.SaveChangesAsync();
+                return Ok(0);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult SendResponse(string id)
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var responses = (from r in _context.Responses select r).Where(r => r.UserId == id);
+
+            var contents = responses.Select(x => x.Content).ToArray();
+            Random random = new Random();
+            int index = random.Next(0, contents.Count());
+
+            MessageModel message = new MessageModel();
+
+            message.ReceiverId = userId;
+            message.Content = contents[index];
+            message.SenderId = id;
+            message.UserId = id;
+            var date = DateTime.Now;
+            message.CreateDate = date.ToLocalTime();
+            _context.Messages.Add(message);
+            _context.SaveChanges();
+
+            return Ok();
         }
     }
 }

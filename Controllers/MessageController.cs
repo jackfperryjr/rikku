@@ -34,10 +34,8 @@ namespace Rikku.Controllers
             return View();
         }
 
-        public IActionResult Chat(string id)
+        public IActionResult Chat()
         {    
-            ViewBag.PictureId = id;
-            
             return View();
         }
 

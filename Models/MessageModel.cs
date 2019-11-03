@@ -14,6 +14,7 @@ namespace Rikku.Models
         public string SenderId { get; set; }
         public string ReceiverId { get; set; }
         public string Content { get; set; }
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy hh:mm}")]
         public DateTime CreateDate { get; set; }
         public virtual ApplicationUser MessageSender { get; set; }
         public int MessageReadFlg { get; set; } = 0;
