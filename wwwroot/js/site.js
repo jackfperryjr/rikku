@@ -29,13 +29,13 @@
     }
 
     if (window.location.href.indexOf("Profile") > -1) {
-        $("#nav-back-btn").css("color", "#ffffff");
+        $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
         isFriend(); // Checking if a user if in friend list.
         checkResponse();
     }
 
     if (window.location.href.indexOf("Chat") > -1) { 
-        $("#nav-back-btn").css("color", "#ffffff");
+        $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
         getChat();
         $(".message-input-chat").focus(function() { // Hides navigation when text input is focused.
             $(".footer-nav").hide();
@@ -54,6 +54,9 @@
         //         sendMessage();
         //     }
         // });
+        $("#send-button").mousedown(function(){
+            sendMessage();
+        });
     }
 
     $("#expand-menu").click(function(){
@@ -386,25 +389,28 @@ function sendMessage() {
     obj.content = $("#message-input").val();
     $("#message-input").val("");
     $(".message-input-chat").height(30);
-    $.ajax({
-        type: "POST",
-        url: "/Api/SendMessage", 
-        data: obj,
-        success: function(response) {
-            if (window.location.href.indexOf("Chat") > -1) { // If in the chat, get the new messages.
-                getChat();
+    if (obj.content.length != 0) {
+      
+        $.ajax({
+            type: "POST",
+            url: "/Api/SendMessage", 
+            data: obj,
+            success: function(response) {
+                if (window.location.href.indexOf("Chat") > -1) { // If in the chat, get the new messages.
+                    getChat();
+                }
+                if (response == 1) {
+                    let responseTime = Math.floor(Math.random() * (120000 - 3000 + 1)) + 3000;
+                    setTimeout(function() {
+                        sendResponse(obj.id);
+                    }, responseTime)
+                    localStorage.setItem("responseTime", responseTime);
+                    localStorage.setItem("id", obj.id);
+                    localStorage.sendResponse = "setTimeout(function() {sendResponse(localStorage.id);}, localStorage.responseTime)";
+                }
             }
-            if (response == 1) {
-                let responseTime = Math.floor(Math.random() * (120000 - 3000 + 1)) + 3000;
-                setTimeout(function() {
-                    sendResponse(obj.id);
-                }, responseTime)
-                localStorage.setItem("responseTime", responseTime);
-                localStorage.setItem("id", obj.id);
-                localStorage.sendResponse = "setTimeout(function() {sendResponse(localStorage.id);}, localStorage.responseTime)";
-            }
-        }
-    });
+        });
+    }
 }
 
 function sendResponse(id) {
