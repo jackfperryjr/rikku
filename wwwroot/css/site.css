@@ -12,6 +12,28 @@ for details on configuring this project to bundle and minify static web assets. 
   height:auto;
   margin:0 auto;
 }
+.title-bg-shroud {
+  position:fixed;
+  left:0;
+  background-color:#000000;
+  padding:0 0 5px 40%;
+  width:100vw;
+  background-color: rgba(0,0,0,.9);
+}
+.modal-title-border-override {
+  border:none!important;
+  border-top-right-radius:0!important;
+  border-top-left-radius:0!important;
+}
+#admin-container {
+  height:100%; 
+  overflow-y: scroll;
+}
+.about-container {
+  width:300px;
+  height:auto;
+  margin:0 auto;
+}
 .layout-container {
   min-width:350px;
   max-width:700px;

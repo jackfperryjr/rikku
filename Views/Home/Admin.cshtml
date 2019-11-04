@@ -7,7 +7,7 @@
 @{
     var you = await UserManager.GetUserAsync(User);
 }
-<h3 class="ffapp" style="position:fixed;left:0;background-color:#000000;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);">admin</h3>
+<h3 class="ffapp title-bg-shroud">admin</h3>
 <div class="container" style="padding-top:30px;">
 <!-- <form asp-controller="Home" asp-action="Admin" method="get">
     <div class="row" style="position: fixed; top: 70px;width: 330px;">
@@ -16,70 +16,6 @@
         </div>
     </div>
 </form> -->
-<div class="container" style="height:100%; overflow-y: scroll;">
-    @foreach (var user in Model)
-    { 
-    <div class="row" style="margin-top:10px;">
-        <div class="col-xs-7">
-            <a class="btn btn-link" style="font-size: 18px;color:#ffffff!important;" data-toggle="modal" href="@("#EditModal" + user.Id)"><img class="user-img-md" src="@user.Picture" style="margin-right: 10px;" /> @user.UserName </a>
-            <div class="modal fade top-margin" id="@("EditModal" + user.Id)" tabindex="-1" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content text-center">
-                    @using (Html.BeginForm("EditUserRole", "Home"))
-                    {
-                        <input type="hidden" value="@user.Id" name="Id" />
-                        <div class="modal-header" style="border:none!important;border-top-right-radius:0!important;border-top-left-radius:0!important;">
-                            <h4 class="modal-title">Edit User Role</h4>
-                            <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <p class="text-left" style="font-size:18px;">
-                                @if (user.FirstName != null || user.LastName != null) 
-                                {
-                                    <span>@user.FirstName @user.LastName</span><br/>
-                                }
-                                else 
-                                {
-                                    <span>(no name provided)</span><br/>
-                                }
-                            @user.Email<br/>
-                            Current Role: @user.RoleName</p>
-                            <p>Assign a role?</p>
-                            <button id="AdminBtn" type="submit" class="btn btn-primary" name="role" value=1>ADMIN</button>
-                            <button id="SuperUserBtn" type="submit" class="btn btn-primary" name="role" value=2>SUPERUSER</button>
-                            <button id="UserBtn" type="submit" class="btn btn-primary" name="role" value=3>USER</button>
-                            <p style="margin-top:5px;">Ban or delete?</p>
-                            <button id="BlockBtn" type="submit" class="btn btn-secondary" name="role" value=4>BAN</button>
-                            <button id="DeleteBtn" type="submit" class="btn btn-secondary" name="role" value=5>DELETE</button>
-                        </div>
-                    }
-                    </div>
-                </div>
-            </div> 
-        </div>
-        <div class="col-xs-5" style="margin:25px 15px 0 auto!important;">
-            @if(user.RoleName == "SuperUser")
-            {
-                <span class="btn btn-success" style="background-color:#28a745!important;">@user.RoleName</span>
-            }
-            @if(user.RoleName == "Admin")
-            {
-                <span class="btn btn-primary">@user.RoleName</span>
-            }
-            @if(user.RoleName == "User")
-            {
-                <span class="btn btn-secondary" style="background-color:#6c757d!important;">@user.RoleName</span>
-            }
-        </div>
-    </div>
-    }
-    @if (!Model.Any())
-    {
-        <div class="row top-margin">
-            <div class="col-xs-10" style="margin: 0 auto;">
-                <strong>There's nobody like that here.</strong>
-            </div>
-        </div>
-    }
+<div id="admin-container" class="container">
 </div>
 </div>

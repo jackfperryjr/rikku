@@ -32,6 +32,123 @@ namespace Rikku.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles="Admin")]
+        public List<ApplicationUser> GetAdmin()
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var users = (from user in _context.Users  
+                        select new  
+                        {  
+                            UserId = user.Id,    
+                            UserName = user.UserName,                                    
+                            FirstName = user.FirstName,  
+                            LastName = user.LastName,
+                            Picture = user.Picture,
+                            Email = user.Email,
+                            City = user.City,
+                            State = user.State,
+                            ZipCode = user.ZipCode,
+                            RoleName = user.RoleName
+                        }).ToList()
+                        .Select(u => new ApplicationUser()  
+                        {  
+                            Id = u.UserId,  
+                            UserName = u.UserName,
+                            FirstName = u.FirstName, 
+                            LastName = u.LastName, 
+                            Picture = u.Picture,
+                            Email = u.Email,
+                            City = u.City,
+                            State = u.State,
+                            ZipCode = u.ZipCode,
+                            RoleName = u.RoleName
+                        }).Where(u => u.Id != userId);  
+                        
+            // if (!String.IsNullOrEmpty(searchString))
+            // {
+            //     searchString = searchString.ToLower();
+            //     users = users.Where(u => {
+            //                                 try 
+            //                                 {
+            //                                     return u.UserName.Contains(searchString)
+            //                                     || u.City.ToLower().Contains(searchString)
+            //                                     || u.ZipCode.Contains(searchString);
+            //                                 }
+            //                                 catch
+            //                                 {
+            //                                     return false;
+            //                                 }
+            //                             }
+            //                         ); 
+            // }
+
+            return users.ToList();  
+        }
+
+        [HttpPost]
+        [Authorize(Roles="Admin")]
+        public async Task<IActionResult> EditUserRole(string id, int role)  
+        { 
+            var userRole = "";
+            if (role == 1) 
+            {
+                userRole = "Admin";
+            }
+            else if (role == 2) 
+            {
+                userRole = "SuperUser";
+            }
+            else if (role == 4)
+            {
+                userRole = "Banned";
+            }
+            else if (role == 3)
+            {
+                userRole = "User";
+            }
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+            await _userManager.RemoveFromRoleAsync(user, "Admin");
+            await _userManager.RemoveFromRoleAsync(user, "SuperUser");
+            await _userManager.RemoveFromRoleAsync(user, "Banned");
+            await _userManager.RemoveFromRoleAsync(user, "User");
+
+            if (role == 5) 
+            {
+                await DeleteUser(id);
+            }
+            else 
+            {
+                await _userManager.AddToRoleAsync(user, userRole);
+                user.RoleName = userRole;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpDelete]
+        [Authorize(Roles="Admin")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpGet]
         public int GetMessageCount()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

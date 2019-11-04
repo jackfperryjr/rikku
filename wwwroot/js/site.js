@@ -16,6 +16,7 @@
     } else if (window.location.href.indexOf("Admin") > -1) {
         $("#fa-users-cog").addClass("active").siblings().removeClass("active");
         $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
+        getAdmin();
         checkResponse();
     } else if (window.location.href.indexOf("About") > -1) {
         $("#fa-info").addClass("active").siblings().removeClass("active");
@@ -117,6 +118,67 @@ function formatDate(d) {
 //
 /////////////////////////
 
+function getAdmin() {
+    $.ajax({
+        type: "GET",
+        url: "/Api/GetAdmin",
+        dataType: "json",
+        success: function(response) {
+            let container = '';
+            for (i = 0; i < response.length; i++) { // Maps response items into containers for display.
+                let id = response[i]["id"];
+                id = id.toString();
+                container += '<div class="row" style="margin-top:10px;">';
+                container += '  <div class="col-xs-7">';
+                container += '    <a class="btn btn-link" style="font-size: 18px;color:#ffffff!important;" data-toggle="modal" href="#EditModal'+response[i]["id"]+'"><img class="user-img-md" src="'+response[i]["picture"]+'" style="margin-right: 10px;" /> '+response[i]["userName"]+' </a>';
+                container += '    <div class="modal fade top-margin" id="EditModal'+response[i]["id"]+'" tabindex="-1" role="dialog">';
+                container += '      <div class="modal-dialog">';
+                container += '        <div class="modal-content text-center">';
+                container += '          <div class="modal-header modal-title-border-override">';
+                container += '            <h4 class="modal-title">Edit User Role</h4>';
+                container += '            <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>';
+                container += '          </div>';
+                container += '          <div class="modal-body">';
+                container += '            <p class="text-left" style="font-size:18px;">';
+                if (response[i]["firstName"] != null || response[i]["lastName"] != null) {
+                    container += '            <span>'+response[i]["firstName"]+' '+response[i]["lastName"]+'</span><br/>';
+                } else if (response[i]["firstName"] != null && response[i]["lastName"] === null) {
+                    container += '            <span>'+response[i]["firstName"]+'</span><br/>';
+                } else {
+                    container += '            <span>(no name provided)</span><br/>';
+                }
+                container += '            '+response[i]["email"]+'<br/>';
+                container += '            Current Role: '+response[i]["roleName"]+'</p>';
+                container += '            <p>Assign a role?</p>';
+                container += '            <button class="btn btn-primary" onclick=editUserRole('+'"'+id+'"'+',1)>ADMIN</button>';
+                container += '            <button class="btn btn-primary" onclick=editUserRole('+'"'+id+'"'+',2)>SUPERUSER</button>';
+                container += '            <button class="btn btn-primary" onclick=editUserRole('+'"'+id+'"'+',3)>USER</button>';
+                container += '            <p style="margin-top:5px;">Ban or delete?</p>';
+                container += '            <button class="btn btn-secondary" onclick=editUserRole('+'"'+id+'"'+',4)>BAN</button>';
+                container += '            <button class="btn btn-secondary" onclick=editUserRole('+'"'+id+'"'+',5)>DELETE</button>';
+                container += '          </div>';
+                container += '        </div>';
+                container += '      </div>';
+                container += '    </div> ';
+                container += '  </div>';
+                container += '  <div class="col-xs-5" style="margin:25px 15px 0 auto!important;">';
+                if (response[i]["roleName"] == "SuperUser") {
+                    container += '    <span class="btn btn-success" style="background-color:#28a745!important;">'+response[i]["roleName"]+'</span>';
+                }
+                if (response[i]["roleName"] == "Admin") {
+                    container += '    <span class="btn btn-primary">'+response[i]["roleName"]+'</span>';
+                }
+                if (response[i]["roleName"] == "User") {
+                    container += '    <span class="btn btn-secondary" style="background-color:#6c757d!important;">'+response[i]["roleName"]+'</span>';
+                }
+                container += '  </div>';
+                container += '</div>';
+            }
+            $("#admin-container").html(container);
+        }
+    });
+}
+
 function getUsers() { // Gets list of all registered users.
     $.ajax({
         type: "GET",
@@ -165,6 +227,7 @@ function getMessages() { // Gets list of messages from users.
                     color = "#000000!important";
                 }
                 let id = response[i]["id"];
+                id = id.toString();
                 container += '<div class="row" style="margin:0 0 20px 0;background-color:'+color+';border-radius:40px;padding:5px;">';
                 container += '<a href="/Message/Chat/'+id+'" style="display:inherit;background-color:'+color+';border-radius:50%;">';
                 container += '  <div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;border-radius:50%;">';
@@ -184,7 +247,7 @@ function getMessages() { // Gets list of messages from users.
                 container += '  </div>';
                 container += '</a>';
                 container += '  <div class="col-xs-2" style="margin:0 0 0 auto;padding-top:5px;padding-right:10px;border-radius:50%;">';
-                container += '    <a class="btn btn-link bg-danger" style="font-size:14px;border-radius:50%;" response-toggle="modal" href="#deleteModal'+response[i]["id"]+'"><i class="fas fa-trash" style="color:#ffffff!important;"></i></a>';
+                container += '    <a class="btn btn-link bg-danger" style="font-size:14px;border-radius:50%;" data-toggle="modal" href="#deleteModal'+response[i]["id"]+'"><i class="fas fa-trash" style="color:#ffffff!important;"></i></a>';
                 container += '    <div class="modal fade top-margin" id="deleteModal'+response[i]["id"]+'" tabindex="-1" role="dialog">';
                 container += '      <div class="modal-dialog">';
                 container += '        <div class="modal-content text-center">';
@@ -196,7 +259,7 @@ function getMessages() { // Gets list of messages from users.
                 container += '              <p>Are you sure you want sto delete these messages?</p>';
                 container += '            </div>';
                 container += '            <div class="modal-footer" style="border:none!important;border-bottom-right-radius:0!important;border-bottom-left-radius:0!important;background-color:#212121!important;">';
-                container += '              <button onclick="deleteMessage('+'"'+id+'"'+')" type="button" class="btn btn-danger" response-dismiss="modal">Yes</button>';
+                container += '              <button onclick=deleteMessage('+'"'+id+'"'+') class="btn btn-danger" response-dismiss="modal">Yes</button>';
                 container += '              <button type="button" class="btn btn-secondary" response-dismiss="modal">Cancel</button>';
                 container += '            </div>';
                 container += '          </div>';
@@ -422,6 +485,20 @@ function sendResponse(id) {
     });
 }
 
+function editUserRole(id, role) {
+    let obj = new Object();
+    obj.id = id;
+    obj.role = role;
+    $.ajax({
+        type: "POST",
+        url: "/Api/EditUserRole", 
+        data: obj,
+        success: function() {
+            $("#EditModal" + id).modal("hide");
+        }
+    });
+}
+
 /////////////////////////
 //
 //        DELETE
@@ -446,13 +523,14 @@ function deleteMessage(id) { // Deletes list of messages between two users.
     let obj = new Object();
     obj.id = id;
     console.log(id);
-    // $.ajax({
-    //     type: "DELETE",
-    //     url: "/Api/DeleteMessage", 
-    //     data: obj,
-    //     success: function() {
-    //         getMessages();
-    //         console.log("Deleted and fetched messages again.");
-    //     }
-    // });
+    $.ajax({
+        type: "DELETE",
+        url: "/Api/DeleteMessage", 
+        data: obj,
+        success: function() {
+            $("#deleteModal" + id).modal("hide");
+            getMessages();
+            console.log("Deleted and fetched messages again.");
+        }
+    });
 }
