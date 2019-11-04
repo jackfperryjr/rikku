@@ -1,25 +1,25 @@
 ﻿$(document).ready(function() { // Activating icon related to navigated screen upon load.
     if (window.location.href.indexOf("Message") > -1) {
         $("#fa-comment").addClass("active").siblings().removeClass("active");
-        $("#nav-back-btn").css("color", "#ffffff");
+        $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
         getMessages();
         checkResponse();
     } else if (window.location.href.indexOf("Friends") > -1) {
         $("#fa-users").addClass("active").siblings().removeClass("active");
-        $("#nav-back-btn").css("color", "#ffffff");
+        $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
         getFriends();
         checkResponse();
     } else if (window.location.href.indexOf("Manage") > -1) {
         $("#fa-user").addClass("active").siblings().removeClass("active");
-        $("#nav-back-btn").css("color", "#ffffff");
+        $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
         checkResponse();
     } else if (window.location.href.indexOf("Admin") > -1) {
         $("#fa-users-cog").addClass("active").siblings().removeClass("active");
-        $("#nav-back-btn").css("color", "#ffffff");
+        $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
         checkResponse();
     } else if (window.location.href.indexOf("About") > -1) {
         $("#fa-info").addClass("active").siblings().removeClass("active");
-        $("#nav-back-btn").css("color", "#ffffff");
+        $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
         checkResponse();
     } else {
         $("#fa-home").addClass("active").siblings().removeClass("active");
