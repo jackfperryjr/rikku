@@ -346,6 +346,8 @@ namespace Rikku.Controllers
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            var deleted = _context.Messages.Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId));
+
             var messages = (from user in _context.Users  
                         join m in _context.Messages on user.Id equals m.SenderId
                         select new  
@@ -367,11 +369,11 @@ namespace Rikku.Controllers
                             DeletedBy2 = m.DeletedBy2
                         })
                         .Where(m => (m.ReceiverId == userId) || (m.SenderId == userId))
-                        .Where(m => (m.DeletedBy1 != m.ReceiverId) || (m.DeletedBy2 != m.ReceiverId))
+                        .Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId))
                         .ToList().OrderByDescending(m => m.CreateDate)
                         .Select(u => new ApplicationUserViewModel()  
                         {  
-                            Id = u.UserId, 
+                            Id = u.UserId,
                             UserName = u.UserName, 
                             FirstName = u.FirstName, 
                             LastName = u.LastName, 
@@ -384,9 +386,12 @@ namespace Rikku.Controllers
                             Content = u.Content,
                             DeletedBy1 = u.DeletedBy1,
                             DeletedBy2 = u.DeletedBy2
-                        });  
-                        
-            messages = messages.Where(m => m.Id != userId).Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId)).GroupBy(u => u.Id).Select(u => u.FirstOrDefault());
+                        })
+                        .Where(m => m.Id != userId)
+                        .Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId))
+                        .GroupBy(u => u.Id)
+                        .Select(u => u.FirstOrDefault());  
+
             return messages.ToList();
         }
 
@@ -394,34 +399,8 @@ namespace Rikku.Controllers
         public IActionResult DeleteMessage(string id)
         {    
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var messages = (from message in _context.Messages
-                            select new   
-                            { 
-                                MessageId = message.MessageId,
-                                SenderId = message.SenderId,
-                                ReceiverId = message.ReceiverId,
-                                Content = message.Content,
-                                CreateDate = message.CreateDate,
-                                DeletedBy1 = message.DeletedBy1,
-                                DeletedBy2 = message.DeletedBy2,
-                                MessageReadFlg = message.MessageReadFlg
-                            }).Select(m => new MessageModel()  
-                            {  
-                                MessageId = m.MessageId,
-                                SenderId = m.SenderId,
-                                ReceiverId = m.ReceiverId,
-                                Content = m.Content,
-                                CreateDate = m.CreateDate,
-                                DeletedBy1 = m.DeletedBy1,
-                                DeletedBy2 = m.DeletedBy2,
-                                MessageReadFlg = m.MessageReadFlg
-                            })
-                            .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
-                                            (c.ReceiverId == userId.ToString() && c.SenderId == id))
-                            .OrderBy(c => c.MessageId);
             
-            foreach (MessageModel message in messages.Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
+            foreach (MessageModel message in _context.Messages.Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
             (c.ReceiverId == userId.ToString() && c.SenderId == id)))
             {
                 if (message.DeletedBy1 == null || message.DeletedBy1 != userId.ToString())
