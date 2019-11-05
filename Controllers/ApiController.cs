@@ -346,22 +346,11 @@ namespace Rikku.Controllers
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var deleted = _context.Messages.Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId));
-
-            var messages = (from user in _context.Users  
-                        join m in _context.Messages on user.Id equals m.SenderId
+            var test = (from m in _context.Messages
                         select new  
                         {  
-                            UserId = user.Id,  
                             ReceiverId = m.ReceiverId,  
-                            SenderId = m.SenderId,  
-                            UserName = user.UserName,                                    
-                            FirstName = user.FirstName,  
-                            LastName = user.LastName,
-                            Picture = user.Picture,
-                            Email = user.Email,
-                            City = user.City,
-                            State = user.State,
+                            SenderId = m.SenderId, 
                             CreateDate = m.CreateDate,
                             MessageReadFlg = m.MessageReadFlg,
                             Content = m.Content,
@@ -370,7 +359,37 @@ namespace Rikku.Controllers
                         })
                         .Where(m => (m.ReceiverId == userId) || (m.SenderId == userId))
                         .Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId))
+                        // .Where(u => u.UserId != userId)
                         .ToList().OrderByDescending(m => m.CreateDate)
+                        .GroupBy(u => u.UserId)
+                        .Select(u => u.FirstOrDefault());
+
+            var messages = (from m in _context.Messages
+                            join u in _context.Users on m.SenderId equals u.Id
+                        select new  
+                        {  
+                            UserId = u.Id,  
+                            ReceiverId = m.ReceiverId,  
+                            SenderId = m.SenderId,  
+                            UserName = u.UserName,                                    
+                            FirstName = u.FirstName,  
+                            LastName = u.LastName,
+                            Picture = u.Picture,
+                            Email = u.Email,
+                            City = u.City,
+                            State = u.State,
+                            CreateDate = m.CreateDate,
+                            MessageReadFlg = m.MessageReadFlg,
+                            Content = m.Content,
+                            DeletedBy1 = m.DeletedBy1,
+                            DeletedBy2 = m.DeletedBy2
+                        })
+                        .Where(m => (m.ReceiverId == userId) || (m.SenderId == userId))
+                        .Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId))
+                        .Where(u => u.UserId != userId)
+                        .ToList().OrderByDescending(m => m.CreateDate)
+                        .GroupBy(u => u.UserId)
+                        .Select(u => u.FirstOrDefault())
                         .Select(u => new ApplicationUserViewModel()  
                         {  
                             Id = u.UserId,
@@ -386,11 +405,7 @@ namespace Rikku.Controllers
                             Content = u.Content,
                             DeletedBy1 = u.DeletedBy1,
                             DeletedBy2 = u.DeletedBy2
-                        })
-                        .Where(m => m.Id != userId)
-                        .Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId))
-                        .GroupBy(u => u.Id)
-                        .Select(u => u.FirstOrDefault());  
+                        });
 
             return messages.ToList();
         }
@@ -399,7 +414,7 @@ namespace Rikku.Controllers
         public IActionResult DeleteMessage(string id)
         {    
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-            
+
             foreach (MessageModel message in _context.Messages.Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
             (c.ReceiverId == userId.ToString() && c.SenderId == id)))
             {
