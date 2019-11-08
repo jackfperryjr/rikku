@@ -210,6 +210,27 @@ namespace Rikku.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> AddMessageReaction(int id, int reaction)
+        {
+            MessageModel m = (from a in _context.Messages
+                                where a.MessageId == id
+                                select a).SingleOrDefault();
+
+            if (reaction == 1)
+            {
+                m.IsLiked = 1;
+                await _context.SaveChangesAsync();
+            }
+            if (reaction == 2)
+            {
+                m.IsLoved = 1;
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddFriend(string id, FriendModel friend)
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -454,7 +475,9 @@ namespace Rikku.Controllers
                                 Content = message.Content,
                                 CreateDate = message.CreateDate,
                                 DeletedBy1 = message.DeletedBy1,
-                                DeletedBy2 = message.DeletedBy2
+                                DeletedBy2 = message.DeletedBy2,
+                                IsLiked = message.IsLiked,
+                                IsLoved = message.IsLoved
                             }).Select(m => new MessageModel()  
                             {  
                                 MessageId = m.MessageId,
@@ -464,7 +487,9 @@ namespace Rikku.Controllers
                                 Content = m.Content,
                                 CreateDate = m.CreateDate,
                                 DeletedBy1 = m.DeletedBy1,
-                                DeletedBy2 = m.DeletedBy2
+                                DeletedBy2 = m.DeletedBy2,
+                                IsLiked = m.IsLiked,
+                                IsLoved = m.IsLoved
                             })
                             .Where(c => ((c.ReceiverId == id && c.SenderId == userId.ToString()) &&
                                         (c.DeletedBy1 != userId || c.DeletedBy2 != userId)) || 

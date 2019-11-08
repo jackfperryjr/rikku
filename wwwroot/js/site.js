@@ -307,9 +307,29 @@ function getChat() { // Gets list of chat messages between two users.
                     container += '</div>';
                 } 
                 if (receiverId == userId) {
+                    let messageId = response[i]["messageId"];
                     container += '<div class="row message-container-row">';
                     container += '<div class="col-sm-12" style="margin:0;padding:0;">';
-                    container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+picture+'.png"><span class="float-left bg-success text-white" style="border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'</span>';
+
+                    let liked = response[i]["isLiked"];
+                    let loved = response[i]["isLoved"];
+                    
+                    if (liked === 0 && loved === 0) {
+                        container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+picture+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left bg-success text-white" style="position:relative;border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
+                    } else {
+                        container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+picture+'.png"><div class="response float-left bg-success text-white" style="position:relative;border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
+                    }
+
+                    container += '<div id="reaction'+messageId+'" style="display:none;border-radius:25px;position:absolute;top:-50%;right:0;background-color:rgba(128,128,128,.7);padding:2%;"><i id="like'+messageId+'" class="fas fa-thumbs-up" style="z-index:1000;padding-top:6.5px;margin:0 5px;text-align:center!important;border:0 solid transparent!important;border-radius:50%!important;width:25px!important;height:25px!important;font-style:normal;font-size:12px;background-color:#4285F4!important;" aria-hidden="true"></i><i id="love'+messageId+'" class="fas fa-heart" style="z-index:1000;padding-top:7.5px;margin:0 5px;text-align:center!important;border:0 solid transparent!important;border-radius:50%!important;width:25px!important;height:25px!important;font-style:normal;font-size:12px;background-color:#cc0000!important;" aria-hidden="true"></i></div>';
+
+                    if (liked === 1) {
+                        container += '<i class="fas fa-thumbs-up" style="padding-top:6.5px;margin:0;text-align:center!important;border:0 solid transparent!important;border-radius:50%!important;width:25px!important;height:25px!important;position:absolute;font-style:normal;font-size:10px;top:-35%;right:0;background-color:#4285F4!important;pointer-events:none!important;" aria-hidden="true"></i>';
+                    }
+                    if (loved === 1) {
+                        container += '<i class="fas fa-heart" style="padding-top:6.5px;margin:0;text-align:center!important;border:0 solid transparent!important;border-radius:50%!important;width:25px!important;height:25px!important;position:absolute;font-style:normal;font-size:14px;top:-35%;right:0;background-color:#cc0000!important;pointer-events:none!important;" aria-hidden="true"></i>';
+                    }
+                    
+                    container += '</div>';
                     container += '</div>';
                     container += '<div class="col-sm-12" style="padding:0 0 20px 0;">';
                     let date = response[i]["createDate"];
@@ -421,6 +441,40 @@ function getFriends() { // Gets a list of users in friend list.
 //         POST
 //
 /////////////////////////
+
+function addMessageReaction(id) {
+    $("#reaction" + id).toggle();
+
+    $("#like"+id).click(function() {
+        let obj = new Object();
+        obj.id = id;
+        obj.reaction = 1;
+        console.log(obj.reaction);
+        $.ajax({
+            type: "POST",
+            url: "/Api/AddMessageReaction", 
+            data: obj,
+            success: function() {
+                getChat();
+            }
+        });
+    })
+
+    $("#love"+id).click(function() {
+        let obj = new Object();
+        obj.id = id;
+        obj.reaction = 2;
+        console.log(obj.reaction);
+        $.ajax({
+            type: "POST",
+            url: "/Api/AddMessageReaction", 
+            data: obj,
+            success: function() {
+                getChat();
+            }
+        });
+    })
+}
 
 function addFriend() { // Adds user to friend list.
     let url = window.location.href;
