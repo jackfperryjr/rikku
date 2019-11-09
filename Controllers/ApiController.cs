@@ -216,6 +216,12 @@ namespace Rikku.Controllers
                                 where a.MessageId == id
                                 select a).SingleOrDefault();
 
+            m.IsLiked = 0;
+            m.IsDisliked = 0;
+            m.IsLoved = 0;
+            m.IsLaughed = 0;
+            m.IsSaddened = 0;
+
             if (reaction == 1)
             {
                 m.IsLiked = 1;
@@ -223,7 +229,22 @@ namespace Rikku.Controllers
             }
             if (reaction == 2)
             {
+                m.IsDisliked = 1;
+                await _context.SaveChangesAsync();
+            }
+            if (reaction == 3)
+            {
                 m.IsLoved = 1;
+                await _context.SaveChangesAsync();
+            }
+            if (reaction == 4)
+            {
+                m.IsLaughed = 1;
+                await _context.SaveChangesAsync();
+            }
+            if (reaction == 5)
+            {
+                m.IsSaddened = 1;
                 await _context.SaveChangesAsync();
             }
 
@@ -477,7 +498,10 @@ namespace Rikku.Controllers
                                 DeletedBy1 = message.DeletedBy1,
                                 DeletedBy2 = message.DeletedBy2,
                                 IsLiked = message.IsLiked,
-                                IsLoved = message.IsLoved
+                                IsDisliked = message.IsDisliked,
+                                IsLoved = message.IsLoved,
+                                IsLaughed = message.IsLaughed,
+                                IsSaddened = message.IsSaddened
                             }).Select(m => new MessageModel()  
                             {  
                                 MessageId = m.MessageId,
@@ -489,7 +513,10 @@ namespace Rikku.Controllers
                                 DeletedBy1 = m.DeletedBy1,
                                 DeletedBy2 = m.DeletedBy2,
                                 IsLiked = m.IsLiked,
-                                IsLoved = m.IsLoved
+                                IsDisliked = m.IsDisliked,
+                                IsLoved = m.IsLoved,
+                                IsLaughed = m.IsLaughed,
+                                IsSaddened = m.IsSaddened
                             })
                             .Where(c => ((c.ReceiverId == id && c.SenderId == userId.ToString()) &&
                                         (c.DeletedBy1 != userId || c.DeletedBy2 != userId)) || 

@@ -20,5 +20,8 @@ namespace Rikku.Models
         public string DeletedBy2 { get; set; }
         public int IsLiked { get; set; }
         public int IsLoved { get; set; }
+        public int IsDisliked { get; set; }
+        public int IsSaddened { get; set; }
+        public int IsLaughed { get; set; }
     }
 }

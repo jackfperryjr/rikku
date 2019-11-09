@@ -4,6 +4,158 @@ for details on configuring this project to bundle and minify static web assets. 
 #main {
   display: none;
 }
+.message-reaction-container {
+  display:none;
+  min-width:190px;
+  min-height:36px;
+  border-radius:25px;
+  position:absolute;
+  top:-65%;
+  background-color:rgba(128,128,128,.7);
+  padding:5px;
+  z-index: 2000;
+}
+.message-reaction-like,
+.message-reaction-dislike {
+  z-index:1000;
+  padding-top:6.5px;
+  margin:0 5px;
+  text-align:center!important;
+  border:0 solid transparent!important;
+  border-radius:50%!important;
+  width:25px!important;
+  height:25px!important;
+  font-style:normal;
+  font-size:12px;
+  background-color:#4285F4!important;
+}
+.message-reaction-love {
+  z-index:1000;
+  padding-top:6.5px;
+  margin:0 5px;
+  text-align:center!important;
+  border:0 solid transparent!important;
+  border-radius:50%!important;
+  width:25px!important;
+  height:25px!important;
+  font-style:normal;
+  font-size:14px;
+  background-color:#cc0000!important;
+}
+.message-reaction-laugh,
+.message-reaction-sad {
+  z-index:1000;
+  padding-top:6.5px;
+  margin:0 5px;
+  text-align:center!important;
+  border:0 solid transparent!important;
+  border-radius:50%!important;
+  width:25px!important;
+  height:25px!important;
+  font-style:normal;
+  font-size:13px;
+  background-color:#ffbb33!important;
+}
+.message-reaction-liked-right,
+.message-reaction-disliked-right {
+  padding-top:6.5px;
+  margin:0;
+  text-align:center!important;
+  border:0 solid transparent!important;
+  border-radius:50%!important;
+  width:25px!important;
+  height:25px!important;
+  position:absolute;
+  font-style:normal;
+  font-size:12px;
+  top:-35%;
+  right:0;
+  background-color:#4285F4!important;
+  pointer-events:none!important;
+}
+.message-reaction-laughed-right,
+.message-reaction-saddened-right {
+  padding-top:6.5px;
+  margin:0;
+  text-align:center!important;
+  border:0 solid transparent!important;
+  border-radius:50%!important;
+  width:25px!important;
+  height:25px!important;
+  position:absolute;
+  font-style:normal;
+  font-size:13px;
+  top:-35%;
+  right:0;
+  background-color:#ffbb33!important;
+  pointer-events:none!important;
+}
+.message-reaction-laughed-left,
+.message-reaction-saddened-left {
+  padding-top:6.5px;
+  margin:0;
+  text-align:center!important;
+  border:0 solid transparent!important;
+  border-radius:50%!important;
+  width:25px!important;
+  height:25px!important;
+  position:absolute;
+  font-style:normal;
+  font-size:13px;
+  top:-35%;
+  left:0;
+  background-color:#ffbb33!important;
+  pointer-events:none!important;
+}
+.message-reaction-liked-left,
+.message-reaction-disliked-left {
+  padding-top:6.5px;
+  margin:0;
+  text-align:center!important;
+  border:0 solid transparent!important;
+  border-radius:50%!important;
+  width:25px!important;
+  height:25px!important;
+  position:absolute;
+  font-style:normal;
+  font-size:12px;
+  top:-35%;
+  left:0;
+  background-color:#4285F4!important;
+  pointer-events:none!important;
+}
+.message-reaction-loved-right {
+  padding-top:6.5px;
+  margin:0;
+  text-align:center!important;
+  border:0 solid transparent!important;
+  border-radius:50%!important;
+  width:25px!important;
+  height:25px!important;
+  position:absolute;
+  font-style:normal;
+  font-size:13px;
+  top:-35%;
+  right:0;
+  background-color:#cc0000!important;
+  pointer-events:none!important;
+}
+.message-reaction-loved-left {
+  padding-top:6.5px;
+  margin:0;
+  text-align:center!important;
+  border:0 solid transparent!important;
+  border-radius:50%!important;
+  width:25px!important;
+  height:25px!important;
+  position:absolute;
+  font-style:normal;
+  font-size:13px;
+  top:-35%;
+  left:0;
+  background-color:#cc0000!important;
+  pointer-events:none!important;
+}
 .ffapp {
   font-family:'Pacifico';
 }

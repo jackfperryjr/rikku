@@ -212,7 +212,10 @@ function getUsers() { // Gets list of all registered users.
     });
 }
 
-function getMessages() { // Gets list of messages from users.
+function getMessages(x) { // Gets list of messages from users.
+    if (!x) {
+        $("#mailbox").html('<i class="fas fa-circle-notch fa-spin text-primary" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+    }
     $.ajax({
         type: "GET",
         url: "/Api/GetMessages", 
@@ -275,7 +278,10 @@ function getMessages() { // Gets list of messages from users.
     });
 }
 
-function getChat() { // Gets list of chat messages between two users.
+function getChat(x) { // Gets list of chat messages between two users.
+    if (!x) {
+        $("#message-container").html('<i class="fas fa-circle-notch fa-spin text-primary" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+    }
     let url = window.location.href;
     let obj = new Object();
     obj.id = url.split('/').pop();
@@ -291,13 +297,38 @@ function getChat() { // Gets list of chat messages between two users.
             );
             let container = "";
             for (i = 0; i < response.length; i++) { // Maps response items into rows to place into the chat screen.
+                let messageId = response[i]["messageId"];
                 let userId = response[i]["userId"];
                 let senderId = response[i]["senderId"];
                 let receiverId = response[i]["receiverId"];
+                let liked = response[i]["isLiked"];
+                let disliked = response[i]["isDisliked"];
+                let loved = response[i]["isLoved"];
+                let laughed = response[i]["isLaughed"];
+                let saddened = response[i]["isSaddened"];
+
                 if (senderId == userId) {
                     container += '<div class="row message-container-row">';
                     container += '<div class="col-sm-12" style="margin:0;padding:0;">';
-                    container += '    <img style="float:right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><span class="float-right bg-primary text-white" style="background-color:#263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'</span>';
+                    container += '    <img style="float:right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><div class="float-right bg-primary text-white" style="position:relative;background-color:#263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
+                    
+                    if (liked === 1) { // Liked.
+                        container += '<i class="fas fa-thumbs-up message-reaction-liked-left" aria-hidden="true"></i>';
+                    }
+                    if (disliked === 1) { // Disliked.
+                        container += '<i class="fas fa-thumbs-down message-reaction-disliked-left" aria-hidden="true"></i>';
+                    }
+                    if (loved === 1) { // Loved.
+                        container += '<i class="fas fa-heart message-reaction-loved-left" aria-hidden="true"></i>';
+                    }
+                    if (laughed === 1) { // Laughed.
+                        container += '<i class="fas fa-laugh-squint message-reaction-laughed-left" aria-hidden="true"></i>';
+                    }
+                    if (saddened === 1) { // Saddened.
+                        container += '<i class="fas fa-sad-tear message-reaction-saddened-left" aria-hidden="true"></i>';
+                    }
+
+                    container += '</div>';
                     container += '</div>';
                     container += '<div class="col-sm-12" style="padding:0 0 20px 0;">';
                     let date = response[i]["createDate"];
@@ -307,26 +338,34 @@ function getChat() { // Gets list of chat messages between two users.
                     container += '</div>';
                 } 
                 if (receiverId == userId) {
-                    let messageId = response[i]["messageId"];
                     container += '<div class="row message-container-row">';
                     container += '<div class="col-sm-12" style="margin:0;padding:0;">';
 
-                    let liked = response[i]["isLiked"];
-                    let loved = response[i]["isLoved"];
-                    
-                    if (liked === 0 && loved === 0) {
-                        container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+picture+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left bg-success text-white" style="position:relative;border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
-                    } else {
-                        container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+picture+'.png"><div class="response float-left bg-success text-white" style="position:relative;border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
-                    }
+                    container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+picture+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left bg-success text-white" style="position:relative;border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
 
-                    container += '<div id="reaction'+messageId+'" style="display:none;border-radius:25px;position:absolute;top:-50%;right:0;background-color:rgba(128,128,128,.7);padding:2%;"><i id="like'+messageId+'" class="fas fa-thumbs-up" style="z-index:1000;padding-top:6.5px;margin:0 5px;text-align:center!important;border:0 solid transparent!important;border-radius:50%!important;width:25px!important;height:25px!important;font-style:normal;font-size:12px;background-color:#4285F4!important;" aria-hidden="true"></i><i id="love'+messageId+'" class="fas fa-heart" style="z-index:1000;padding-top:7.5px;margin:0 5px;text-align:center!important;border:0 solid transparent!important;border-radius:50%!important;width:25px!important;height:25px!important;font-style:normal;font-size:12px;background-color:#cc0000!important;" aria-hidden="true"></i></div>';
+                    // Container to display message reaction options.
+                    container += '<div id="reaction'+messageId+'" class="message-reaction-container">';
+                    container += '<i id="like'+messageId+'" class="fas fa-thumbs-up message-reaction-like" aria-hidden="true"></i>';
+                    container += '<i id="dislike'+messageId+'" class="fas fa-thumbs-down message-reaction-dislike" aria-hidden="true"></i>';
+                    container += '<i id="love'+messageId+'" class="fas fa-heart message-reaction-love" aria-hidden="true"></i>';
+                    container += '<i id="laugh'+messageId+'" class="fas fa-laugh-squint message-reaction-laugh" aria-hidden="true"></i>';
+                    container += '<i id="sad'+messageId+'" class="fas fa-sad-tear message-reaction-sad" aria-hidden="true"></i>';
+                    container += '</div>';
 
-                    if (liked === 1) {
-                        container += '<i class="fas fa-thumbs-up" style="padding-top:6.5px;margin:0;text-align:center!important;border:0 solid transparent!important;border-radius:50%!important;width:25px!important;height:25px!important;position:absolute;font-style:normal;font-size:10px;top:-35%;right:0;background-color:#4285F4!important;pointer-events:none!important;" aria-hidden="true"></i>';
+                    if (liked === 1) { // Liked.
+                        container += '<i class="fas fa-thumbs-up message-reaction-liked-right" aria-hidden="true"></i>';
                     }
-                    if (loved === 1) {
-                        container += '<i class="fas fa-heart" style="padding-top:6.5px;margin:0;text-align:center!important;border:0 solid transparent!important;border-radius:50%!important;width:25px!important;height:25px!important;position:absolute;font-style:normal;font-size:14px;top:-35%;right:0;background-color:#cc0000!important;pointer-events:none!important;" aria-hidden="true"></i>';
+                    if (disliked === 1) { // Disliked.
+                        container += '<i class="fas fa-thumbs-down message-reaction-disliked-right" aria-hidden="true"></i>';
+                    }
+                    if (loved === 1) { // Loved.
+                        container += '<i class="fas fa-heart message-reaction-loved-right" aria-hidden="true"></i>';
+                    }
+                    if (laughed === 1) { // Laughed.
+                        container += '<i class="fas fa-laugh-squint message-reaction-laughed-right" aria-hidden="true"></i>';
+                    }
+                    if (saddened === 1) { // Saddened.
+                        container += '<i class="fas fa-sad-tear message-reaction-saddened-right" aria-hidden="true"></i>';
                     }
                     
                     container += '</div>';
@@ -339,8 +378,11 @@ function getChat() { // Gets list of chat messages between two users.
                     container += '</div>';
                 }
             }
+            $("#message-container").empty();
             $("#message-container").html(container);
-            $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
+            if (!x) {
+                $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
+            }
         }
     });
 }
@@ -358,7 +400,7 @@ function getMessageCount() { // Gets a count of unread messages.
                     $("#message-count").show();
                 
                     if (window.location.href.indexOf("Message") > -1) { // If in the mailbox, get the new messages.
-                        getMessages();
+                        getMessages(1);
                     }
                 }
             }
@@ -455,12 +497,12 @@ function addMessageReaction(id) {
             url: "/Api/AddMessageReaction", 
             data: obj,
             success: function() {
-                getChat();
+                getChat(1);
             }
         });
-    })
+    });
 
-    $("#love"+id).click(function() {
+    $("#dislike"+id).click(function() {
         let obj = new Object();
         obj.id = id;
         obj.reaction = 2;
@@ -470,10 +512,55 @@ function addMessageReaction(id) {
             url: "/Api/AddMessageReaction", 
             data: obj,
             success: function() {
-                getChat();
+                getChat(1);
             }
         });
-    })
+    });
+
+    $("#love"+id).click(function() {
+        let obj = new Object();
+        obj.id = id;
+        obj.reaction = 3;
+        console.log(obj.reaction);
+        $.ajax({
+            type: "POST",
+            url: "/Api/AddMessageReaction", 
+            data: obj,
+            success: function() {
+                getChat(1);
+            }
+        });
+    });
+
+    $("#laugh"+id).click(function() {
+        let obj = new Object();
+        obj.id = id;
+        obj.reaction = 4;
+        console.log(obj.reaction);
+        $.ajax({
+            type: "POST",
+            url: "/Api/AddMessageReaction", 
+            data: obj,
+            success: function() {
+                getChat(1);
+            }
+        });
+    });
+
+    $("#sad"+id).click(function() {
+        let obj = new Object();
+        obj.id = id;
+        obj.reaction = 5;
+        console.log(obj.reaction);
+        $.ajax({
+            type: "POST",
+            url: "/Api/AddMessageReaction", 
+            data: obj,
+            success: function() {
+                getChat(1);
+            }
+        });
+    });
 }
 
 function addFriend() { // Adds user to friend list.
