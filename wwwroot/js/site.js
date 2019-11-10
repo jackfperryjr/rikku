@@ -82,6 +82,10 @@ function checkResponse() {
     }
 }
 
+function messageScroll() {
+    $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
+}
+
 function formatDate(d) {
     let date = new Date(d);
     date = new Date(date.getTime() - date.getTimezoneOffset()*60*1000);
@@ -445,7 +449,10 @@ function getChat(x) { // Gets list of chat messages between two users.
             $("#message-container").empty();
             $("#message-container").html(container);
             if (!x) {
-                $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
+                messageScroll();
+            }
+            if (x && x == 2) {
+                messageScroll();
             }
         }
     });
@@ -663,7 +670,7 @@ function sendMessage() {
                     $("#newMessageModal").modal("hide");
                 }
                 if (window.location.href.indexOf("Chat") > -1) { // If in the chat, get the new messages.
-                    getChat(1);
+                    getChat(2);
                 }
                 if (response == 1) {
                     let responseTime = Math.floor(Math.random() * (120000 - 3000 + 1)) + 3000;
@@ -689,7 +696,7 @@ function sendResponse(id) {
         success: function() {
             localStorage.clear();
             if (window.location.href.indexOf("Chat") > -1) { // If in the chat, get the new messages.
-                getChat(1);
+                getChat(2);
             }
         }
     });
