@@ -174,6 +174,7 @@ function getProfile(id, x) {
             container += '</div>';
             $("#profile-container").empty();
             $("#profile-container").html(container);
+            isFriend();
         }
     });
 }
