@@ -485,7 +485,8 @@ function getFriends() { // Gets a list of users in friend list.
 /////////////////////////
 
 function addMessageReaction(id) {
-    $("#reaction" + id).toggle();
+    $("#reaction"+id).toggle();
+    // TODO: get this to turn off on a document click while still allowing it to toggle.
 
     $("#like"+id).click(function() {
         let obj = new Object();
