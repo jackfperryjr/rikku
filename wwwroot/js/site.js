@@ -141,7 +141,7 @@ function getProfile(id, x) {
             container += '</div>';
             container += '</div>';
             container += '<div class="row top-margin" style="margin:80px 0 0 0;">';
-            container += '<div class="col-md-4" style="margin:0 0 10px 0;">';
+            container += '<div class="col-md-12" style="margin:0 0 10px 0;">';
             container += '<h3 class="text-center">'+response["userName"]+'</h3>';
             container += '<h5 class="text-center">'+response["city"]+', '+response["state"]+'</h5>';
             container += '<h5></h5>';
