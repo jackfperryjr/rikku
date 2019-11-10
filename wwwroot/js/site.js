@@ -61,6 +61,10 @@
         $("#extra-nav").slideToggle(150);
     });
 
+    $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").click(function() {
+        $("#main").empty().html('<i class="fas fa-circle-notch fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+    });
+
     (function mailChecker(){ // Self executing function that runs every 3 seconds.
         getMessageCount(); // Quick function to check for new messages.
         setTimeout(mailChecker, 3000)
