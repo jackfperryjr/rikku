@@ -740,6 +740,13 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
   animation-name: slideOutLeft;
 }
 
+.web-nav {
+  display:none;
+}
+.mobile-nav {
+  display:block;
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -760,5 +767,11 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
   }
   .message-container-row {
     width:100%;
+  }
+  .web-nav {
+    display:block;
+  }
+  .mobile-nav {
+    display:none;
   }
 }
