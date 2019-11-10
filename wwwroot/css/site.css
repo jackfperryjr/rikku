@@ -195,6 +195,7 @@ for details on configuring this project to bundle and minify static web assets. 
   padding: 0;
 }
 .home-index-container {
+  background-color:#101010!important;
   min-width:350px;
   max-width:500px;
   margin:0 auto;
@@ -241,6 +242,9 @@ html {
   color:#ffffff!important;
   transition: all .1s ease-in-out;
   font-size:34px;
+}
+.profile-input {
+  margin:0;
 }
 /* Dark Mode overrides */
 body,
@@ -739,6 +743,9 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
 @media (min-width: 768px) {
   html {
     font-size: 16px;
+  }
+  .profile-input {
+    margin:0 15%;
   }
   .message-container {
     display:flex;

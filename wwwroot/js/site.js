@@ -31,6 +31,9 @@
 
     if (window.location.href.indexOf("Profile") > -1) {
         $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
+        let url = window.location.href;
+        let id = url.split('/').pop();
+        getProfile(id);
         isFriend(); // Checking if a user if in friend list.
         checkResponse();
     }
@@ -49,17 +52,12 @@
             $(this).height(30);
             $(".message-input-chat").scrollTop($(".message-input-chat")[0].scrollHeight);
         });
-        $("#send-button").mousedown(function(){
+        $("#send-button").mousedown(function() {
             sendMessage();
         });
     }
 
-    $("#expand-menu").click(function(){
-        if(!$("#fa-bar").hasClass("active")){
-            $("#fa-bar").addClass("active").siblings().removeClass("active");
-        } else {
-            $("#fa-bar").removeClass("active");
-        }
+    $("#expand-menu").click(function() {
         $("#extra-nav").slideToggle(150);
     });
 
@@ -118,7 +116,68 @@ function formatDate(d) {
 //
 /////////////////////////
 
-function getAdmin() {
+function getProfile(id, x) {
+    if (!x) {
+        $("#profile-container").html('<i class="fas fa-circle-notch fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+    }
+    let obj = new Object();
+    obj.id = id;
+    $.ajax({
+        type: "GET",
+        url: "/Api/GetProfile",
+        data: obj,
+        dataType: "json",
+        success: function(response) {
+            let container = '';
+            container += '<div class="row text-center" style="height:150px;margin:0;">';
+            container += '<img id="img-output-wallpaper" style="height:150px;width:100%;" src="'+response["wallpaper"]+'" style="cursor:pointer;">';
+            container += '<div class="col-md-4" style="margin: -150px auto 0 auto;">';
+            container += '<img class="user-img-lg bottom-margin" src="'+response["picture"]+'" title="Picture of user!">';
+            container += '<button id="add-friend" onclick="addFriend()" style="border:none!important;font-size:30px;position:absolute;bottom:10px;right:60px;background-color:transparent!important;"></button>';
+            container += '</div>';
+            container += '</div>';
+            container += '<div class="row top-margin" style="margin:80px 0 0 0;">';
+            container += '<div class="col-md-4" style="margin:0 0 10px 0;">';
+            container += '<h3 class="text-center">'+response["userName"]+'</h3>';
+            container += '<h5 class="text-center">'+response["city"]+', '+response["state"]+'</h5>';
+            container += '<h5></h5>';
+            container += '<h5 style="margin: 20px 0;">'+response["profile"]+'</h5>';
+            container += '<h5></h5>';
+            container += '</div>';
+            container += '</div>';
+            container += '<div class="row text-center" style="margin:0 0 50px 0;">';
+            container += '<a class="btn btn-primary" style="width:45%;margin:0 5px 0 auto;" data-toggle="modal" href="#newMessageModal">Message</a>';
+            container += '<a class="btn btn-secondary" style="background-color:#6c757d!important;width:45%;margin:0 auto 0 5px;" onclick="window.history.go(-1); return false;">Go Back</a>';
+            container += '<div class="row text-center" style="margin:50px auto;width:100vw;">';
+            container += '<input id="id" type="hidden" name="id" value="@Model.Id" />';
+            container += '<span style="margin:0 auto;">';
+            container += '<button id="delete-friend" onclick="deleteFriend()" style="display:none;border:none!important;font-size:15px;background-color:transparent!important;color:#ffffff;">';
+            container += '<i class="fas fa-heart-broken text-danger" style="font-size:30px;" aria-hidden="true"></i> Remove friend?</button>';
+            container += '</span>';
+            container += '</div>';
+            container += '<div class="modal fade top-margin" id="newMessageModal" tabindex="-1" role="dialog">';
+            container += '<div class="modal-dialog">';
+            container += '<div class="modal-content">';
+            container += '<div class="modal-body">';
+            container += '<img style="border-radius:50%;height:100px;width:100px;margin-bottom:50px;" src="'+response["picture"]+'" title="Picture of user!">';
+            container += '<input id="message-input" class="form-group input-group message-input-profile" placeholder="Type message here..." style="border-radius:25px!important;" maxlength=40 required />';
+            container += '<button class="btn btn-link" style="font-size:20px;z-index:100;font-weight:bolder;color:#ffffff;position:absolute;right:10px;bottom:5.5vh;" onclick="sendMessage();">Send</button>';
+            container += '<div class="bottom-margin">&nbsp;</div>';
+            container += '</div>';
+            container += '</div>';
+            container += '</div>';
+            container += '</div>';
+            container += '</div>';
+            $("#profile-container").empty();
+            $("#profile-container").html(container);
+        }
+    });
+}
+
+function getAdmin(x) {
+    if (!x) {
+        $("#admin-container").html('<i class="fas fa-circle-notch fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+    }
     $.ajax({
         type: "GET",
         url: "/Api/GetAdmin",
@@ -174,12 +233,16 @@ function getAdmin() {
                 container += '  </div>';
                 container += '</div>';
             }
+            $("#admin-container").empty();
             $("#admin-container").html(container);
         }
     });
 }
 
-function getUsers() { // Gets list of all registered users.
+function getUsers(x) { // Gets list of all registered users.
+    if (!x) {
+        $("#home-index-container").html('<i class="fas fa-circle-notch fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+    }
     $.ajax({
         type: "GET",
         url: "/Api/GetUsers", 
@@ -207,6 +270,7 @@ function getUsers() { // Gets list of all registered users.
                 container += '  </a>';
                 container += '</div>';
             }
+            $("#home-index-container").empty();
             $("#home-index-container").html(container);
         }
     });
@@ -214,7 +278,7 @@ function getUsers() { // Gets list of all registered users.
 
 function getMessages(x) { // Gets list of messages from users.
     if (!x) {
-        $("#mailbox").html('<i class="fas fa-circle-notch fa-spin text-primary" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+        $("#mailbox").html('<i class="fas fa-circle-notch fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
     }
     $.ajax({
         type: "GET",
@@ -235,7 +299,7 @@ function getMessages(x) { // Gets list of messages from users.
                 container += '<a href="/Message/Chat/'+id+'" style="display:inherit;background-color:'+color+';border-radius:50%;">';
                 container += '  <div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;border-radius:50%;">';
                 if (response[i]["messageReadFlg"] == 0) { // Adds color gradient around user image of unread messages.
-                    container += '  <div style="position:relative;border-radius:50%;height:55px;width:55px;background-image:linear-gradient(to bottom right, #fff,#0d47a1,#9933CC);">';
+                    container += '  <div style="position:relative;border-radius:50%;height:55px;width:55px;background:linear-gradient(40deg,#f57f17,#4527a0)!important;">';
                     container += '    <img src="'+response[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
                     container += '  </div>';
                 } else {
@@ -280,7 +344,7 @@ function getMessages(x) { // Gets list of messages from users.
 
 function getChat(x) { // Gets list of chat messages between two users.
     if (!x) {
-        $("#message-container").html('<i class="fas fa-circle-notch fa-spin text-primary" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+        $("#message-container").html('<i class="fas fa-circle-notch fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
     }
     let url = window.location.href;
     let obj = new Object();
@@ -445,7 +509,10 @@ function isFriend(id) { // Check if user is in friend list.
     });
 }
 
-function getFriends() { // Gets a list of users in friend list.
+function getFriends(x) { // Gets a list of users in friend list.
+    if (!x) {
+        $("#friend-container").html('<i class="fas fa-circle-notch fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+    }
     $.ajax({
         type: "GET",
         url: "/Api/GetFriends", 
@@ -473,6 +540,7 @@ function getFriends() { // Gets a list of users in friend list.
                 container += '      </div>';
                 container += '    </div>';
             }
+            $("#friend-container").empty();
             $("#friend-container").html(container);
         }
     });
@@ -595,7 +663,7 @@ function sendMessage() {
                     $("#newMessageModal").modal("hide");
                 }
                 if (window.location.href.indexOf("Chat") > -1) { // If in the chat, get the new messages.
-                    getChat();
+                    getChat(1);
                 }
                 if (response == 1) {
                     let responseTime = Math.floor(Math.random() * (120000 - 3000 + 1)) + 3000;
@@ -621,7 +689,7 @@ function sendResponse(id) {
         success: function() {
             localStorage.clear();
             if (window.location.href.indexOf("Chat") > -1) { // If in the chat, get the new messages.
-                getChat();
+                getChat(1);
             }
         }
     });

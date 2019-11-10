@@ -309,6 +309,16 @@ namespace Rikku.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetProfile(string id)
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
+ 
+            return Ok(user);        
+        }
+
+        [HttpGet]
         public List<ApplicationUserViewModel> GetUsers()
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
