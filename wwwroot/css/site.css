@@ -10,7 +10,7 @@ for details on configuring this project to bundle and minify static web assets. 
   min-height:36px;
   border-radius:25px;
   position:absolute;
-  top:-65%;
+  top:-85%;
   background-color:rgba(128,128,128,.7);
   padding:5px;
   z-index: 2000;

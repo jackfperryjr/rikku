@@ -1,7 +1,4 @@
-﻿@model IEnumerable<Rikku.Data.ApplicationUser>
-@using Rikku.Data
-@using Rikku.Models
-@using Microsoft.AspNetCore.Identity
+﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 @{
@@ -10,7 +7,73 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <div id="home-index-container" class="container home-index-container">            
+
+    <div id="home-page">
+        <div id="home-index-container" class="container home-index-container">            
+        </div>
+    </div>
+
+    <div id="profile-page" style="display:none;">
+        <div id="profile-container">
+        </div>
+    </div>
+
+    <div id="mail-page" style="display:none;">
+        <h3 class="ffapp" style="position:fixed;left:0;background-color:#000000;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);">messages</h3>
+        <div class="container" style="padding:40px 0 0 0;">
+            <div id="mailbox" class="container" style="padding:0;"> 
+            </div>
+        </div>
+    </div>
+
+    <div id="friend-page" style="display:none;">
+        <h3 class="ffapp" style="position:fixed;left:0;background-color:#000000;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);">friends</h3>
+        <div class="container" style="padding-top:40px;">
+            <div id="friend-container" class="container"> 
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-page" style="display:none;">
+        <div class="row">
+            <div id="chat-picture" class="col-md-2" style="position:fixed;top:60px;text-align:left;background-color: rgba(0,0,0,.9);z-index: 100;">
+            </div>
+        </div>
+        <div id="message-container" class="message-container"> 
+        </div>
+        <div class="row form-group">
+            <div class="col-sm-12" style="display:inline-block;position:absolute;bottom:70px;">
+                <textarea id="message-input" name="content" class="form-group input-group message-input-chat" placeholder="Type message here..." style="border-radius:25px!important;" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' required></textarea>
+                <button id="send-button" class="input-group-button btn btn-link">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="admin-page" style="display:none;">
+        <h3 class="ffapp title-bg-shroud">admin</h3>
+        <div class="container" style="padding-top:30px;">
+        <!-- <form asp-controller="Home" asp-action="Admin" method="get">
+            <div class="row" style="position: fixed; top: 70px;width: 330px;">
+                <div class="input-group">
+                    <input class="form-control" id="search" type="text" name="SearchString" placeholder='Search...' />
+                </div>
+            </div>
+        </form> -->
+            <div id="admin-container" class="container">
+            </div>
+        </div>
+    </div>
+
+    <div id="about-page" style="display:none;">
+        <div class="text-center top-margin">
+            <img src="~/icons/ffapp/ff-circle-192.png" />
+            <h3 class="top-margin">About</h3>
+            <div class="about-container">
+                <p>This is a fun little app I've put together to chat with your favorite Final Fantasy characters! Or chat with each other about your favorite Final Fantasy characters!</p>
+                <p>The photos for the characters are of real people cosplaying as those characters. If you find yourself pictured as a character I didn't mean any disrespect; the exact opposite, in fact. I found you to be the most realistic depiction of the character. However, if you'd like for your photo to be removed please <a href="/Home/Profile/e7f72e6a-5c23-4dcd-81e6-327c64177b95">message</a> me to do so! I'll remove it as soon as I can!</p>
+                <p>A little privacy notice: this app doesn't currently use cookies to retrieve any information. However, it may do so in the future to in order to organize things to suit you better!</p>
+            </div>
+        </div>
     </div>
 }
 else

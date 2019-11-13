@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
@@ -51,15 +49,20 @@ namespace Rikku.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> Profile(string id)
+        public IActionResult Profile()
         {
-            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
- 
-            return View(user);        
+            return View();        
         }
 
+        public IActionResult Mailbox()
+        {            
+            return View();
+        }
+
+        public IActionResult Chat()
+        {    
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

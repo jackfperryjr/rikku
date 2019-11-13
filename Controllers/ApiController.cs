@@ -13,7 +13,6 @@ using Rikku.Data;
 
 namespace Rikku.Controllers
 {
-
     [Authorize]
     public class ApiController : ControllerBase
     {
@@ -86,7 +85,7 @@ namespace Rikku.Controllers
             return users.ToList();  
         }
 
-        [HttpPost]
+        [HttpPut]
         [Authorize(Roles="Admin")]
         public async Task<IActionResult> EditUserRole(string id, int role)  
         { 
@@ -209,7 +208,7 @@ namespace Rikku.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> AddMessageReaction(int id, int reaction)
         {
             MessageModel m = (from a in _context.Messages
@@ -394,7 +393,7 @@ namespace Rikku.Controllers
         }
 
         [HttpGet]
-        public List<ApplicationUserViewModel> GetMessages()
+        public List<ApplicationUserViewModel> GetMailbox()
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
 
