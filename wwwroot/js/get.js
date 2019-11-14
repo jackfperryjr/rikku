@@ -1,4 +1,4 @@
-function getProfile(id, x) {
+function getProfile(id) {
     $("#profile-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
     $("#profile-container").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
@@ -10,12 +10,7 @@ function getProfile(id, x) {
         data: obj,
         dataType: "json",
         success: function(response) {
-            let goBack;
-            if (x) {
-                goBack = localStorage.getItem("getUsers");
-            } else {
-                goBack = localStorage.getItem("getChat");
-            }
+            let x = localStorage.referrer;
             let container = '';
             container += '<div class="row text-center" style="height:150px;margin:0;">';
             container += '<img id="img-output-wallpaper" style="height:150px;width:100%;" src="'+response["wallpaper"]+'" style="cursor:pointer;">';
@@ -35,7 +30,7 @@ function getProfile(id, x) {
             container += '</div>';
             container += '<div class="row text-center" style="margin:0 0 50px 0;">';
             container += '<a class="btn btn-primary" style="width:45%;margin:0 5px 0 auto;" data-toggle="modal" href="#newMessageModal">Message</a>';
-            container += '<a class="btn btn-secondary" style="background-color:#6c757d!important;width:45%;margin:0 auto 0 5px;" onclick='+goBack+'>Go Back</a>';
+            container += '<a id="goback" class="btn btn-secondary" style="background-color:#6c757d!important;width:45%;margin:0 auto 0 5px;">Go Back</a>';
             container += '<div class="row text-center" style="margin:50px auto;width:100vw;">';
             container += '<span style="margin:0 auto;">';
             container += '<button id="delete-friend" onclick="deleteFriend()" style="display:none;border:none!important;font-size:15px;background-color:transparent!important;color:#ffffff;">';
@@ -58,6 +53,16 @@ function getProfile(id, x) {
             $("#profile-container").empty();
             $("#profile-container").html(container);
             isFriend(id);
+            if (x == 1) {
+                $("#nav-back-btn, #goback").click(function(){
+                    getUsers();
+                });
+            } 
+            if (x == 2) {
+                $("#nav-back-btn, #goback").click(function(){
+                    getChat(id);
+                });
+            }
         }
     });
 }
@@ -132,18 +137,17 @@ function getUsers(x) { // Gets list of all registered users.
     if (!x) {
         $("#home-index-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
     }
-    localStorage.removeItem("getUsers");
-    localStorage.getUsers = "getUsers()";
     $.ajax({
         type: "GET",
         url: "/Api/GetUsers", 
         dataType: "json",
         success: function(response) { 
+            localStorage.referrer = 1;
             let container = '';
             for (i = 0; i < response.length; i++) { // Maps response items into containers for display.
                 let id = response[i]["userId"];
                 container += '<div class="user-snippet-container">';
-                container += '  <a onclick=getProfile("'+id+'", 1)>';
+                container += '  <a onclick=getProfile("'+id+'")>';
                 container += '    <div class="row user-snippet-row-main">';
                 container += '      <div class="col-xs-5">';
                 container += '        <img class="user-img-md" src="'+response[i]["picture"]+'">';
@@ -164,13 +168,13 @@ function getUsers(x) { // Gets list of all registered users.
             }
             $("#home-index-container").empty();
             $("#home-index-container").html(container);
-            localStorage.removeItem(getUsers);
         }
     });
 }
 
 function getMailbox(x) { // Gets list of messages from users.
     $("#mail-page").show().siblings().hide();
+    $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
         $("#mailbox").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
     }
@@ -237,13 +241,13 @@ function getMailbox(x) { // Gets list of messages from users.
 
 function getChat(id, x) { // Gets list of chat messages between two users.
     $("#chat-page").show().siblings().hide();
+    $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
+    $("#nav-back-btn").click(function(){
+        getMailbox();
+    });
     if (!x) {
         $("#message-container").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
     }
-    localStorage.removeItem("getChat");
-    localStorage.removeItem("chatId");
-    localStorage.setItem("chatId", obj.id);
-    localStorage.getChat = "getChat(localStorage.chatId)";
     let obj = new Object();
     obj.id = id;
     $.ajax({
@@ -251,6 +255,7 @@ function getChat(id, x) { // Gets list of chat messages between two users.
         url: "/Api/GetChat", 
         data: obj,
         success: function(response) {
+            localStorage.referrer = 2;
             $("#chat-picture").html(
                 '<a onclick=getProfile("'+id+'")><img class="user-img-md" src="https://rikku.blob.core.windows.net/images/User-'+id+'.png"></a>'
             );
@@ -300,7 +305,7 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                     container += '<div class="row message-container-row">';
                     container += '<div class="col-sm-12" style="margin:0;padding:0;">';
 
-                    container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+picture+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left bg-success text-white" style="position:relative;border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
+                    container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left bg-success text-white" style="position:relative;border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
 
                     // Container to display message reaction options.
                     container += '<div id="reaction'+messageId+'" class="message-reaction-container">';

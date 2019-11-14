@@ -1,4 +1,5 @@
 $(document).ready(function() { // Activating icon related to navigated screen upon load.
+    getUsers();
     // if (window.location.href.indexOf("mailbox") > -1) {
     //     $("#fa-comment").addClass("active").siblings().removeClass("active");
     //     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
@@ -62,8 +63,7 @@ $(document).ready(function() { // Activating icon related to navigated screen up
     });
 
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").click(function() {
-        $(this).addClass("active")
-        $(this).siblings().toggleClass("active");
+        // TODO: swap active class amongst IDs.
     });
 
     (function mailChecker(){ // Self executing function that runs every 3 seconds.

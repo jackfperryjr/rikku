@@ -6,13 +6,13 @@
 }
 @if (SignInManager.IsSignedIn(User))
 {
-    <a id="nav-back-btn" style="padding-left:10px;color:#000000;" onclick="window.history.go(-1); return false;"><i class="fas fa-chevron-left"></i></a>
+    <a id="nav-back-btn" style="padding-left:10px;color:#000000;"><i class="fas fa-chevron-left"></i></a>
     <h2 class="ffapp">ffriendster</h2>
     <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><img class="user-img-sm" src=@user.Picture></a>
 }
 else
 {
-    <a id="nav-back-btn" style="padding-left:10px;color:#000000;" onclick="window.history.go(-1); return false;"><i class="fas fa-chevron-left"></i></a>
+    <a id="nav-back-btn" style="padding-left:10px;color:#000000;"><i class="fas fa-chevron-left"></i></a>
     <h2 class="ffapp">ffriendster</h2>
     <a class="nav-link" asp-area="Identity" asp-page="/Account/Login"><i class="fas fa-sign-in-alt"></i></a>
 }

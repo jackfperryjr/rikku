@@ -38,8 +38,8 @@ function sendMessage() {
                     setTimeout(function() {
                         sendResponse(obj.id);
                     }, responseTime)
-                    localStorage.setItem("responseTime", responseTime);
-                    localStorage.setItem("id", obj.id);
+                    localStorage.responseTime = responseTime;
+                    localStorage.id = id;
                     localStorage.sendResponse = "setTimeout(function() {sendResponse(localStorage.id);}, localStorage.responseTime)";
                 }
             }
@@ -55,7 +55,9 @@ function sendResponse(id) {
         url: "/Api/SendResponse", 
         data: obj,
         success: function() {
-            localStorage.clear();
+            localStorage.removeItem("id");
+            localStorage.removeItem("sendResponse");
+            localStorage.removeItem("responseTime");
             if (window.location.href.indexOf("chat") > -1) { // If in the chat, get the new messages.
                 getChat(2);
             }
