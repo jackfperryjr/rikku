@@ -12,6 +12,7 @@ namespace Rikku.Data
         public string City { get; set; }
         public string State { get; set; }
         public string ZipCode { get; set; }
+        [Required]
         public DateTime BirthDate { get; set; }
         public string Age { get; set; }
         public string Picture { get; set; }

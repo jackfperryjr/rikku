@@ -7,8 +7,8 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
     var user = await UserManager.GetUserAsync(User); 
 }
-<partial name="_StatusMessage" for="StatusMessage" />
-<form id="profile-form" method="post" enctype="multipart/form-data">
+<!-- <partial name="_StatusMessage" for="StatusMessage" /> -->
+<!-- <form id="profile-form" method="post" enctype="multipart/form-data">
     <div class="row text-center" style="height: 150px;position:relative;margin:0;">
         <label>
             <img id="img-output-wallpaper" style="height:150px;width:100%;" src="@user.Wallpaper" style="cursor:pointer;">
@@ -75,7 +75,7 @@
             <button id="update-profile-button" type="submit" class="btn btn-primary" style="width:100%;">Save</button>
             <a asp-area="Identity" asp-page="/Account/Manage/DeletePersonalData" class="btn btn-danger" style="margin-top:15px;width:100%;">Delete Account</a>
         </div>
-    </div>
+    </div> -->
     <!-- <div class="row" style="margin:30px auto;">
         <div class="col-xs-8" style="margin:0 15px 0 auto;">
             <label class="switch">
@@ -84,4 +84,4 @@
             </label>
         </div>
     </div> -->
-</form>
+<!-- </form> -->

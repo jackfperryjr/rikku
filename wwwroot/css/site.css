@@ -234,14 +234,26 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.status-message {
+  background: rgba(0, 151, 19, 0.3);
+  height: 60px;
+  width: 250px;
+  position:fixed;
+  top: 80px;
+}
+
 /* Sticky footer styles */
 html {
   font-size: 14px;
 }
 .active {
-  color:#ffffff!important;
+  background-image: -webkit-gradient(linear, left bottom, right top, from(#f57f17), to(#4527a0));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* text-shadow: 0 0 3px -webkit-linear-gradient(40deg,#f57f17,#4527a0)!important; */
+  /* color:#ffffff!important; */
   transition: all .1s ease-in-out;
-  font-size:34px;
+  /* font-size:34px; */
 }
 .profile-input {
   margin:0;

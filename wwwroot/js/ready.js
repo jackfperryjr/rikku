@@ -63,7 +63,11 @@ $(document).ready(function() { // Activating icon related to navigated screen up
     });
 
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").click(function() {
-        // TODO: swap active class amongst IDs.
+        $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
+        $(this).addClass("active");
+        if ($("#extra-nav").is(":visible")) {
+            $("#extra-nav").slideToggle(150);
+        }
     });
 
     (function mailChecker(){ // Self executing function that runs every 3 seconds.

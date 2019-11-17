@@ -63,11 +63,18 @@ function getProfile(id) {
                     getChat(id);
                 });
             }
+            if (x == 3) {
+                $("#nav-back-btn, #goback").click(function(){
+                    getFriends();
+                });
+            }
         }
     });
 }
 
 function getAdmin(x) {
+    $("#admin-page").show().siblings().hide();
+    $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
         $("#admin-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
     }
@@ -305,7 +312,7 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                     container += '<div class="row message-container-row">';
                     container += '<div class="col-sm-12" style="margin:0;padding:0;">';
 
-                    container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left bg-success text-white" style="position:relative;border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
+                    container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+id+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left bg-success text-white" style="position:relative;border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
 
                     // Container to display message reaction options.
                     container += '<div id="reaction'+messageId+'" class="message-reaction-container">';
@@ -350,6 +357,20 @@ function getChat(id, x) { // Gets list of chat messages between two users.
             if (x && x == 2) {
                 messageScroll();
             }
+            $(".message-input-chat").focus(function() { // Hides navigation when text input is focused.
+                $(".footer-nav").hide();
+                $("#send-button").addClass("move-bottom");
+                $(this).height((this.scrollHeight - 7) + "px");
+            });
+            $(".message-input-chat").blur(function() { // Shows navigation when text input is no longer focused.
+                $(".footer-nav").show();
+                $("#send-button").removeClass("move-bottom");
+                $(this).height(30);
+                $(".message-input-chat").scrollTop($(".message-input-chat")[0].scrollHeight);
+            });
+            $("#send-button").mousedown(function() {
+                sendMessage();
+            });
         }
     });
 }
@@ -402,6 +423,8 @@ function isFriend(id) { // Check if user is in friend list.
 }
 
 function getFriends(x) { // Gets a list of users in friend list.
+    $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
+    $("#friend-page").show().siblings().hide();
     if (!x) {
         $("#friend-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
     }
@@ -413,7 +436,7 @@ function getFriends(x) { // Gets a list of users in friend list.
             let container = '';
             if (response.length > 0) {
                 for (i = 0; i < response.length; i++) { // Maps response items into container for display.
-                    container += '  <a href="/home/profile/'+response[i]["id"]+'">';
+                    container += '  <a onclick=getProfile(&quot;'+response[i]["id"]+'&quot;)>';
                     container += '    <div class="row" style="margin-bottom:10px;">';
                     container += '      <div class="col-xs-5">';
                     container += '        <img class="user-img-md" src="'+response[i]["picture"]+'" style="border-radius:50%;margin-right: 10px;width:70px;height70px;">';
@@ -434,7 +457,96 @@ function getFriends(x) { // Gets a list of users in friend list.
             }
             $("#friend-container").empty();
             $("#friend-container").html(container);
-            $("#friend-page").show().siblings().hide();
+            localStorage.referrer = 3;
+        }
+    });
+}
+
+function getUser(x) {
+    $("#user-page").show().siblings().hide();
+    $("#user-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+    $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
+    $.ajax({
+        type: "GET",
+        url: "/Api/GetUser", 
+        dataType: "json",
+        success: function(response) {
+            let container = '';
+            if (x) {
+                container += '<div id="status-message" class="status-message text-success">Profile Updated! <span>&times;</span></div>';
+            }
+            container += '<div class="row text-center" style="height: 150px;position:relative;margin:0;">';
+            container += '<label>';
+            container += '<img id="img-output-wallpaper" style="height:150px;width:100%;" src="'+response["wallpaper"]+'" style="cursor:pointer;">';
+            container += '<i class="fas fa-camera" title="Change Image" style="color:rgba(255,255,255,.7);cursor:pointer;position:absolute;bottom:3px;right:3px;z-index:200;"></i>';
+            container += '<input value="'+response["wallpaper"]+'" id="img-input-wallpaper" type="file" accept="image/*" name="wallpaper" style="display:none;" multiple/>';
+            container += '</label>';
+            container += '<div class="col-md-4" style="margin: -150px auto 0 auto;">';
+            container += '<label>';
+            container += '<img id="img-output-user" class="user-img-lg bottom-margin" src="'+response["picture"]+'" title="Picture of you!" style="cursor:pointer;">';
+            container += '<div class="user-img-overlay">';
+            container += '<i class="fas fa-camera" title="Change Image" style="cursor:pointer;"></i>';
+            container += '</div>';
+            container += '<input value="'+response["picture"]+'" id="img-input-user" type="file" accept="image/*" name="picture" style="display:none;" multiple/>';
+            container += '</label>';
+            container += '</div>';
+            container += '</div>';
+            container += '<div class="row" style="margin:100px 0 0 0!important;">';
+            container += '<div class="col-md-8 profile-input">';
+            container += '<div class="form-group">';
+            container += '<input value="'+response["userName"]+'" class="form-control" style="border-radius:25px;" />';
+            container += '</div>';
+            container += '<div class="form-group">';
+            container += '<div class="form-inline">';
+            container += '<input value="'+response["firstName"]+'" class="form-control" style="border-radius:25px;width: 45%; margin-right: 10%;" placeholder="First..." />';
+            container += '<input value="'+response["lastName"]+'" class="form-control" style="border-radius:25px;width: 45%;" placeholder="Last..." />';
+            container += '</div>';
+            container += '</div>';
+            container += '<div class="form-group">';
+            container += '<div class="input-group">';
+            container += '<input value="'+response["email"]+'" class="form-control" style="border-radius:25px;" />';
+            container += '<span class="input-group-addon" aria-hidden="true"><span class="text-success"></span></span>';
+            container += '</div>';
+            container += '</div>';
+            container += '<div class="form-group">';
+            container += '<input value="'+response["city"]+'" class="form-control" placeholder="City..." style="border-radius:25px;" />';
+            container += '</div>';
+            container += '<div class="form-group">';
+            container += '<input value="'+response["state"]+'" class="form-control" placeholder="State..." style="border-radius:25px;" />';
+            container += '</div>';
+            container += '<div class="form-group">';
+            container += '<input value="'+response["zipCode"]+'" class="form-control" placeholder="ZipCode..." style="border-radius:25px;" />';
+            container += '</div>';
+            container += '<div class="form-group">';
+            let date = response["birthDate"];
+            date = formatDate(date);
+            container += '<input type="date" value="'+date+'" class="form-control" style="border-radius:25px;" />';
+            container += '</div>';
+            container += '<div class="form-group">';
+            container += '<input value="'+response["age"]+'" class="form-control" placeholder="Age..." style="border-radius:25px;" />';
+            container += '</div>';
+            container += '<div class="form-group">';
+            container += '<textarea id="profile-text" class="form-control" style="height:92px!important;resize: none;border-radius:25px;" placeholder="Write something about yourself! Up to 255 characters..."></textarea>';
+            container += '</div>';
+            container += '</div>';
+            container += '</div>';
+            container += '<div class="row text-center" style="margin:15px auto;">';
+            container += '<div class="col-md-8 profile-input">';
+            container += '<button id="update-profile-button" type="submit" class="btn btn-primary" style="width:100%;">Save</button>';
+            container += '<a asp-area="Identity" asp-page="/Account/Manage/DeletePersonalData" class="btn btn-danger" style="margin-top:15px;width:100%;">Delete Account</a>';
+            container += '</div>';
+            container += '</div>';
+            // container += '<div class="row" style="margin:30px auto;">';
+            // container += '<div class="col-xs-8" style="margin:0 15px 0 auto;">';
+            // container += '<label class="switch">';
+            // container += '<input id="dark-mode" type="checkbox">';
+            // container += '<span class="slider round"></span>';
+            // container += '</label>';
+            // container += '</div>';
+            // container += '</div>';
+            $("#user-container").empty();
+            $("#user-container").html(container);
+            $("#profile-text").append(response["profile"]);
         }
     });
 }

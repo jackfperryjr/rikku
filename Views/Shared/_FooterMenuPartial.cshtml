@@ -10,7 +10,7 @@
 {
     <div id="extra-nav" class="row" style="display:none;padding-bottom:10px;">
         <a class="transition"><i id="fa-cog" class="fas fa-cog" style="color:rgba(255,255,255,.5)!important;"></i></a>
-        <a href="~/identity/account/manage/index" class="transition"><i id="fa-user" class="fas fa-user-circle"></i></a>
+        <a onclick=getUser() class="transition"><i id="fa-user" class="fas fa-user-circle"></i></a>
         @if (User.IsInRole("Admin"))
         {
         <a onclick=getAdmin() class="transition"><i id="fa-users-cog" class="fas fa-users-cog"></i></a>

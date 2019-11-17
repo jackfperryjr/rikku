@@ -1,6 +1,6 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
 using Rikku.Models;
 using Rikku.Data;
 
@@ -19,15 +22,18 @@ namespace Rikku.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private IConfiguration _configuration;
 
         public ApiController(
             ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            IConfiguration configuration)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -63,31 +69,13 @@ namespace Rikku.Controllers
                             ZipCode = u.ZipCode,
                             RoleName = u.RoleName
                         }).Where(u => u.Id != userId);  
-                        
-            // if (!String.IsNullOrEmpty(searchString))
-            // {
-            //     searchString = searchString.ToLower();
-            //     users = users.Where(u => {
-            //                                 try 
-            //                                 {
-            //                                     return u.UserName.Contains(searchString)
-            //                                     || u.City.ToLower().Contains(searchString)
-            //                                     || u.ZipCode.Contains(searchString);
-            //                                 }
-            //                                 catch
-            //                                 {
-            //                                     return false;
-            //                                 }
-            //                             }
-            //                         ); 
-            // }
 
             return users.ToList();  
         }
 
         [HttpPut]
         [Authorize(Roles="Admin")]
-        public async Task<IActionResult> EditUserRole(string id, int role)  
+        public async Task<IActionResult> UpdateUserRole(string id, int role)  
         { 
             var userRole = "";
             if (role == 1) 
@@ -591,6 +579,160 @@ namespace Rikku.Controllers
             _context.Messages.Add(message);
             _context.SaveChanges();
 
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetUser()
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId);
+ 
+            return Ok(user);
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateUser(string firstName, 
+                                                    string lastName, 
+                                                    string city, 
+                                                    string state, 
+                                                    string zipCode, 
+                                                    string profile,
+                                                    string email,
+                                                    string phoneNumber,
+                                                    string picture,
+                                                    string wallpaper)
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId);
+
+            // if (Input.UserName != user.UserName)
+            // {
+            //     user.UserName = Input.UserName;
+            // }
+
+            if (firstName != user.FirstName)
+            {
+                user.FirstName = firstName;
+            }
+
+            if (lastName != user.LastName)
+            {
+                user.LastName = lastName;
+            }
+
+            if (city != user.City)
+            {
+                user.City = city;
+            }
+
+            if (state != user.State)
+            {
+                user.State = state;
+            }
+
+            if (zipCode != user.ZipCode)
+            {
+                user.ZipCode = zipCode;
+            }
+
+            // if (birthDate != user.BirthDate)
+            // {
+            //     user.BirthDate = birthDate;
+            // }
+
+            // if (Input.Age != user.Age)
+            // {
+            //     user.Age = Input.Age;
+            // }
+
+            if (profile != user.Profile)
+            {
+                user.Profile = profile;
+            }
+
+            var userEmail = await _userManager.GetEmailAsync(user);
+            if (email != userEmail)
+            {
+                var setEmailResult = await _userManager.SetEmailAsync(user, email);
+                if (!setEmailResult.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred setting email for user with ID '{userId}'.");
+                }
+            }
+
+            var userPhoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            if (phoneNumber != userPhoneNumber)
+            {
+                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, phoneNumber);
+                if (!setPhoneResult.Succeeded)
+                {
+                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+                }
+            }
+
+            var account = _configuration["StorageConfig:AccountName"];
+            var key = _configuration["StorageConfig:AccountKey"];
+            var storageCredentials = new StorageCredentials(account, key);
+            var cloudStorageAccount = new CloudStorageAccount(storageCredentials, true);
+            var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+            var container = cloudBlobClient.GetContainerReference("images");
+            await container.CreateIfNotExistsAsync();
+
+            if (picture != user.Picture)
+            {
+                var files = HttpContext.Request.Form.Files;
+
+                if (files.Count != 0) 
+                {
+                    for (var i = 0; i < files.Count; i++)
+                    {
+                        if (files[i].Name == "picture")
+                        {
+                            //var extension = Path.GetExtension(files[i].FileName);
+                            var newBlob = container.GetBlockBlobReference("User-" + user.Id + ".png");
+
+                            using (var filestream = new MemoryStream())
+                            {   
+                                files[i].CopyTo(filestream);
+                                filestream.Position = 0;
+                                await newBlob.UploadFromStreamAsync(filestream);
+                            }
+                            user.Picture = "https://rikku.blob.core.windows.net/images/User-" + user.Id + ".png";
+                        }
+                    }
+                }
+            }
+
+            if (wallpaper != user.Wallpaper)
+            {
+                var files = HttpContext.Request.Form.Files;
+
+                if (files.Count != 0) 
+                {
+                    for (var i = 0; i < files.Count; i++)
+                    {
+                        if (files[i].Name == "wallpaper")
+                        {
+                            //var extension = Path.GetExtension(files[i].FileName);
+                            var newBlob = container.GetBlockBlobReference("User-Wallpaper-" + user.Id + ".jpg");
+
+                            using (var filestream = new MemoryStream())
+                            {   
+                                files[i].CopyTo(filestream);
+                                filestream.Position = 0;
+                                await newBlob.UploadFromStreamAsync(filestream);
+                            }
+                            user.Wallpaper = "https://rikku.blob.core.windows.net/images/User-Wallpaper-" + user.Id + ".jpg";
+                        }
+                    }
+                }
+            }
+            
+            await _userManager.UpdateAsync(user);
+ 
             return Ok();
         }
     }
