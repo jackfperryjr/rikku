@@ -18,7 +18,17 @@ function messageScroll() {
     $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
 }
 
-function formatDate(d) {
+function clear() {
+    clearTimeout(getChat);
+    clearTimeout(getMailbox);
+    clearTimeout(getProfile);
+    clearTimeout(getUsers);
+    clearTimeout(getUser);
+    clearTimeout(getFriends);
+    clearTimeout();
+}
+
+function formatDate(d, x) {
     let date = new Date(d);
     date = new Date(date.getTime() - date.getTimezoneOffset()*60*1000);
     let dayOfMonth = date.getDate();
@@ -39,9 +49,18 @@ function formatDate(d) {
 
     minutes = minutes < 10 ? "0" + minutes : minutes;
 
-    year = year.toString().slice(-2);
+    if (x) {
+        year = year;
+        dayOfMonth += 1;
+    } else {
+        year = year.toString().slice(-2);
+    }
     month = month < 10 ? "0" + month : month;
     dayOfMonth = dayOfMonth < 10 ? "0" + dayOfMonth : dayOfMonth;
   
-    return `${month}.${dayOfMonth}.${year} ${hh}:${minutes}${dd}`
+    if (x) {
+        return [year, month, dayOfMonth].join('-');
+    } else {
+        return `${month}.${dayOfMonth}.${year} ${hh}:${minutes}${dd}`;
+    }
 }

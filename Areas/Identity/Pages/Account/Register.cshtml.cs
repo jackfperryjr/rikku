@@ -56,6 +56,16 @@ namespace Rikku.Areas.Identity.Pages.Account
             public string UserName { get; set; }
 
             [Required]
+            [Display(Name = "First name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [Display(Name = "Birthdate")]
+            public DateTime BirthDate { get; set; }
+
+            public DateTime JoinDate { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
@@ -77,15 +87,26 @@ namespace Rikku.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                int day = (int)DateTime.Now.DayOfWeek + 1;
                 ApplicationUser user; 
+
+                var today = DateTime.Now;
+                var age = today.Year - Input.BirthDate.Year;
+                if (today.Month < Input.BirthDate.Month || ((today.Month == Input.BirthDate.Month) && (today.Day < Input.BirthDate.Day)))
+                {
+                    age--;
+                }
+                var ageString = age.ToString();
 
                 user = new ApplicationUser 
                         { 
                             UserName = Input.UserName, 
                             Email = Input.Email, 
+                            FirstName = Input.FirstName,
+                            BirthDate = Input.BirthDate,
+                            Age = ageString,
                             Picture = "/icons/default/default-picture.jpg",
-                            Wallpaper = "/icons/default/default-wallpaper.jpg"
+                            Wallpaper = "/icons/default/default-wallpaper.jpg",
+                            JoinDate = DateTime.Now
                         };
                 
 
@@ -101,10 +122,14 @@ namespace Rikku.Areas.Identity.Pages.Account
 
                     if (users.Count == 1) {
                         await _userManager.AddToRoleAsync(user, "Admin");
+                        user.RoleName = "Admin";
+                        await _userManager.UpdateAsync(user);
                     }
                     else 
                     {
                         await _userManager.AddToRoleAsync(user, "User");
+                        user.RoleName = "User";
+                        await _userManager.UpdateAsync(user);
                     }
                     
                     // Sending welcome message to a new user.

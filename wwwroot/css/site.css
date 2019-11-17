@@ -235,11 +235,27 @@ a.navbar-brand {
 }
 
 .status-message {
-  background: rgba(0, 151, 19, 0.3);
+  color:#ffffff!important;
+  font-size:20px;
+  padding: 15px;
+  background: rgba(223,240,216, 0.7);
+  border-radius:25px;
   height: 60px;
-  width: 250px;
+  width: auto;
   position:fixed;
-  top: 80px;
+  top: 40%;
+  left:10%;
+  right:10%;
+  z-index: 2500;
+}
+
+.status-message > span {
+  color:#ffffff!important;
+  background: rgba(223,240,216, 0)!important;
+  font-size:24px;
+  float:right;
+  padding-right:7px;
+  margin-top:-10px;
 }
 
 /* Sticky footer styles */
@@ -247,11 +263,7 @@ html {
   font-size: 14px;
 }
 .active {
-  background-image: -webkit-gradient(linear, left bottom, right top, from(#f57f17), to(#4527a0));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  /* text-shadow: 0 0 3px -webkit-linear-gradient(40deg,#f57f17,#4527a0)!important; */
-  /* color:#ffffff!important; */
+  color:#ffffff!important;
   transition: all .1s ease-in-out;
   /* font-size:34px; */
 }

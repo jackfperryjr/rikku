@@ -36,6 +36,21 @@ namespace Rikku.Controllers
             _configuration = configuration;
         }
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateUserLocation(string ip, string city, string region, string country)  
+        { 
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId);
+
+            user.LoggedInIP = ip;
+            user.LoggedInCity = city;
+            user.LoggedInRegion = region;
+            user.LoggedInCountry = country;            
+
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
+
         [HttpGet]
         [Authorize(Roles="Admin")]
         public List<ApplicationUser> GetAdmin()
@@ -53,7 +68,6 @@ namespace Rikku.Controllers
                             Email = user.Email,
                             City = user.City,
                             State = user.State,
-                            ZipCode = user.ZipCode,
                             RoleName = user.RoleName
                         }).ToList()
                         .Select(u => new ApplicationUser()  
@@ -66,7 +80,6 @@ namespace Rikku.Controllers
                             Email = u.Email,
                             City = u.City,
                             State = u.State,
-                            ZipCode = u.ZipCode,
                             RoleName = u.RoleName
                         }).Where(u => u.Id != userId);  
 
@@ -171,7 +184,6 @@ namespace Rikku.Controllers
                                     Email = u.Email,
                                     City = u.City,
                                     State = u.State,
-                                    ZipCode = u.ZipCode
                                 }).Where(u => userId == u.UserId).ToList()
                                 .Select(u => new ApplicationUserViewModel()  
                                 {  
@@ -183,7 +195,6 @@ namespace Rikku.Controllers
                                     Email = u.Email,
                                     City = u.City,
                                     State = u.State,
-                                    ZipCode = u.ZipCode
                                 });  
 
             if (friends.Any(c => c.Id == id))
@@ -257,7 +268,6 @@ namespace Rikku.Controllers
                                     Email = u.Email,
                                     City = u.City,
                                     State = u.State,
-                                    ZipCode = u.ZipCode
                                 }).Where(u => userId == u.UserId).ToList()
                                 .Select(u => new ApplicationUserViewModel()  
                                 {  
@@ -269,7 +279,6 @@ namespace Rikku.Controllers
                                     Email = u.Email,
                                     City = u.City,
                                     State = u.State,
-                                    ZipCode = u.ZipCode
                                 });  
 
             if (!friends.Any(c => c.Id == id))
@@ -321,7 +330,6 @@ namespace Rikku.Controllers
                             Email = user.Email,
                             City = user.City,
                             State = user.State,
-                            ZipCode = user.ZipCode,
                             Profile = user.Profile
                         }).ToList()
                         .Select(u => new ApplicationUserViewModel()  
@@ -334,7 +342,6 @@ namespace Rikku.Controllers
                             Email = u.Email,
                             City = u.City,
                             State = u.State,
-                            ZipCode = u.ZipCode,
                             Profile = u.Profile,
                             IsFriendFlg = 0
                         }).Where(u => u.UserId != userId);   
@@ -361,7 +368,6 @@ namespace Rikku.Controllers
                             Email = user.Email,
                             City = user.City,
                             State = user.State,
-                            ZipCode = user.ZipCode
                         }).Where(u => userId == u.UserId).ToList()
                         .Select(u => new ApplicationUserViewModel()  
                         {  
@@ -374,7 +380,6 @@ namespace Rikku.Controllers
                             Email = u.Email,
                             City = u.City,
                             State = u.State,
-                            ZipCode = u.ZipCode
                         });  
             
             return friends.ToList();
@@ -623,24 +628,14 @@ namespace Rikku.Controllers
                 user.LastName = lastName;
             }
 
-            if (city != user.City)
-            {
-                user.City = city;
-            }
-
-            if (state != user.State)
-            {
-                user.State = state;
-            }
-
-            if (zipCode != user.ZipCode)
-            {
-                user.ZipCode = zipCode;
-            }
-
-            // if (birthDate != user.BirthDate)
+            // if (city != user.City)
             // {
-            //     user.BirthDate = birthDate;
+            //     user.City = city;
+            // }
+
+            // if (state != user.State)
+            // {
+            //     user.State = state;
             // }
 
             // if (Input.Age != user.Age)

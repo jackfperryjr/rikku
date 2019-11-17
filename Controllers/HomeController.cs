@@ -31,38 +31,6 @@ namespace Rikku.Controllers
             return View(); 
         }
         
-        public IActionResult About()
-        {
-            return View();
-        }
-
-        [Authorize(Roles="Admin")]
-        public IActionResult Admin()
-        {
-            return View();  
-        }
-
-        [Authorize]
-        public IActionResult Friends()
-        {
-            return View(); 
-        }
-
-        [Authorize]
-        public IActionResult Profile()
-        {
-            return View();        
-        }
-
-        public IActionResult Mailbox()
-        {            
-            return View();
-        }
-
-        public IActionResult Chat()
-        {    
-            return View();
-        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

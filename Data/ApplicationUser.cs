@@ -11,8 +11,7 @@ namespace Rikku.Data
         public string LastName { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        public string ZipCode { get; set; }
-        [Required]
+        public string Country { get; set; }
         public DateTime BirthDate { get; set; }
         public string Age { get; set; }
         public string Picture { get; set; }
@@ -20,5 +19,10 @@ namespace Rikku.Data
         [MaxLength(255)]
         public string Profile { get; set; }
         public string RoleName { get; set; }
+        public DateTime JoinDate { get; set; }
+        public string LoggedInIP { get; set; }
+        public string LoggedInCity { get; set; }
+        public string LoggedInRegion { get; set; }
+        public string LoggedInCountry { get; set; }
     }
 }

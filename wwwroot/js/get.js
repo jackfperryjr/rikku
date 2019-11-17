@@ -1,7 +1,8 @@
 function getProfile(id) {
+    clear();
     $("#profile-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
-    $("#profile-container").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+    $("#profile-container").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
     let obj = new Object();
     obj.id = id;
     $.ajax({
@@ -21,6 +22,7 @@ function getProfile(id) {
             container += '</div>';
             container += '<div class="row top-margin" style="margin:80px 0 0 0;">';
             container += '<div class="col-md-12" style="margin:0 0 10px 0;">';
+            container += '<input id="profile-id" type="hidden" value='+id+' />';
             container += '<h3 class="text-center">'+response["userName"]+'</h3>';
             container += '<h5 class="text-center">'+response["city"]+', '+response["state"]+'</h5>';
             container += '<h5></h5>';
@@ -68,15 +70,20 @@ function getProfile(id) {
                     getFriends();
                 });
             }
+        },
+        error: function(jqXHR, textStatus) {
+            $("#no-connection").show();
+            setTimeout(function() { getProfile(id) }, 5000);
         }
     });
 }
 
 function getAdmin(x) {
+    clear();
     $("#admin-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
-        $("#admin-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+        $("#admin-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
     }
     $.ajax({
         type: "GET",
@@ -87,108 +94,120 @@ function getAdmin(x) {
             for (i = 0; i < response.length; i++) { // Maps response items into containers for display.
                 let id = response[i]["id"];
                 container += '<div class="row" style="margin-top:10px;">';
-                container += '  <div class="col-xs-7">';
-                container += '    <a class="btn btn-link" style="font-size: 18px;color:#ffffff!important;" data-toggle="modal" href="#EditModal'+response[i]["id"]+'"><img class="user-img-md" src="'+response[i]["picture"]+'" style="margin-right: 10px;" /> '+response[i]["userName"]+' </a>';
-                container += '    <div class="modal fade top-margin" id="EditModal'+id+'" tabindex="-1" role="dialog">';
-                container += '      <div class="modal-dialog">';
-                container += '        <div class="modal-content text-center">';
-                container += '          <div class="modal-header modal-title-border-override">';
-                container += '            <h4 class="modal-title">Edit User Role</h4>';
-                container += '            <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>';
-                container += '          </div>';
-                container += '          <div class="modal-body">';
-                container += '            <p class="text-left" style="font-size:18px;">';
+                container += '<div class="col-xs-7">';
+                container += '<a class="btn btn-link" style="font-size: 18px;color:#ffffff!important;" data-toggle="modal" href="#EditModal'+response[i]["id"]+'"><img class="user-img-md" src="'+response[i]["picture"]+'" style="margin-right: 10px;" /> '+response[i]["userName"]+' </a>';
+                container += '<div class="modal fade top-margin" id="EditModal'+id+'" tabindex="-1" role="dialog">';
+                container += '<div class="modal-dialog">';
+                container += '<div class="modal-content text-center">';
+                container += '<div class="modal-header modal-title-border-override">';
+                container += '<h4 class="modal-title">Edit User Role</h4>';
+                container += '<button type="button" class="close pull-right" data-dismiss="modal">&times;</button>';
+                container += '</div>';
+                container += '<div class="modal-body">';
+                container += '<p class="text-left" style="font-size:18px;">';
                 if (response[i]["firstName"] != null || response[i]["lastName"] != null) {
                     container += '            <span>'+response[i]["firstName"]+' '+response[i]["lastName"]+'</span><br/>';
                 } else if (response[i]["firstName"] != null && response[i]["lastName"] === null) {
-                    container += '            <span>'+response[i]["firstName"]+'</span><br/>';
+                    container += '<span>'+response[i]["firstName"]+'</span><br/>';
                 } else {
-                    container += '            <span>(no name provided)</span><br/>';
+                    container += '<span>(no name provided)</span><br/>';
                 }
-                container += '            '+response[i]["email"]+'<br/>';
-                container += '            Current Role: '+response[i]["roleName"]+'</p>';
-                container += '            <p>Assign a role?</p>';
-                container += '            <button class="btn btn-primary" onclick=editUserRole('+'"'+id+'"'+',1)>ADMIN</button>';
-                container += '            <button class="btn btn-primary" onclick=editUserRole('+'"'+id+'"'+',2)>SUPERUSER</button>';
-                container += '            <button class="btn btn-primary" onclick=editUserRole('+'"'+id+'"'+',3)>USER</button>';
-                container += '            <p style="margin-top:5px;">Ban or delete?</p>';
-                container += '            <button class="btn btn-secondary" onclick=editUserRole('+'"'+id+'"'+',4)>BAN</button>';
-                container += '            <button class="btn btn-secondary" onclick=editUserRole('+'"'+id+'"'+',5)>DELETE</button>';
-                container += '          </div>';
-                container += '        </div>';
-                container += '      </div>';
-                container += '    </div> ';
-                container += '  </div>';
-                container += '  <div class="col-xs-5" style="margin:25px 15px 0 auto!important;">';
+                container += ''+response[i]["email"]+'<br/>';
+                container += 'Current Role: '+response[i]["roleName"]+'</p>';
+                container += '<p>Assign a role?</p>';
+                container += '<button class="btn btn-primary" onclick=updateUserRole('+'"'+id+'"'+',1)>ADMIN</button>';
+                container += '<button class="btn btn-primary" onclick=updateUserRole('+'"'+id+'"'+',2)>SUPERUSER</button>';
+                container += '<button class="btn btn-primary" onclick=updateUserRole('+'"'+id+'"'+',3)>USER</button>';
+                container += '<p style="margin-top:5px;">Ban or delete?</p>';
+                container += '<button class="btn btn-secondary" onclick=updateUserRole('+'"'+id+'"'+',4)>BAN</button>';
+                container += '<button class="btn btn-secondary" onclick=updateUserRole('+'"'+id+'"'+',5)>DELETE</button>';
+                container += '</div>';
+                container += '</div>';
+                container += '</div>';
+                container += '</div> ';
+                container += '</div>';
+                container += '<div class="col-xs-5" style="margin:25px 15px 0 auto!important;">';
                 if (response[i]["roleName"] == "SuperUser") {
-                    container += '    <span class="btn btn-success" style="background-color:#28a745!important;">'+response[i]["roleName"]+'</span>';
+                    container += '<span class="btn btn-success" style="background-color:#28a745!important;">'+response[i]["roleName"]+'</span>';
                 }
                 if (response[i]["roleName"] == "Admin") {
-                    container += '    <span class="btn btn-primary">'+response[i]["roleName"]+'</span>';
+                    container += '<span class="btn btn-primary">'+response[i]["roleName"]+'</span>';
                 }
                 if (response[i]["roleName"] == "User") {
-                    container += '    <span class="btn btn-secondary" style="background-color:#6c757d!important;">'+response[i]["roleName"]+'</span>';
+                    container += '<span class="btn btn-secondary" style="background-color:#6c757d!important;">'+response[i]["roleName"]+'</span>';
                 }
-                container += '  </div>';
+                container += '</div>';
                 container += '</div>';
             }
             $("#admin-container").empty();
             $("#admin-container").html(container);
+        },
+        error: function(jqXHR, textStatus) {
+            $("#no-connection").show();
+            setTimeout(getAdmin, 5000);
         }
     });
 }
 
 function getUsers(x) { // Gets list of all registered users.
+    clear();
     $("#home-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
-        $("#home-index-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+        $("#home-index-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
     }
     $.ajax({
         type: "GET",
         url: "/Api/GetUsers", 
         dataType: "json",
+        timeout: 7000,
         success: function(response) { 
             localStorage.referrer = 1;
             let container = '';
             for (i = 0; i < response.length; i++) { // Maps response items into containers for display.
                 let id = response[i]["userId"];
                 container += '<div class="user-snippet-container">';
-                container += '  <a onclick=getProfile("'+id+'")>';
-                container += '    <div class="row user-snippet-row-main">';
-                container += '      <div class="col-xs-5">';
-                container += '        <img class="user-img-md" src="'+response[i]["picture"]+'">';
-                container += '      </div>';
-                container += '      <div class="col-xs-7">';
-                container += '        <span style="font-size: 18px;">'+response[i]["userName"]+'</span> <br/>';
-                container += '        <span style="font-size: 16px;">'+response[i]["city"]+', '+response[i]["state"]+'</span>';
-                container += '        <span id="friend-heart" style="display:none;">';
-                container += '          <i class="fas fa-heart text-danger"></i>';
-                container += '        </span>';
-                container += '      </div>';
-                container += '    </div>';
-                container += '    <div class="row user-snippet-row-secondary">';
-                container += '      <span>'+response[i]["profile"]+'</span>';
-                container += '    </div>';
-                container += '  </a>';
+                container += '<a onclick=getProfile("'+id+'")>';
+                container += '<div class="row user-snippet-row-main">';
+                container += '<div class="col-xs-5">';
+                container += '<img class="user-img-md" src="'+response[i]["picture"]+'">';
+                container += '</div>';
+                container += '<div class="col-xs-7">';
+                container += '<span style="font-size: 18px;">'+response[i]["userName"]+'</span> <br/>';
+                container += '<span style="font-size: 16px;">'+response[i]["city"]+', '+response[i]["state"]+'</span>';
+                container += '<span id="friend-heart" style="display:none;">';
+                container += '<i class="fas fa-heart text-danger"></i>';
+                container += '</span>';
+                container += '</div>';
+                container += '</div>';
+                container += '<div class="row user-snippet-row-secondary">';
+                container += '<span>'+response[i]["profile"]+'</span>';
+                container += '</div>';
+                container += '</a>';
                 container += '</div>';
             }
             $("#home-index-container").empty();
             $("#home-index-container").html(container);
+        },
+        error: function(jqXHR, textStatus) {
+            $("#no-connection").show();
+            setTimeout(getUsers, 5000);
         }
     });
 }
 
 function getMailbox(x) { // Gets list of messages from users.
+    clear();
     $("#mail-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
-        $("#mailbox").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+        $("#mailbox").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
     }
     $.ajax({
         type: "GET",
         url: "/Api/GetMailbox", 
         dataType: "json",
+        timeout: 7000,
         success: function(response) {
             let container = "";
             let color = "#000000!important";
@@ -201,59 +220,65 @@ function getMailbox(x) { // Gets list of messages from users.
                 let id = response[i]["id"];
                 container += '<div class="row" style="margin:0 0 20px 0;background-color:'+color+';border-radius:40px;padding:5px;">';
                 container += '<a onclick=getChat("'+id+'") style="display:inherit;background-color:'+color+';border-radius:50%;">';
-                container += '  <div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;border-radius:50%;">';
+                container += '<div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;border-radius:50%;">';
                 if (response[i]["messageReadFlg"] == 0) { // Adds color gradient around user image of unread messages.
-                    container += '  <div style="position:relative;border-radius:50%;height:55px;width:55px;background:linear-gradient(40deg,#f57f17,#4527a0)!important;">';
-                    container += '    <img src="'+response[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
-                    container += '  </div>';
+                    container += '<div style="position:relative;border-radius:50%;height:55px;width:55px;background:linear-gradient(40deg,#f57f17,#4527a0)!important;">';
+                    container += '<img src="'+response[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
+                    container += '</div>';
                 } else {
-                    container += '    <img src="'+response[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;">';
+                    container += '<img src="'+response[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;">';
                 }       
-                container += '  </div>';
-                container += '  <div class="col-xs-6" style="background-color:'+color+';margin:0;padding-top:5px;padding-right:100px;text-align:left;">';
-                container += '      <span style="font-size: 14px;background-color:'+color+';">'+response[i]["userName"]+'</span><br/>';
+                container += '</div>';
+                container += '<div class="col-xs-6" style="background-color:'+color+';margin:0;padding-top:5px;padding-right:100px;text-align:left;">';
+                container += '<span style="font-size: 14px;background-color:'+color+';">'+response[i]["userName"]+'</span><br/>';
                 let date = response[i]["createDate"];
                 date = formatDate(date);
-                container += '      <span style="font-size: 12px;background-color:'+color+';">'+date+'</span>';
-                container += '  </div>';
+                container += '<span style="font-size: 12px;background-color:'+color+';">'+date+'</span>';
+                container += '</div>';
                 container += '</a>';
-                container += '  <div class="col-xs-2" style="margin:0 0 0 auto;padding-top:10px;padding-right:10px;border-radius:50%;">';
-                container += '    <a class="btn btn-link bg-danger" style="font-size:14px;border-radius:50%;" data-toggle="modal" href="#deleteModal'+response[i]["id"]+'"><i class="fas fa-trash" style="color:#ffffff!important;"></i></a>';
-                container += '    <div class="modal fade top-margin" id="deleteModal'+id+'" tabindex="-1" role="dialog">';
-                container += '      <div class="modal-dialog">';
-                container += '        <div class="modal-content text-center">';
-                container += '          <div class="modal-header" style="border:none!important;border:none!important;border-bottom-top-radius:0!important;border-top-left-radius:0!important;">';
-                container += '            <h4 class="modal-title">Confirm</h4>';
-                container += '              <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>';
-                container += '            </div>';
-                container += '            <div class="modal-body" style="border:none!important;background-color:#212121!important;">';
-                container += '              <p>Are you sure you want sto delete these messages?</p>';
-                container += '            </div>';
-                container += '            <div class="modal-footer" style="border:none!important;border-bottom-right-radius:0!important;border-bottom-left-radius:0!important;background-color:#212121!important;">';
-                container += '              <button onclick=deleteMessage("'+id+'") class="btn btn-danger" data-dismiss="modal">Yes</button>';
-                container += '              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>';
-                container += '            </div>';
-                container += '          </div>';
-                container += '        </div>';
-                container += '      </div>';
-                container += '    </div>';
-                container += '  </div>';
+                container += '<div class="col-xs-2" style="margin:0 0 0 auto;padding-top:10px;padding-right:10px;border-radius:50%;">';
+                container += '<a class="btn btn-link bg-danger" style="font-size:14px;border-radius:50%;" data-toggle="modal" href="#deleteModal'+response[i]["id"]+'"><i class="fas fa-trash" style="color:#ffffff!important;"></i></a>';
+                container += '<div class="modal fade top-margin" id="deleteModal'+id+'" tabindex="-1" role="dialog">';
+                container += '<div class="modal-dialog">';
+                container += '<div class="modal-content text-center">';
+                container += '<div class="modal-header" style="border:none!important;border:none!important;border-bottom-top-radius:0!important;border-top-left-radius:0!important;">';
+                container += '<h4 class="modal-title">Confirm</h4>';
+                container += '<button type="button" class="close pull-right" data-dismiss="modal">&times;</button>';
+                container += '</div>';
+                container += '<div class="modal-body" style="border:none!important;background-color:#212121!important;">';
+                container += '<p>Are you sure you want sto delete these messages?</p>';
+                container += '</div>';
+                container += '<div class="modal-footer" style="border:none!important;border-bottom-right-radius:0!important;border-bottom-left-radius:0!important;background-color:#212121!important;">';
+                container += '<button onclick=deleteMessage("'+id+'") class="btn btn-danger" data-dismiss="modal">Yes</button>';
+                container += '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>';
+                container += '</div>';
+                container += '</div>';
+                container += '</div>';
+                container += '</div>';
+                container += '</div>';
+                container += '</div>';
                 container += '</div>';
             }
             $("#mailbox").empty();
             $("#mailbox").html(container);
+        },
+        error: function(jqXHR, textStatus) {
+            $("#no-connection").show();
+            setTimeout(function() { getMailbox(x) }, 5000);
         }
     });
 }
 
 function getChat(id, x) { // Gets list of chat messages between two users.
+    clear();
+    getMessageCount();
     $("#chat-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
-    $("#nav-back-btn").click(function(){
+    $("#nav-back-btn").click(function() {
         getMailbox();
     });
     if (!x) {
-        $("#message-container").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+        $("#message-container").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
     }
     let obj = new Object();
     obj.id = id;
@@ -261,10 +286,11 @@ function getChat(id, x) { // Gets list of chat messages between two users.
         type: "GET",
         url: "/Api/GetChat", 
         data: obj,
+        timeout: 7000,
         success: function(response) {
             localStorage.referrer = 2;
             $("#chat-picture").html(
-                '<a onclick=getProfile("'+id+'")><img class="user-img-md" src="https://rikku.blob.core.windows.net/images/User-'+id+'.png"></a>'
+                '<a onclick=getProfile("'+id+'")><img class="user-img-md" src="https://rikku.blob.core.windows.net/images/User-'+id+'.png"></a><input id="chat-id" type="hidden" value='+id+' />'
             );
             let container = "";
             for (i = 0; i < response.length; i++) { // Maps response items into rows to place into the chat screen.
@@ -281,7 +307,7 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                 if (senderId == userId) {
                     container += '<div class="row message-container-row">';
                     container += '<div class="col-sm-12" style="margin:0;padding:0;">';
-                    container += '    <img style="float:right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><div class="float-right bg-primary text-white" style="position:relative;background-color:#263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
+                    container += '<img style="float:right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><div class="float-right bg-primary text-white" style="position:relative;background-color:#263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
                     
                     if (liked === 1) { // Liked.
                         container += '<i class="fas fa-thumbs-up message-reaction-liked-left" aria-hidden="true"></i>';
@@ -304,7 +330,7 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                     container += '<div class="col-sm-12" style="padding:0 0 20px 0;">';
                     let date = response[i]["createDate"];
                     date = formatDate(date);
-                    container += '   <span style="color: #bdbdbd;height:15px; font-size:10px; float:right;">Sent '+date+'</span>';
+                    container += '<span style="color: #bdbdbd;height:15px; font-size:10px; float:right;">Sent '+date+'</span>';
                     container += '</div>';
                     container += '</div>';
                 } 
@@ -371,6 +397,10 @@ function getChat(id, x) { // Gets list of chat messages between two users.
             $("#send-button").mousedown(function() {
                 sendMessage();
             });
+        },
+        error: function(jqXHR, textStatus) {
+            $("#no-connection").show();
+            setTimeout(function() { getChat(id, 2) }, 5000);
         }
     });
 }
@@ -387,15 +417,17 @@ function getMessageCount() { // Gets a count of unread messages.
                     $("#message-count").val(response);
                     $("#message-count").show();
                 
-                    if (window.location.href.indexOf("mailbox") > -1) { // If in the mailbox, get the new messages.
+                    if ($("#mail-page").is(":visible")) { // If in the mailbox, get the new messages.
                         getMailbox(1);
                     }
                 }
-            }
-            if (window.location.href.indexOf("chat") > -1) { // If in the chat, get the new messages.
-                if (response > 0) {
-                    getChat();
+                if ($("#chat-page").is(":visible")) { // If in the chat, get the new messages.
+                    let id = $("#chat-id").val();
+                    getChat(id, 2);
                 }
+            } else {
+                $("#message-count").empty();
+                $("#message-count").hide();
             }
         }
     });
@@ -423,10 +455,11 @@ function isFriend(id) { // Check if user is in friend list.
 }
 
 function getFriends(x) { // Gets a list of users in friend list.
+    clear();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $("#friend-page").show().siblings().hide();
     if (!x) {
-        $("#friend-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+        $("#friend-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
     }
     $.ajax({
         type: "GET",
@@ -436,35 +469,40 @@ function getFriends(x) { // Gets a list of users in friend list.
             let container = '';
             if (response.length > 0) {
                 for (i = 0; i < response.length; i++) { // Maps response items into container for display.
-                    container += '  <a onclick=getProfile(&quot;'+response[i]["id"]+'&quot;)>';
-                    container += '    <div class="row" style="margin-bottom:10px;">';
-                    container += '      <div class="col-xs-5">';
-                    container += '        <img class="user-img-md" src="'+response[i]["picture"]+'" style="border-radius:50%;margin-right: 10px;width:70px;height70px;">';
-                    container += '      </div>';
-                    container += '      <div class="col-xs-7">';
-                    container += '        <span style="font-size: 18px;">'+response[i]["userName"]+'</span> <br/>';
-                    container += '        <span style="font-size: 16px;">'+response[i]["city"]+', '+response[i]["state"]+'</span>';
-                    container += '      </div>';
-                    container += '    </div>';
-                    container += '  </a>';
+                    container += '<a onclick=getProfile(&quot;'+response[i]["id"]+'&quot;)>';
+                    container += '<div class="row" style="margin-bottom:10px;">';
+                    container += '<div class="col-xs-5">';
+                    container += '<img class="user-img-md" src="'+response[i]["picture"]+'" style="border-radius:50%;margin-right: 10px;width:70px;height70px;">';
+                    container += '</div>';
+                    container += '<div class="col-xs-7">';
+                    container += '<span style="font-size: 18px;">'+response[i]["userName"]+'</span> <br/>';
+                    container += '<span style="font-size: 16px;">'+response[i]["city"]+', '+response[i]["state"]+'</span>';
+                    container += '</div>';
+                    container += '</div>';
+                    container += '</a>';
                 }
             } else {
-                container += '    <div class="row" style="margin: 0 auto;">';
-                container += '      <div class="col-xs-10">';
-                container += '        <strong>Nobody like that here.</strong>';
-                container += '      </div>';
-                container += '    </div>';
+                container += '<div class="row" style="margin: 0 auto;">';
+                container += '<div class="col-xs-10">';
+                container += '<strong>Nobody like that here.</strong>';
+                container += '</div>';
+                container += '</div>';
             }
             $("#friend-container").empty();
             $("#friend-container").html(container);
             localStorage.referrer = 3;
+        },
+        error: function(jqXHR, textStatus) {
+            $("#no-connection").show();
+            setTimeout(getFriends, 5000);
         }
     });
 }
 
 function getUser(x) {
+    clear();
     $("#user-page").show().siblings().hide();
-    $("#user-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i>');
+    $("#user-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $.ajax({
         type: "GET",
@@ -473,7 +511,7 @@ function getUser(x) {
         success: function(response) {
             let container = '';
             if (x) {
-                container += '<div id="status-message" class="status-message text-success">Profile Updated! <span>&times;</span></div>';
+                container += '<div id="status-message" class="status-message">Profile updated! <span onclick=this.parentNode.style.display="none">&times;</span></div>';
             }
             container += '<div class="row text-center" style="height: 150px;position:relative;margin:0;">';
             container += '<label>';
@@ -498,13 +536,13 @@ function getUser(x) {
             container += '</div>';
             container += '<div class="form-group">';
             container += '<div class="form-inline">';
-            container += '<input value="'+response["firstName"]+'" class="form-control" style="border-radius:25px;width: 45%; margin-right: 10%;" placeholder="First..." />';
-            container += '<input value="'+response["lastName"]+'" class="form-control" style="border-radius:25px;width: 45%;" placeholder="Last..." />';
+            container += '<input id="user-firstname" value="'+response["firstName"]+'" class="form-control" style="border-radius:25px;width: 45%; margin-right: 10%;" placeholder="First..." />';
+            container += '<input id="user-lastname" value="'+response["lastName"]+'" class="form-control" style="border-radius:25px;width: 45%;" placeholder="Last..." />';
             container += '</div>';
             container += '</div>';
             container += '<div class="form-group">';
             container += '<div class="input-group">';
-            container += '<input value="'+response["email"]+'" class="form-control" style="border-radius:25px;" />';
+            container += '<input id="user-email" value="'+response["email"]+'" class="form-control" style="border-radius:25px;" />';
             container += '<span class="input-group-addon" aria-hidden="true"><span class="text-success"></span></span>';
             container += '</div>';
             container += '</div>';
@@ -515,11 +553,8 @@ function getUser(x) {
             container += '<input value="'+response["state"]+'" class="form-control" placeholder="State..." style="border-radius:25px;" />';
             container += '</div>';
             container += '<div class="form-group">';
-            container += '<input value="'+response["zipCode"]+'" class="form-control" placeholder="ZipCode..." style="border-radius:25px;" />';
-            container += '</div>';
-            container += '<div class="form-group">';
             let date = response["birthDate"];
-            date = formatDate(date);
+            date = formatDate(date, 1);
             container += '<input type="date" value="'+date+'" class="form-control" style="border-radius:25px;" />';
             container += '</div>';
             container += '<div class="form-group">';
@@ -532,8 +567,8 @@ function getUser(x) {
             container += '</div>';
             container += '<div class="row text-center" style="margin:15px auto;">';
             container += '<div class="col-md-8 profile-input">';
-            container += '<button id="update-profile-button" type="submit" class="btn btn-primary" style="width:100%;">Save</button>';
-            container += '<a asp-area="Identity" asp-page="/Account/Manage/DeletePersonalData" class="btn btn-danger" style="margin-top:15px;width:100%;">Delete Account</a>';
+            container += '<button id="update-profile-button" class="btn btn-primary" style="width:100%;" onclick="updateUser();">Save</button>';
+            container += '<a asp-area="Identity" asp-page="/Account/Manage/DeletePersonalData" class="btn btn-danger" style="margin-top:15px;width:100%;background-color: #000!important;border:1px solid #455a64!important;">Delete Account</a>';
             container += '</div>';
             container += '</div>';
             // container += '<div class="row" style="margin:30px auto;">';
@@ -547,6 +582,10 @@ function getUser(x) {
             $("#user-container").empty();
             $("#user-container").html(container);
             $("#profile-text").append(response["profile"]);
+        },
+        error: function(jqXHR, textStatus) {
+            $("#no-connection").show();
+            setTimeout(getUser, 5000);
         }
     });
 }

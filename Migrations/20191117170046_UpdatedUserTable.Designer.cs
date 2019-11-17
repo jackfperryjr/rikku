@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rikku.Data;
 
 namespace Rikku.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191117170046_UpdatedUserTable")]
+    partial class UpdatedUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,6 +186,9 @@ namespace Rikku.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IP")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("JoinDate")
                         .HasColumnType("datetime2");
 
@@ -195,18 +200,6 @@ namespace Rikku.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("LoggedInCity")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LoggedInCountry")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LoggedInIP")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LoggedInRegion")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")

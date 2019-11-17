@@ -54,7 +54,6 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
             public string LastName { get; set; }
             public string City { get; set; }
             public string State { get; set; }
-            public string ZipCode { get; set; }
             public DateTime BirthDate { get; set; }
             public string Age { get; set; }
             public string Picture { get; set; }
@@ -86,7 +85,6 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
                 LastName = user.LastName,
                 City = user.City,
                 State = user.State,
-                ZipCode = user.ZipCode,
                 BirthDate = user.BirthDate,
                 Age = user.Age,
                 Email = user.Email,
@@ -138,11 +136,6 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
             if (Input.State != user.State)
             {
                 user.State = Input.State;
-            }
-
-            if (Input.ZipCode != user.ZipCode)
-            {
-                user.ZipCode = Input.ZipCode;
             }
 
             if (Input.BirthDate != user.BirthDate)
