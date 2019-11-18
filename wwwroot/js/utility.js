@@ -8,6 +8,14 @@ $("#img-input-wallpaper").change(function(event) { // Drops in a preview of user
     $("#img-output-wallpaper").fadeIn("fast").attr('src',imgPath); 
 }); 
 
+function getHome() {
+    $("#home-page").show().siblings().hide();
+}
+
+function getInfo() {
+    $("#about-page").show().siblings().hide();
+}
+
 function checkResponse() {
     if (localStorage.sendResponse) {
         eval(localStorage.sendResponse);

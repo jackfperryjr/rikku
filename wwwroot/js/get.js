@@ -190,8 +190,11 @@ function getUsers(x) { // Gets list of all registered users.
             $("#home-index-container").html(container);
         },
         error: function(jqXHR, textStatus) {
-            $("#no-connection").show();
-            setTimeout(getUsers, 5000);
+            console.log(jqXHR.status);
+            if (jqXHR.status != 401) {
+                $("#no-connection").show();
+                setTimeout(getUsers, 5000);
+            }
         }
     });
 }
@@ -429,6 +432,12 @@ function getMessageCount() { // Gets a count of unread messages.
                 $("#message-count").empty();
                 $("#message-count").hide();
             }
+        },
+        error: function(jqXHR) {
+            console.log(jqXHR);
+            // if (jqXHR.status === 401) {
+            //     clearTimeout(mailChecker);
+            // }
         }
     });
 }
