@@ -43,8 +43,9 @@ function getProfile(id) {
             container += '<div class="modal-content">';
             container += '<div class="modal-body">';
             container += '<img style="border-radius:50%;height:100px;width:100px;margin-bottom:50px;" src="'+response["picture"]+'" title="Picture of user!">';
-            container += '<input id="message-input" class="form-group input-group message-input-profile" placeholder="Type message here..." style="border-radius:25px!important;" maxlength=40 required />';
-            container += '<button class="btn btn-link" style="font-size:20px;z-index:100;font-weight:bolder;color:#00b0ff;position:absolute;right:10px;bottom:5.5vh;" onclick="sendMessage();">Send</button>';
+            container += '<div id="no-connection-profile" style="font-size:10px;display:none;position:absolute;bottom:85px;color:#00b0ff!important;">No connection. Retrying...</div>';
+            container += '<input id="message-input-profile" class="form-group input-group message-input-profile" placeholder="Type message here..." style="border-radius:25px!important;" maxlength=40 required />';
+            container += '<button class="btn btn-link" style="font-size:20px;z-index:100;font-weight:bolder;color:#00b0ff;position:absolute;right:10px;bottom:5.5vh;text-decoration:none!important;" onclick="sendMessage();">Send</button>';
             container += '<div class="bottom-margin">&nbsp;</div>';
             container += '</div>';
             container += '</div>';
@@ -129,13 +130,13 @@ function getAdmin(x) {
                 container += '</div>';
                 container += '<div class="col-xs-5" style="margin:25px 15px 0 auto!important;">';
                 if (response[i]["roleName"] == "SuperUser") {
-                    container += '<span class="btn btn-success" style="background-color:#28a745!important;">'+response[i]["roleName"]+'</span>';
+                    container += '<span class="btn btn-primary" style="background-color:#00b0ff!important;">'+response[i]["roleName"]+'</span>';
                 }
                 if (response[i]["roleName"] == "Admin") {
-                    container += '<span class="btn btn-primary">'+response[i]["roleName"]+'</span>';
+                    container += '<span class="btn btn-warning" style="min-width:92px;">'+response[i]["roleName"]+'</span>';
                 }
                 if (response[i]["roleName"] == "User") {
-                    container += '<span class="btn btn-secondary" style="background-color:#6c757d!important;">'+response[i]["roleName"]+'</span>';
+                    container += '<span class="btn btn-secondary" style="background-color: #000!important;border:1px solid #455a64!important;min-width:92px;">'+response[i]["roleName"]+'</span>';
                 }
                 container += '</div>';
                 container += '</div>';
@@ -193,7 +194,6 @@ function getUsers(x) { // Gets list of all registered users.
             $("#home-index-container").html(container);
         },
         error: function(jqXHR, textStatus) {
-            console.log(jqXHR.status);
             if (jqXHR.status != 401) {
                 $("#no-connection").show();
                 setTimeout(getUsers, 5000);
@@ -439,7 +439,7 @@ function getMessageCount() { // Gets a count of unread messages.
             }
         },
         error: function(jqXHR) {
-            console.log(jqXHR);
+            //console.log(jqXHR);
             // if (jqXHR.status === 401) {
             //     clearTimeout(mailChecker);
             // }
@@ -534,7 +534,7 @@ function getUser(x) {
             container += '<div class="row text-center" style="height: 150px;position:relative;margin:0;">';
             container += '<label>';
             container += '<img id="img-output-wallpaper" style="height:150px;width:100%;" src="'+response["wallpaper"]+'" style="cursor:pointer;">';
-            container += '<i class="fas fa-camera" title="Change Image" style="color:rgba(255,255,255,.7);cursor:pointer;position:absolute;bottom:3px;right:3px;z-index:200;"></i>';
+            container += '<i class="fas fa-camera" title="Change Image" style="cursor:pointer;position:absolute;bottom:3px;right:3px;z-index:200;"></i>';
             container += '<input value="'+response["wallpaper"]+'" id="img-input-wallpaper" type="file" accept="image/*" name="wallpaper" style="display:none;" multiple/>';
             container += '</label>';
             container += '<div class="col-md-4" style="margin: -150px auto 0 auto;">';

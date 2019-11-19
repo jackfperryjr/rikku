@@ -27,7 +27,7 @@ for details on configuring this project to bundle and minify static web assets. 
   height:25px!important;
   font-style:normal;
   font-size:12px;
-  background-color:#4285F4!important;
+  background-color:#00b0ff!important;
 }
 .message-reaction-love {
   z-index:1000;
@@ -54,7 +54,7 @@ for details on configuring this project to bundle and minify static web assets. 
   height:25px!important;
   font-style:normal;
   font-size:13px;
-  background-color:#ffbb33!important;
+  background-color:#ff6f00!important;
 }
 .message-reaction-liked-right,
 .message-reaction-disliked-right {
@@ -70,7 +70,7 @@ for details on configuring this project to bundle and minify static web assets. 
   font-size:12px;
   top:-35%;
   right:0;
-  background-color:#4285F4!important;
+  background-color:#00b0ff!important;
   pointer-events:none!important;
 }
 .message-reaction-laughed-right,
@@ -87,7 +87,7 @@ for details on configuring this project to bundle and minify static web assets. 
   font-size:13px;
   top:-35%;
   right:0;
-  background-color:#ffbb33!important;
+  background-color:#ff6f00!important;
   pointer-events:none!important;
 }
 .message-reaction-laughed-left,
@@ -104,7 +104,7 @@ for details on configuring this project to bundle and minify static web assets. 
   font-size:13px;
   top:-35%;
   left:0;
-  background-color:#ffbb33!important;
+  background-color:#ff6f00!important;
   pointer-events:none!important;
 }
 .message-reaction-liked-left,
@@ -121,7 +121,7 @@ for details on configuring this project to bundle and minify static web assets. 
   font-size:12px;
   top:-35%;
   left:0;
-  background-color:#4285F4!important;
+  background-color:#00b0ff!important;
   pointer-events:none!important;
 }
 .message-reaction-loved-right {
@@ -156,8 +156,26 @@ for details on configuring this project to bundle and minify static web assets. 
   background-color:#cc0000!important;
   pointer-events:none!important;
 }
+.message-count-bubble {
+  font-size:12px!important;
+  text-align:center!important;
+  border:1.5px solid #101010!important;
+  border-radius:50%!important;
+  width:20px!important;
+  height:20px!important;
+  position:absolute;
+  font-style:normal;
+  font-size:10px;
+  top:-5px;
+  right:-10px;
+  display:none;
+  background-color:#ff6f00!important;
+  pointer-events:none!important;
+}
+
 .ffapp {
   font-family:'Pacifico';
+  color:#00b0ff!important;
 }
 .ffapp-container {
   width:300px;
@@ -500,7 +518,8 @@ body {
   transition: .1s ease;
 }
 .fa-camera {
-  color: rgba(255,255,255,.7);
+  /* color: rgba(255,255,255,.7); */
+  color:rgba(255,111,0,.7);
   font-size: 25px;
   position: absolute;
   bottom: 0;
@@ -526,6 +545,7 @@ body {
   color:#00b0ff;
   z-index:100;
   font-weight:bolder;
+  text-decoration: none!important;
 }
 .move-bottom {
   bottom: 12px!important;

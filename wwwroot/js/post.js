@@ -18,23 +18,16 @@ function addFriend() { // Adds user to friend list.
     });
 }
 
-function sendMessage(id, content) {
+function sendMessage() {
     let obj = new Object();
-    if (id) {
-        obj.id = id;
-    }
-    if (!id && $("#chat-page").is(":visible")) {
+    if ($("#chat-page").is(":visible")) {
         obj.id = $("#chat-id").val();
+        obj.content = $("#message-input-chat").val();
     }
-    if (!id && $("#profile-page").is(":visible")) {
+    if ($("#profile-page").is(":visible")) {
         obj.id = $("#profile-id").val();
+        obj.content = $("#message-input-profile").val();
     }
-    if (content) {
-        obj.content = content;
-    } else {
-        obj.content = $("#message-input").val();
-    }
-    $("#message-input").val("");
     $(".message-input-chat").height(30);
     if (obj.content.length != 0) {
         $.ajax({
@@ -44,37 +37,30 @@ function sendMessage(id, content) {
             timeout: 7000,
             success: function(response) {
                 if ($("#profile-page").is(":visible")) {
+                    $("#no-connection-profile").hide();
+                    $("#message-input-profile").val("");
                     $("#newMessageModal").modal("hide");
                 }
                 if ($("#chat-page").is(":visible")) { // If in the chat, get the new messages.
+                    $("#no-connection-chat").hide();
+                    $("#message-input-chat").val("");
                     getChat(obj.id, 2);
                 }
                 if (response == 1) {
-                    let responseTime = Math.floor(Math.random() * (120000 - 3000 + 1)) + 3000;
+                    let responseTime = Math.floor(Math.random() * (60000 - 3000 + 1)) + 3000;
                     setTimeout(function() {
                         sendResponse(obj.id);
                     }, responseTime)
-                    localStorage.sendResponseTime = responseTime;
-                    localStorage.sendResponseId = obj.id;
-                    localStorage.sendResponse = "setTimeout(function() { sendResponse(localStorage.sendResponseId) }, localStorage.sendResponseTime)";
                 }
             },
             error: function(jqXHR, textStatus) {
                 if ($("#chat-page").is(":visible")) {
-                    $("#no-connection").show();
-                    // localStorage.sendMessageTime = 100;
-                    // localStorage.sendMessageId = obj.id;
-                    // localStorage.sendMessageContent = obj.content;
-                    // localStorage.sendMessage = "setTimeout(function() { sendMessage(localStorage.sendMessageId, localStorage.sendMessageContent) }, localStorage.sendMessageTime)";
+                    $("#no-connection-chat").show();
                     setTimeout(sendMessage, 5000);
                 }
                 if ($("#profile-page").is(":visible")) {
-                    $("#no-connection").show();
-                    // localStorage.sendMessageTime = 100;
-                    // localStorage.sendMessageId = obj.id;
-                    // localStorage.sendMessageContent = obj.content;
-                    // localStorage.sendMessage = "setTimeout(function() { sendMessage(localStorage.sendMessageId, localStorage.sendMessageContent) }, localStorage.sendMessageTime)";
-                    setTimeout(function() { sendMessage(id) }, 5000);
+                    $("#no-connection-profile").show();
+                    setTimeout(sendMessage, 5000);
                 }
             }
         });
@@ -89,10 +75,6 @@ function sendResponse(id) {
         url: "/Api/SendResponse", 
         data: obj,
         success: function() {
-            localStorage.removeItem("id");
-            localStorage.removeItem("sendResponse");
-            localStorage.removeItem("responseTime");
-            
             if ($("#chat-page").is(":visible")) { // If in the chat, get the new messages.
                 let id = $("#chat-id").val();
                 getChat(id, 2);

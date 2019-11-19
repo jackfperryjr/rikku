@@ -22,11 +22,11 @@ function getInfo() {
     $("#about-page").show().siblings().hide();
 }
 
-function checkResponse() {
-    if (localStorage.sendResponse) {
-        eval(localStorage.sendResponse);
-    }
-}
+// function checkResponse() {
+//     if (localStorage.sendResponse) {
+//         eval(localStorage.sendResponse);
+//     }
+// }
 
 function messageScroll() {
     $("#message-container").scrollTop($("#message-container")[0].scrollHeight);

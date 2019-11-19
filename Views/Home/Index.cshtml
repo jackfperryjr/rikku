@@ -21,14 +21,14 @@
     </div>
 
     <div id="mail-page" style="display:none;">
-        <h3 class="ffapp" style="position:fixed;left:0;background-color:#000000;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);">messages</h3>
+        <h3 class="ffapp" style="position:fixed;left:0;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);color:#ffffff!important;">messages</h3>
         <div class="container" style="padding:40px 0 0 0;">
             <div id="mailbox" class="container" style="padding:0;"></div>
         </div>
     </div>
 
     <div id="friend-page" style="display:none;">
-        <h3 class="ffapp" style="position:fixed;left:0;background-color:#000000;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);">friends</h3>
+        <h3 class="ffapp" style="position:fixed;left:0;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);color:#ffffff!important;">friends</h3>
         <div class="container" style="padding-top:40px;">
             <div id="friend-container" class="container"></div>
         </div>
@@ -41,15 +41,16 @@
         </div>
         <div id="message-container" class="message-container"></div>
         <div class="row form-group">
+            <div id="no-connection-chat" style="font-size: 10px; position: absolute; bottom: 125px; left:10px;color: rgb(0, 176, 255) !important;">No connection. Retrying...</div>
             <div class="col-sm-12" style="display:inline-block;position:absolute;bottom:70px;">
-                <textarea id="message-input" name="content" class="form-group input-group message-input-chat" placeholder="Type message here..." style="border-radius:25px!important;" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' required></textarea>
+                <textarea id="message-input-chat" name="content" class="form-group input-group message-input-chat" placeholder="Type message here..." style="border-radius:25px!important;" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' required></textarea>
                 <button id="send-button" class="input-group-button btn btn-link">Send</button>
             </div>
         </div>
     </div>
 
     <div id="admin-page" style="display:none;">
-        <h3 class="ffapp title-bg-shroud">admin</h3>
+        <h3 class="ffapp title-bg-shroud" style="color:#ffffff!important;">admin</h3>
         <div class="container" style="padding-top:30px;">
             <div id="admin-container" class="container">
             </div>
