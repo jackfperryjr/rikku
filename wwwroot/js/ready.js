@@ -5,10 +5,8 @@ $(document).ready(function() { // Activating icon related to navigated screen up
     $("#expand-menu").click(function() {
         $("#extra-nav").slideToggle(150);
     });
-
+    
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").click(function() {
-        $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
-        $(this).addClass("active");
         if ($("#extra-nav").is(":visible")) {
             $("#extra-nav").slideToggle(150);
         }

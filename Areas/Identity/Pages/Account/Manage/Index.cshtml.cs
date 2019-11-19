@@ -71,7 +71,6 @@ namespace Rikku.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            //ViewData["MessageCount"] = GetMessageCount();
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

@@ -263,7 +263,7 @@ html {
   font-size: 14px;
 }
 .active {
-  color:#ffffff!important;
+  color:#00b0ff!important;
   transition: all .1s ease-in-out;
   /* font-size:34px; */
 }
@@ -325,8 +325,8 @@ a:focus {
 .btn-primary:visited,
 .btn-primary:focus,
 .btn-primary:active {
-  border-color:#0d47a1!important;
-  background-color:#0d47a1!important;
+  border-color:#00b0ff!important;
+  background-color:#00b0ff!important;
 }
 .btn-warning,
 .btn-warning:hover,
@@ -523,7 +523,7 @@ body {
   right:10px;
   bottom:82px;
   font-size:20px;
-  color:#ffffff;
+  color:#00b0ff;
   z-index:100;
   font-weight:bolder;
 }

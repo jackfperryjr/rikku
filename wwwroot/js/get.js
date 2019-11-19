@@ -2,7 +2,7 @@ function getProfile(id) {
     clear();
     $("#profile-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
-    $("#profile-container").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
+    $("#profile-container").empty().html(noconnection);
     let obj = new Object();
     obj.id = id;
     $.ajax({
@@ -31,8 +31,7 @@ function getProfile(id) {
             container += '</div>';
             container += '</div>';
             container += '<div class="row text-center" style="margin:0 0 50px 0;">';
-            container += '<a class="btn btn-primary" style="width:45%;margin:0 5px 0 auto;" data-toggle="modal" href="#newMessageModal">Message</a>';
-            container += '<a id="goback" class="btn btn-secondary" style="background-color:#6c757d!important;width:45%;margin:0 auto 0 5px;">Go Back</a>';
+            container += '<a class="btn btn-primary" style="width:45%;margin:0 auto;" data-toggle="modal" href="#newMessageModal">Message</a>';
             container += '<div class="row text-center" style="margin:50px auto;width:100vw;">';
             container += '<span style="margin:0 auto;">';
             container += '<button id="delete-friend" onclick="deleteFriend()" style="display:none;border:none!important;font-size:15px;background-color:transparent!important;color:#ffffff;">';
@@ -45,7 +44,7 @@ function getProfile(id) {
             container += '<div class="modal-body">';
             container += '<img style="border-radius:50%;height:100px;width:100px;margin-bottom:50px;" src="'+response["picture"]+'" title="Picture of user!">';
             container += '<input id="message-input" class="form-group input-group message-input-profile" placeholder="Type message here..." style="border-radius:25px!important;" maxlength=40 required />';
-            container += '<button class="btn btn-link" style="font-size:20px;z-index:100;font-weight:bolder;color:#ffffff;position:absolute;right:10px;bottom:5.5vh;" onclick="sendMessage();">Send</button>';
+            container += '<button class="btn btn-link" style="font-size:20px;z-index:100;font-weight:bolder;color:#00b0ff;position:absolute;right:10px;bottom:5.5vh;" onclick="sendMessage();">Send</button>';
             container += '<div class="bottom-margin">&nbsp;</div>';
             container += '</div>';
             container += '</div>';
@@ -56,17 +55,17 @@ function getProfile(id) {
             $("#profile-container").html(container);
             isFriend(id);
             if (x == 1) {
-                $("#nav-back-btn, #goback").click(function(){
+                $("#nav-back-btn").click(function(){
                     getUsers();
                 });
             } 
             if (x == 2) {
-                $("#nav-back-btn, #goback").click(function(){
+                $("#nav-back-btn").click(function(){
                     getChat(id);
                 });
             }
             if (x == 3) {
-                $("#nav-back-btn, #goback").click(function(){
+                $("#nav-back-btn").click(function(){
                     getFriends();
                 });
             }
@@ -80,10 +79,12 @@ function getProfile(id) {
 
 function getAdmin(x) {
     clear();
+    $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
+    $("#fa-users-cog").addClass("active");
     $("#admin-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
-        $("#admin-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
+        $("#admin-container").html(noconnection);
     }
     $.ajax({
         type: "GET",
@@ -151,10 +152,12 @@ function getAdmin(x) {
 
 function getUsers(x) { // Gets list of all registered users.
     clear();
+    $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
+    $("#fa-home").addClass("active");
     $("#home-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
-        $("#home-index-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
+        $("#home-index-container").html(noconnection);
     }
     $.ajax({
         type: "GET",
@@ -201,10 +204,13 @@ function getUsers(x) { // Gets list of all registered users.
 
 function getMailbox(x) { // Gets list of messages from users.
     clear();
+    $("#message-container").empty();
+    $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
+    $("#fa-comment").addClass("active");
     $("#mail-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
-        $("#mailbox").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
+        $("#mailbox").empty().html(noconnection);
     }
     $.ajax({
         type: "GET",
@@ -225,7 +231,7 @@ function getMailbox(x) { // Gets list of messages from users.
                 container += '<a onclick=getChat("'+id+'") style="display:inherit;background-color:'+color+';border-radius:50%;">';
                 container += '<div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;border-radius:50%;">';
                 if (response[i]["messageReadFlg"] == 0) { // Adds color gradient around user image of unread messages.
-                    container += '<div style="position:relative;border-radius:50%;height:55px;width:55px;background:linear-gradient(40deg,#f57f17,#4527a0)!important;">';
+                    container += '<div style="position:relative;border-radius:50%;height:55px;width:55px;background:linear-gradient(40deg,#f57f17,#098cff)!important;">';
                     container += '<img src="'+response[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
                     container += '</div>';
                 } else {
@@ -281,7 +287,7 @@ function getChat(id, x) { // Gets list of chat messages between two users.
         getMailbox();
     });
     if (!x) {
-        $("#message-container").empty().html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
+        $("#message-container").empty().html(noconnection);
     }
     let obj = new Object();
     obj.id = id;
@@ -378,7 +384,6 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                     container += '</div>';
                 }
             }
-            $("#message-container").empty();
             $("#message-container").html(container);
             if (!x) {
                 messageScroll();
@@ -465,10 +470,12 @@ function isFriend(id) { // Check if user is in friend list.
 
 function getFriends(x) { // Gets a list of users in friend list.
     clear();
+    $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
+    $("#fa-users").addClass("active");
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $("#friend-page").show().siblings().hide();
     if (!x) {
-        $("#friend-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
+        $("#friend-container").html(noconnection);
     }
     $.ajax({
         type: "GET",
@@ -510,8 +517,10 @@ function getFriends(x) { // Gets a list of users in friend list.
 
 function getUser(x) {
     clear();
+    $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
+    $("#fa-user").addClass("active");
     $("#user-page").show().siblings().hide();
-    $("#user-container").html('<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:30%;right:30%;font-size:10px;">Check your connection. Retrying...</p>');
+    $("#user-container").html(noconnection);
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $.ajax({
         type: "GET",

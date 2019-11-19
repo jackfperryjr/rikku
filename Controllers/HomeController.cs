@@ -1,9 +1,5 @@
 ﻿using System.Diagnostics;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Rikku.Models;
 using Rikku.Data;
@@ -30,7 +26,7 @@ namespace Rikku.Controllers
         {
             return View(); 
         }
-        
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

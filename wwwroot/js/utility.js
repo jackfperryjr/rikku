@@ -1,3 +1,4 @@
+let noconnection = '<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:27%;right:27%;font-size:10px;color:#00b0ff;">Check your connection. Retrying...</p>';
 
 $("#img-input-user").change(function(event) { // Drops in a preview of user image before saving.
     let imgPath = URL.createObjectURL(event.target.files[0]);
@@ -9,10 +10,15 @@ $("#img-input-wallpaper").change(function(event) { // Drops in a preview of user
 }); 
 
 function getHome() {
+    location ="../../";
+    $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users, #fa-info").removeClass("active");
+    $("#fa-home").addClass("active");
     $("#home-page").show().siblings().hide();
 }
 
 function getInfo() {
+    $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users, #fa-info").removeClass("active");
+    $("#fa-info").addClass("active");
     $("#about-page").show().siblings().hide();
 }
 

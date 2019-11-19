@@ -2,9 +2,10 @@
 @model RegisterModel
 
 <h1 class="top-margin"></h1>
-<div class="row">
+<div class="row" style="margin:0;">
     <div class="col-md-4 margin-auto" style="margin:0 15%;">
         <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <img src="~/icons/ffapp/ff-circle-192.png" style="height:70px;width:70px;margin:0 auto;" />
             <h4>Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -42,7 +43,3 @@
         </form>
     </div>
 </div>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
