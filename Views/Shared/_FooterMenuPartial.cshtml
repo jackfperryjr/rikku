@@ -23,12 +23,12 @@
         <a onclick=getUsers()><i id="fa-home" class="fas fa-home"></i></a>
         <a onclick=getMailbox() class="transition">
             <i id="fa-comment" class="fas fa-comment" style="position:relative;">
-                <input id="message-count" class="message-count-bubble" style="background-color:#ff6f00!important;" />
+                <input id="message-count" class="message-count-bubble" style="background-color:#8e24aa!important;" />
             </i>
         </a>
         <a onclick=getFriends() class="transition"><i id="fa-users" class="fas fa-users"></i></a>
         <a id="expand-menu" class="mobile-nav"><i id="fa-bar" class="fas fa-bars"></i></a>
-        <a href="~/identity/account/manage" class="transition web-nav"><i id="fa-user" class="fas fa-user-circle"></i></a>
+        <a onclick=getUser() class="transition web-nav"><i id="fa-user" class="fas fa-user-circle"></i></a>
         <a class="transition web-nav"><i id="fa-cog" class="fas fa-cog" style="color:rgba(255,255,255,.5)!important;"></i></a>
         @if (User.IsInRole("Admin"))
         {

@@ -231,7 +231,7 @@ function getMailbox(x) { // Gets list of messages from users.
                 container += '<a onclick=getChat("'+id+'") style="display:inherit;background-color:'+color+';border-radius:50%;">';
                 container += '<div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;border-radius:50%;">';
                 if (response[i]["messageReadFlg"] == 0) { // Adds color gradient around user image of unread messages.
-                    container += '<div style="position:relative;border-radius:50%;height:55px;width:55px;background:linear-gradient(40deg,#f57f17,#098cff)!important;">';
+                    container += '<div style="position:relative;border-radius:50%;height:55px;width:55px;background:linear-gradient(40deg,#4a148c,#098cff)!important;">';
                     container += '<img src="'+response[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
                     container += '</div>';
                 } else {

@@ -19,6 +19,7 @@ function addFriend() { // Adds user to friend list.
 }
 
 function sendMessage() {
+    clearTimeout(sendMessage);
     let obj = new Object();
     if ($("#chat-page").is(":visible")) {
         obj.id = $("#chat-id").val();
@@ -54,6 +55,7 @@ function sendMessage() {
                 }
             },
             error: function(jqXHR, textStatus) {
+                clearTimeout(sendMessage);
                 if ($("#chat-page").is(":visible")) {
                     $("#no-connection-chat").show();
                     setTimeout(sendMessage, 5000);

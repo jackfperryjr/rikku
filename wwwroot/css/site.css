@@ -54,7 +54,7 @@ for details on configuring this project to bundle and minify static web assets. 
   height:25px!important;
   font-style:normal;
   font-size:13px;
-  background-color:#ff6f00!important;
+  background-color:#8e24aa!important;
 }
 .message-reaction-liked-right,
 .message-reaction-disliked-right {
@@ -87,7 +87,7 @@ for details on configuring this project to bundle and minify static web assets. 
   font-size:13px;
   top:-35%;
   right:0;
-  background-color:#ff6f00!important;
+  background-color:#8e24aa!important;
   pointer-events:none!important;
 }
 .message-reaction-laughed-left,
@@ -104,7 +104,7 @@ for details on configuring this project to bundle and minify static web assets. 
   font-size:13px;
   top:-35%;
   left:0;
-  background-color:#ff6f00!important;
+  background-color:#8e24aa!important;
   pointer-events:none!important;
 }
 .message-reaction-liked-left,
@@ -169,7 +169,7 @@ for details on configuring this project to bundle and minify static web assets. 
   top:-5px;
   right:-10px;
   display:none;
-  background-color:#ff6f00!important;
+  background-color:#8e24aa!important;
   pointer-events:none!important;
 }
 
@@ -519,7 +519,7 @@ body {
 }
 .fa-camera {
   /* color: rgba(255,255,255,.7); */
-  color:rgba(255,111,0,.7);
+  color:rgba(0,176,255,.7);
   font-size: 25px;
   position: absolute;
   bottom: 0;
