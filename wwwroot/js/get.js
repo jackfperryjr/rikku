@@ -402,7 +402,7 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                 $(this).height(30);
                 $(".message-input-chat").scrollTop($(".message-input-chat")[0].scrollHeight);
             });
-            $("#send-button").mousedown(function() {
+            $("#send-button").off("mousedown").mousedown(function() {
                 sendMessage();
             });
         },

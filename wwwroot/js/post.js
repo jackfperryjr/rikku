@@ -37,6 +37,7 @@ function sendMessage() {
             data: obj,
             timeout: 7000,
             success: function(response) {
+                clearTimeout(sendMessage);
                 if ($("#profile-page").is(":visible")) {
                     $("#no-connection-profile").hide();
                     $("#message-input-profile").val("");
