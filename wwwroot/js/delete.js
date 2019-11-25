@@ -11,17 +11,3 @@ function deleteFriend() { // Removes user from friend list.
         }
     });
 }
-
-function deleteMessage(id) { // Deletes list of messages between two users.
-    let obj = new Object();
-    obj.id = id;
-    $.ajax({
-        type: "DELETE",
-        url: "/Api/DeleteMessage", 
-        data: obj,
-        success: function() {
-            $("#deleteModal" + id).modal("hide");
-            getMailbox();
-        }
-    });
-}

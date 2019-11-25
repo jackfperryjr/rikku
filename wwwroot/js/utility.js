@@ -45,12 +45,20 @@ function messageScroll() {
 }
 
 function clear() {
+    clearTimeout(getAdmin);
+    clearInterval(getAdmin);
     clearTimeout(getChat);
+    clearInterval(getChat);
     clearTimeout(getMailbox);
+    clearInterval(getMailbox);
     clearTimeout(getProfile);
+    clearInterval(getProfile);
     clearTimeout(getUsers);
+    clearInterval(getUsers);
     clearTimeout(getUser);
+    clearInterval(getUser);
     clearTimeout(getFriends);
+    clearInterval(getFriends);
 }
 
 function formatDate(d, x) {

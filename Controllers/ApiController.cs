@@ -389,6 +389,7 @@ namespace Rikku.Controllers
         public List<ApplicationUserViewModel> GetMailbox()
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var expiriationDt = DateTime.Today.AddDays(-7);
 
             var messages = (from user in _context.Users  
                         join m in _context.Messages on user.Id equals m.SenderId
@@ -406,12 +407,10 @@ namespace Rikku.Controllers
                             State = user.State,
                             CreateDate = m.CreateDate,
                             MessageReadFlg = m.MessageReadFlg,
-                            Content = m.Content,
-                            DeletedBy1 = m.DeletedBy1,
-                            DeletedBy2 = m.DeletedBy2
+                            Content = m.Content
                         })
                         .Where(m => (m.ReceiverId == userId) || (m.SenderId == userId))
-                        .Where(m => (m.DeletedBy1 != m.ReceiverId) || (m.DeletedBy2 != m.ReceiverId))
+                        .Where(m => m.CreateDate >= expiriationDt)
                         .ToList().OrderByDescending(m => m.CreateDate)
                         .Select(u => new ApplicationUserViewModel()  
                         {  
@@ -425,68 +424,18 @@ namespace Rikku.Controllers
                             State = u.State,
                             CreateDate = u.CreateDate,
                             MessageReadFlg = u.MessageReadFlg,
-                            Content = u.Content,
-                            DeletedBy1 = u.DeletedBy1,
-                            DeletedBy2 = u.DeletedBy2
+                            Content = u.Content
                         });  
                         
-            messages = messages.Where(m => m.Id != userId).Where(m => (m.DeletedBy1 != userId) || (m.DeletedBy2 != userId)).GroupBy(u => u.Id).Select(u => u.FirstOrDefault());
+            messages = messages.Where(m => m.Id != userId && m.CreateDate >= expiriationDt).GroupBy(u => u.Id).Select(u => u.FirstOrDefault());
             return messages.ToList();
         }
-
-        [HttpDelete]
-        public IActionResult DeleteMessage(string id)
-        {    
-            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var messages = (from message in _context.Messages
-                            select new   
-                            { 
-                                MessageId = message.MessageId,
-                                SenderId = message.SenderId,
-                                ReceiverId = message.ReceiverId,
-                                Content = message.Content,
-                                CreateDate = message.CreateDate,
-                                DeletedBy1 = message.DeletedBy1,
-                                DeletedBy2 = message.DeletedBy2,
-                                MessageReadFlg = message.MessageReadFlg
-                            }).Select(m => new MessageModel()  
-                            {  
-                                MessageId = m.MessageId,
-                                SenderId = m.SenderId,
-                                ReceiverId = m.ReceiverId,
-                                Content = m.Content,
-                                CreateDate = m.CreateDate,
-                                DeletedBy1 = m.DeletedBy1,
-                                DeletedBy2 = m.DeletedBy2,
-                                MessageReadFlg = m.MessageReadFlg
-                            })
-                            .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
-                                            (c.ReceiverId == userId.ToString() && c.SenderId == id))
-                            .OrderBy(c => c.MessageId);
-            
-            foreach (MessageModel message in messages.Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) || 
-            (c.ReceiverId == userId.ToString() && c.SenderId == id)))
-            {
-                if (message.DeletedBy1 == null || message.DeletedBy1 != userId.ToString())
-                {
-                    message.DeletedBy1 = userId.ToString();
-                }
-                else 
-                {
-                    message.DeletedBy2 = userId.ToString();
-                }
-                message.MessageReadFlg = 1;
-            }
-            
-            _context.SaveChanges();
-            return Ok();
-        }
-
+      
         [HttpGet]
         public List<MessageModel> GetChat(string id)
         {    
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var expiriationDt = DateTime.Today.AddDays(-7);
 
             var messages = (from message in _context.Messages
                             select new   
@@ -497,8 +446,6 @@ namespace Rikku.Controllers
                                 ReceiverId = message.ReceiverId,
                                 Content = message.Content,
                                 CreateDate = message.CreateDate,
-                                DeletedBy1 = message.DeletedBy1,
-                                DeletedBy2 = message.DeletedBy2,
                                 IsLiked = message.IsLiked,
                                 IsDisliked = message.IsDisliked,
                                 IsLoved = message.IsLoved,
@@ -512,18 +459,15 @@ namespace Rikku.Controllers
                                 ReceiverId = m.ReceiverId,
                                 Content = m.Content,
                                 CreateDate = m.CreateDate,
-                                DeletedBy1 = m.DeletedBy1,
-                                DeletedBy2 = m.DeletedBy2,
                                 IsLiked = m.IsLiked,
                                 IsDisliked = m.IsDisliked,
                                 IsLoved = m.IsLoved,
                                 IsLaughed = m.IsLaughed,
                                 IsSaddened = m.IsSaddened
                             })
-                            .Where(c => ((c.ReceiverId == id && c.SenderId == userId.ToString()) &&
-                                        (c.DeletedBy1 != userId || c.DeletedBy2 != userId)) || 
-                                        ((c.ReceiverId == userId.ToString() && c.SenderId == id) && 
-                                        (c.DeletedBy1 != userId || c.DeletedBy2 != userId)))
+                            .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) ||
+                                        (c.ReceiverId == userId.ToString() && c.SenderId == id)
+                                        && c.CreateDate >= expiriationDt)
                             .OrderBy(c => c.MessageId);
             
             foreach (MessageModel message in _context.Messages.Where(c => c.ReceiverId == userId.ToString() && c.SenderId == id))
