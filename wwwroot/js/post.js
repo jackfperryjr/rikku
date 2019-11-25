@@ -9,7 +9,7 @@ function addFriend() { // Adds user to friend list.
         data: obj,
         timeout: 7000,
         success: function() {
-            isFriend();
+            isFriend(obj.id);
         },
         error: function(jqXHR, textStatus) {
             $("#no-connection").show();
@@ -82,6 +82,23 @@ function sendResponse(id) {
                 let id = $("#chat-id").val();
                 getChat(id, 2);
             }
+        }
+    });
+}
+
+function logOut() {
+    $.ajax({
+        type: "POST",
+        url: "/Api/Logout", 
+        success: function() {
+            $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
+            $("#fa-home").addClass("active");
+            $("#home-page").empty();
+            $("#home-page").show().siblings().hide();
+            location.reload();
+        },
+        error: function(jqXHR, textStatus) {
+            //
         }
     });
 }

@@ -8,9 +8,8 @@
 <div class="footer-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <div id="extra-nav" class="row" style="display:none;padding-bottom:10px;">
+    <!-- <div id="extra-nav" class="row" style="display:none;padding-bottom:10px;">
         <a class="transition"><i id="fa-cog" class="fas fa-cog" style="color:rgba(255,255,255,.5)!important;"></i></a>
-        <a onclick=getUser() class="transition"><i id="fa-user" class="fas fa-user-circle"></i></a>
         @if (User.IsInRole("Admin"))
         {
         <a onclick=getAdmin() class="transition"><i id="fa-users-cog" class="fas fa-users-cog"></i></a>
@@ -18,25 +17,25 @@
         <form style="display:inline;" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button type="submit" class="btn btn-link"><i class="fas fa-sign-out-alt" style="color:#ffffff;font-size:26px;"></i></button>
         </form>
-    </div>
+    </div> -->
     <div class="row">
         <a onclick=getUsers()><i id="fa-home" class="fas fa-home"></i></a>
-        <a onclick=getMailbox() class="transition">
+        <a onclick=getMailbox()>
             <i id="fa-comment" class="fas fa-comment" style="position:relative;">
                 <input id="message-count" class="message-count-bubble" style="background-color:#8e24aa!important;" />
             </i>
         </a>
-        <a onclick=getFriends() class="transition"><i id="fa-users" class="fas fa-users"></i></a>
-        <a id="expand-menu" class="mobile-nav"><i id="fa-bar" class="fas fa-bars"></i></a>
-        <a onclick=getUser() class="transition web-nav"><i id="fa-user" class="fas fa-user-circle"></i></a>
-        <a class="transition web-nav"><i id="fa-cog" class="fas fa-cog" style="color:rgba(255,255,255,.5)!important;"></i></a>
-        @if (User.IsInRole("Admin"))
+        <a onclick=getUser()><i id="fa-user" class="fas fa-user-circle"></i></a>
+        <a onclick=getFriends()><i id="fa-users" class="fas fa-users"></i></a>
+        <a><i id="fa-bar" class="fas fa-bars" style="color:rgba(255,255,255,.5)!important;"></i></a>
+        <!-- <a class="transition"><i id="fa-cog" class="fas fa-file-signature" style="color:rgba(255,255,255,.5)!important;"></i></a> -->
+        <!-- @if (User.IsInRole("Admin"))
         {
         <a onclick=getAdmin() class="transition web-nav"><i id="fa-users-cog" class="fas fa-users-cog"></i></a>
-        }
-        <form style="display:inline;" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+        } -->
+        <!-- <form style="display:inline;" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
             <button type="submit" class="btn btn-link web-nav"><i class="fas fa-sign-out-alt" style="color:#ffffff;font-size:26px;"></i></button>
-        </form>
+        </form> -->
     </div>
 }
 else

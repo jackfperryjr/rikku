@@ -9,6 +9,24 @@ $("#img-input-wallpaper").change(function(event) { // Drops in a preview of user
     $("#img-output-wallpaper").fadeIn("fast").attr('src',imgPath); 
 }); 
 
+function setGoBack(x, id) {
+    if (x == 1) {
+        $("#nav-back-btn").off("click").click(function(){
+            getUsers();
+        });
+    } 
+    if (x == 2) {
+        $("#nav-back-btn").off("click").click(function(){
+            getChat(id);
+        });
+    }
+    if (x == 3) {
+        $("#nav-back-btn").off("click").click(function(){
+            getFriends();
+        });
+    }
+}
+
 function getHome() {
     location ="../../";
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users, #fa-info").removeClass("active");

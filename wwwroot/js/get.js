@@ -55,21 +55,7 @@ function getProfile(id) {
             $("#profile-container").empty();
             $("#profile-container").html(container);
             isFriend(id);
-            if (x == 1) {
-                $("#nav-back-btn").click(function(){
-                    getUsers();
-                });
-            } 
-            if (x == 2) {
-                $("#nav-back-btn").click(function(){
-                    getChat(id);
-                });
-            }
-            if (x == 3) {
-                $("#nav-back-btn").click(function(){
-                    getFriends();
-                });
-            }
+            setGoBack(x, id);
         },
         error: function(jqXHR, textStatus) {
             $("#no-connection").show();
@@ -178,14 +164,33 @@ function getUsers(x) { // Gets list of all registered users.
                 container += '</div>';
                 container += '<div class="col-xs-7">';
                 container += '<span style="font-size: 18px;">'+response[i]["userName"]+'</span> <br/>';
-                container += '<span style="font-size: 16px;">'+response[i]["city"]+', '+response[i]["state"]+'</span>';
+                let location;
+                if (response[i]["city"] == null && response[i]["state"] == null) {
+                    location = "";
+                }
+                if (response[i]["city"] != null && response[i]["state"] != null) {
+                    location = response[i]["city"] + ", " + response[i]["state"];
+                }
+                if (response[i]["state"] == null && response[i]["city"] != null) {
+                    location = response[i]["city"];
+                }
+                if (response[i]["city"] == null && response[i]["state"] != null) {
+                    location = response[i]["state"];
+                }
+                container += '<span style="font-size: 16px;">'+location+'</span>';
                 container += '<span id="friend-heart" style="display:none;">';
                 container += '<i class="fas fa-heart text-danger"></i>';
                 container += '</span>';
                 container += '</div>';
                 container += '</div>';
                 container += '<div class="row user-snippet-row-secondary">';
-                container += '<span>'+response[i]["profile"]+'</span>';
+                let profile;
+                if (response[i]["profile"] == null) {
+                    profile = "";
+                } else {
+                    profile = response[i]["profile"];
+                }
+                container += '<span>'+profile+'</span>';
                 container += '</div>';
                 container += '</a>';
                 container += '</div>';
@@ -205,6 +210,7 @@ function getUsers(x) { // Gets list of all registered users.
 function getMailbox(x) { // Gets list of messages from users.
     clear();
     $("#message-container").empty();
+    $("#chat-picture").empty();
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-comment").addClass("active");
     $("#mail-page").show().siblings().hide();
@@ -280,11 +286,17 @@ function getMailbox(x) { // Gets list of messages from users.
 
 function getChat(id, x) { // Gets list of chat messages between two users.
     clear();
-    getMessageCount();
+    //getMessageCount();
     $("#chat-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
     $("#nav-back-btn").click(function() {
-        getMailbox();
+        //getMailbox();
+        $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
+        $("#fa-comment").addClass("active");
+        $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
+        $("#mail-page").show().siblings().hide();
+        $("#chat-picture").empty();
+        $("#message-container").empty();
     });
     if (!x) {
         $("#message-container").empty().html(noconnection);
@@ -482,6 +494,7 @@ function getFriends(x) { // Gets a list of users in friend list.
         url: "/Api/GetFriends", 
         dataType: "json",
         success: function(response) {
+            localStorage.referrer = 3;
             let container = '';
             if (response.length > 0) {
                 for (i = 0; i < response.length; i++) { // Maps response items into container for display.
@@ -506,7 +519,6 @@ function getFriends(x) { // Gets a list of users in friend list.
             }
             $("#friend-container").empty();
             $("#friend-container").html(container);
-            localStorage.referrer = 3;
         },
         error: function(jqXHR, textStatus) {
             $("#no-connection").show();
@@ -546,8 +558,16 @@ function getUser(x) {
             container += '<input value="'+response["picture"]+'" id="img-input-user" type="file" accept="image/*" name="picture" style="display:none;" multiple/>';
             container += '</label>';
             container += '</div>';
+            container += '<div class="col-md-4" style="margin:0;font-size:26px;text-align:center;background-color: #00b0ff!important;">';
+            container += '<i class="fas fa-user-graduate" style="padding:0 5%;"></i>';
+            container += '<i class="fas fa-user-secret" style="padding:0 5%;"></i>';
+            container += '<i onclick=getAdmin() class="fas fa-users-cog" style="padding:0 5%;"></i>';
+            container += '<i onclick=logOut() class="fas fa-sign-out-alt" style="padding:0 5%;"></i>';
+            container += '</form>';
             container += '</div>';
-            container += '<div class="row" style="margin:100px 0 0 0!important;">';
+            container += '</div>';
+
+            container += '<div class="row" style="margin:170px 0 0 0!important;">';
             container += '<div class="col-md-8 profile-input">';
             container += '<div class="form-group">';
             container += '<input value="'+response["userName"]+'" class="form-control" style="border-radius:25px;" />';
