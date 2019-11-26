@@ -6,7 +6,11 @@
 }
 
 @if (SignInManager.IsSignedIn(User))
-{
+{    
+    <div id="spinner" style="display:none;background-color:rgba(0,0,0,.5);position: absolute;top:0;left:0;width:100%;height:100%;">
+        <i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size:24px;"></i>
+        <p id="no-connection" style="display:none;position:fixed;top:45%;left:27%;right:27%;font-size:10px;color:#00b0ff;">Check your connection. Retrying...</p>
+    </div>
 
     <div id="home-page">
         <div id="home-index-container" class="container home-index-container"></div>
@@ -14,6 +18,7 @@
 
     <div id="profile-page" style="display:none;">
         <div id="profile-container"></div>
+        <div id="no-connection-profile" style="font-size:10px;display:none;position:absolute;bottom:85px;color:#00b0ff!important;">No connection. Retrying...</div>
     </div>
 
     <div id="user-page" style="display:none;">

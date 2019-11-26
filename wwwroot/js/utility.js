@@ -1,5 +1,3 @@
-let noconnection = '<i class="fab fa-ello fa-spin text-white" style="position:fixed;top:40%;left:50vw;font-size: 24px;"></i><p id="no-connection" style="display:none;position:fixed;top:45%;left:27%;right:27%;font-size:10px;color:#00b0ff;">Check your connection. Retrying...</p>';
-
 $("#img-input-user").change(function(event) { // Drops in a preview of user image before saving.
     let imgPath = URL.createObjectURL(event.target.files[0]);
     $("#img-output-user").fadeIn("fast").attr('src',imgPath); 
@@ -42,23 +40,6 @@ function getInfo() {
 
 function messageScroll() {
     $("#message-container").scrollTop($("#message-container")[0].scrollHeight);
-}
-
-function clear() {
-    clearTimeout(getAdmin);
-    clearInterval(getAdmin);
-    clearTimeout(getChat);
-    clearInterval(getChat);
-    clearTimeout(getMailbox);
-    clearInterval(getMailbox);
-    clearTimeout(getProfile);
-    clearInterval(getProfile);
-    clearTimeout(getUsers);
-    clearInterval(getUsers);
-    clearTimeout(getUser);
-    clearInterval(getUser);
-    clearTimeout(getFriends);
-    clearInterval(getFriends);
 }
 
 function formatDate(d, x) {

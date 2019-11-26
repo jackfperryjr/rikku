@@ -1,8 +1,9 @@
 function getProfile(id) {
-    clear();
+    clearInterval(getProfile);
     $("#profile-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
-    $("#profile-container").empty().html(noconnection);
+    $("#profile-container").empty();
+    $("#spinner").show();
     let obj = new Object();
     obj.id = id;
     $.ajax({
@@ -24,9 +25,26 @@ function getProfile(id) {
             container += '<div class="col-md-12" style="margin:0 0 10px 0;">';
             container += '<input id="profile-id" type="hidden" value='+id+' />';
             container += '<h3 class="text-center">'+response["userName"]+'</h3>';
-            container += '<h5 class="text-center">'+response["city"]+', '+response["state"]+'</h5>';
+            let location;
+            if (response["city"] == null && response["state"] == null) {
+                location = "";
+            }
+            if (response["city"] != null && response["state"] != null) {
+                location = response[i]["city"] + ", " + response[i]["state"];
+            }
+            if (response["state"] == null && response["city"] != null) {
+                location = response[i]["city"];
+            }
+            if (response["city"] == null && response["state"] != null) {
+                location = response[i]["state"];
+            }
+            container += '<h5 class="text-center">'+location+'</h5>';
             container += '<h5></h5>';
-            container += '<h5 style="margin: 20px 0;">'+response["profile"]+'</h5>';
+            if (response["profile"] != null) {
+                container += '<h5 style="margin: 20px 0;">'+response["profile"]+'</h5>';
+            } else {
+                container += '<h5 style="margin: 20px 0;">&nbsp;</h5>';
+            } 
             container += '<h5></h5>';
             container += '</div>';
             container += '</div>';
@@ -43,7 +61,6 @@ function getProfile(id) {
             container += '<div class="modal-content">';
             container += '<div class="modal-body">';
             container += '<img style="border-radius:50%;height:100px;width:100px;margin-bottom:50px;" src="'+response["picture"]+'" title="Picture of user!">';
-            container += '<div id="no-connection-profile" style="font-size:10px;display:none;position:absolute;bottom:85px;color:#00b0ff!important;">No connection. Retrying...</div>';
             container += '<input id="message-input-profile" class="form-group input-group message-input-profile" placeholder="Type message here..." style="border-radius:25px!important;" maxlength=40 required />';
             container += '<button class="btn btn-link" style="font-size:20px;z-index:100;font-weight:bolder;color:#00b0ff;position:absolute;right:10px;bottom:5.5vh;text-decoration:none!important;" onclick="sendMessage();">Send</button>';
             container += '<div class="bottom-margin">&nbsp;</div>';
@@ -52,26 +69,30 @@ function getProfile(id) {
             container += '</div>';
             container += '</div>';
             container += '</div>';
+            $("#spinner").hide();
+            $("#no-connection").hide();
             $("#profile-container").empty();
             $("#profile-container").html(container);
             isFriend(id);
             setGoBack(x, id);
         },
         error: function(jqXHR, textStatus) {
+            $("#spinner").show();
             $("#no-connection").show();
+            clearInterval(getProfile);
             setTimeout(function() { getProfile(id) }, 5000);
         }
     });
 }
 
 function getAdmin(x) {
-    clear();
+    clearInterval(getAdmin);
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-users-cog").addClass("active");
     $("#admin-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
-        $("#admin-container").html(noconnection);
+        $("#spinner").show();
     }
     $.ajax({
         type: "GET",
@@ -127,12 +148,16 @@ function getAdmin(x) {
                 container += '</div>';
                 container += '</div>';
             }
+            $("#spinner").hide();
+            $("#no-connection").hide();
             $("#admin-container").empty();
             $("#admin-container").html(container);
         },
         error: function(jqXHR, textStatus) {
             if (jqXHR.status != 403) {
+                $("#spinner").show();
                 $("#no-connection").show();
+                clearInterval(getAdmin);
                 setTimeout(getAdmin, 5000);
             }
         }
@@ -140,19 +165,19 @@ function getAdmin(x) {
 }
 
 function getUsers(x) { // Gets list of all registered users.
-    clear();
+    clearInterval(getUsers);
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-home").addClass("active");
     $("#home-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
-        $("#home-index-container").html(noconnection);
+        $("#spinner").show();
     }
     $.ajax({
         type: "GET",
         url: "/Api/GetUsers", 
         dataType: "json",
-        timeout: 7000,
+        timeout: 5000,
         success: function(response) { 
             localStorage.referrer = 1;
             let container = '';
@@ -197,20 +222,28 @@ function getUsers(x) { // Gets list of all registered users.
                 container += '</a>';
                 container += '</div>';
             }
+            $("#spinner").hide();
+            $("#no-connection").hide();
             $("#home-index-container").empty();
             $("#home-index-container").html(container);
         },
         error: function(jqXHR, textStatus) {
             if (jqXHR.status != 401) {
+                $("#spinner").show();
                 $("#no-connection").show();
+                clearInterval(getUsers);
                 setTimeout(getUsers, 5000);
+            } else if (jqXHR.status == 0) {
+                $("#spinner").show();
+                $("#no-connection").show();
+                getUsers();
             }
         }
     });
 }
 
 function getMailbox(x) { // Gets list of messages from users.
-    clear();
+    clearInterval(getMailbox);
     $("#message-container").empty();
     $("#chat-picture").empty();
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
@@ -218,7 +251,8 @@ function getMailbox(x) { // Gets list of messages from users.
     $("#mail-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     if (!x) {
-        $("#mailbox").empty().html(noconnection);
+        //$("#mailbox").empty();
+        $("#spinner").show();
     }
     $.ajax({
         type: "GET",
@@ -255,19 +289,22 @@ function getMailbox(x) { // Gets list of messages from users.
                 container += '</a>';
                 container += '</div>';
             }
-            $("#mailbox").empty();
+            $("#spinner").hide();
+            $("#no-connection").hide();
             $("#mailbox").html(container);
         },
         error: function(jqXHR, textStatus) {
+            $("#spinner").show();
             $("#no-connection").show();
+            clearInterval(getMailbox);
             setTimeout(function() { getMailbox(x) }, 5000);
         }
     });
 }
 
 function getChat(id, x) { // Gets list of chat messages between two users.
-    clear();
     //getMessageCount();
+    clearInterval(getChat);
     $("#chat-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
     $("#nav-back-btn").click(function() {
@@ -280,7 +317,8 @@ function getChat(id, x) { // Gets list of chat messages between two users.
         $("#message-container").empty();
     });
     if (!x) {
-        $("#message-container").empty().html(noconnection);
+        $("#message-container").empty();
+        $("#spinner").show();
     }
     let obj = new Object();
     obj.id = id;
@@ -377,6 +415,8 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                     container += '</div>';
                 }
             }
+            $("#spinner").hide();
+            $("#no-connection").hide();
             $("#message-container").html(container);
             if (!x) {
                 messageScroll();
@@ -400,7 +440,9 @@ function getChat(id, x) { // Gets list of chat messages between two users.
             });
         },
         error: function(jqXHR, textStatus) {
+            $("#spinner").show();
             $("#no-connection").show();
+            clearInterval(getChat);
             setTimeout(function() { getChat(id, 2) }, 5000);
         }
     });
@@ -432,10 +474,7 @@ function getMessageCount() { // Gets a count of unread messages.
             }
         },
         error: function(jqXHR) {
-            //console.log(jqXHR);
-            // if (jqXHR.status === 401) {
-            //     clearTimeout(mailChecker);
-            // }
+            // TODO.
         }
     });
 }
@@ -462,13 +501,14 @@ function isFriend(id) { // Check if user is in friend list.
 }
 
 function getFriends(x) { // Gets a list of users in friend list.
-    clear();
+    clearInterval(getFriends);
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-users").addClass("active");
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $("#friend-page").show().siblings().hide();
     if (!x) {
-        $("#friend-container").html(noconnection);
+        $("#friend-container").empty();
+        $("#spinner").show();
     }
     $.ajax({
         type: "GET",
@@ -498,22 +538,26 @@ function getFriends(x) { // Gets a list of users in friend list.
                 container += '</div>';
                 container += '</div>';
             }
-            $("#friend-container").empty();
+            $("#spinner").hide();
+            $("#no-connection").hide();
             $("#friend-container").html(container);
         },
         error: function(jqXHR, textStatus) {
+            $("#spinner").show();
             $("#no-connection").show();
+            clearInterval(getFriends);
             setTimeout(getFriends, 5000);
         }
     });
 }
 
 function getUser(x) {
-    clear();
+    clearInterval(getUser);
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-user").addClass("active");
     $("#user-page").show().siblings().hide();
-    $("#user-container").html(noconnection);
+    $("#user-container").empty();
+    $("#spinner").show();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $.ajax({
         type: "GET",
@@ -539,24 +583,45 @@ function getUser(x) {
             container += '<input value="'+response["picture"]+'" id="img-input-user" type="file" accept="image/*" name="picture" style="display:none;" multiple/>';
             container += '</label>';
             container += '</div>';
-            container += '<div class="col-md-4" style="margin:0;font-size:26px;text-align:center;background-color: #00b0ff!important;">';
-            container += '<i class="fas fa-user-graduate" style="padding:0 5%;"></i>';
-            container += '<i class="fas fa-user-secret" style="padding:0 5%;"></i>';
-            container += '<i onclick=getAdmin() class="fas fa-users-cog" style="padding:0 5%;"></i>';
-            container += '<i onclick=logOut() class="fas fa-sign-out-alt" style="padding:0 5%;"></i>';
+            container += '<div class="col-md-4" style="margin:0;font-size:8px;text-align:center;background-color: #00b0ff!important;">';
+            container += '<span class="fa-stack fa-2x" style="padding:0 10%;background-color: transparent!important;">';
+            container += '<i class="far fa-circle fa-stack-2x"></i>';
+            container += '<i class="fas fa-pen fa-stack-1x"></i>';
+            container += '</span>';
+            container += '<span class="fa-stack fa-2x" style="padding:0 10%;background-color: transparent!important;">';
+            container += '<i class="far fa-circle fa-stack-2x"></i>';
+            container += '<i class="fas fa-cog fa-stack-1x"></i>';
+            container += '</span>';
+
+            if (response["roleName"] == "Admin") {
+                container += '<span onclick=getAdmin() class="fa-stack fa-2x" style="padding:0 10%;background-color: transparent!important;">';
+                container += '<i class="far fa-circle fa-stack-2x"></i>';
+                container += '<i class="fas fa-users-cog fa-stack-1x"></i>';
+                container += '</span>';
+            }
+
+            container += '<span onclick=logOut() class="fa-stack fa-2x" style="padding:0 10%;transform:rotate(180deg);background-color: transparent!important;">';
+            container += '<i class="far fa-circle fa-stack-2x"></i>';
+            container += '<i class="fas fa-outdent fa-stack-1x"></i>';
+            container += '</span>';
             container += '</form>';
             container += '</div>';
             container += '</div>';
-
             container += '<div class="row" style="margin:170px 0 0 0!important;">';
             container += '<div class="col-md-8 profile-input">';
             container += '<div class="form-group">';
-            container += '<input value="'+response["userName"]+'" class="form-control" style="border-radius:25px;" />';
+            container += '<input value="'+response["userName"]+'" class="form-control" style="border-radius:25px;pointer-events:none;" />';
             container += '</div>';
             container += '<div class="form-group">';
             container += '<div class="form-inline">';
             container += '<input id="user-firstname" value="'+response["firstName"]+'" class="form-control" style="border-radius:25px;width: 45%; margin-right: 10%;" placeholder="First..." />';
-            container += '<input id="user-lastname" value="'+response["lastName"]+'" class="form-control" style="border-radius:25px;width: 45%;" placeholder="Last..." />';
+
+            if (response["lastName"] != null) {
+                container += '<input id="user-lastname" value="'+response["lastName"]+'" class="form-control" style="border-radius:25px;width: 45%;" placeholder="Last..." />';
+            } else {
+                container += '<input id="user-lastname" value="" class="form-control" style="border-radius:25px;width: 45%;" placeholder="Last name..." />';
+            }
+            
             container += '</div>';
             container += '</div>';
             container += '<div class="form-group">';
@@ -598,12 +663,16 @@ function getUser(x) {
             // container += '</label>';
             // container += '</div>';
             // container += '</div>';
+            $("#spinner").hide();
+            $("#no-connection").hide();
             $("#user-container").empty();
             $("#user-container").html(container);
             $("#profile-text").append(response["profile"]);
         },
         error: function(jqXHR, textStatus) {
+            $("#spinner").show();
             $("#no-connection").show();
+            clearInterval(getUser);
             setTimeout(getUser, 5000);
         }
     });

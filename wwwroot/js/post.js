@@ -19,7 +19,6 @@ function addFriend() { // Adds user to friend list.
 }
 
 function sendMessage() {
-    clearTimeout(sendMessage);
     clearInterval(sendMessage);
     let obj = new Object();
     if ($("#chat-page").is(":visible")) {
@@ -36,10 +35,8 @@ function sendMessage() {
             type: "POST",
             url: "/Api/SendMessage", 
             data: obj,
-            timeout: 7000,
+            timeout: 5000,
             success: function(response, jqXHR) {
-                clearTimeout(sendMessage);
-                clearInterval(sendMessage);
                 if ($("#profile-page").is(":visible")) {
                     $("#no-connection-profile").hide();
                     $("#message-input-profile").val("");
@@ -55,22 +52,31 @@ function sendMessage() {
                     setTimeout(function() {
                         sendResponse(obj.id);
                     }, responseTime)
-                } else {
-                    jqXHR.abort();
-                }
+                } 
             },
             error: function(jqXHR, textStatus) {
-                clearInterval(sendMessage);
-                clearTimeout(sendMessage);
-
-                if ($("#chat-page").is(":visible")) {
-                    $("#no-connection-chat").show();
-                    setTimeout(sendMessage, 5000);
-                }
-                if ($("#profile-page").is(":visible")) {
-                    jqXHR.abort();
-                    $("#no-connection-profile").show();
-                    setTimeout(sendMessage, 5000);
+                if (jqXHR.status == 0) {
+                    if ($("#chat-page").is(":visible")) {
+                        $("#no-connection-chat").show();
+                        clearInterval(sendMessage);
+                        setTimeout(sendMessage, 5000);
+                    }
+                    if ($("#profile-page").is(":visible")) {
+                        $("#no-connection-profile").show();
+                        clearInterval(sendMessage);
+                        setTimeout(sendMessage,5000);
+                    }
+                } else {
+                    if ($("#chat-page").is(":visible")) {
+                        $("#no-connection-chat").show();
+                        clearInterval(sendMessage);
+                        sendMessage();
+                    }
+                    if ($("#profile-page").is(":visible")) {
+                        $("#no-connection-profile").show();
+                        clearInterval(sendMessage);
+                        sendMessage();
+                    }
                 }
             }
         });
