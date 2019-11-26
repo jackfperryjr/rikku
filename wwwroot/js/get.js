@@ -3,7 +3,7 @@ function getProfile(id) {
     $("#profile-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
     $("#profile-container").empty();
-    $("#spinner").show();
+    //$("#spinner").show();
     let obj = new Object();
     obj.id = id;
     $.ajax({
@@ -11,6 +11,7 @@ function getProfile(id) {
         url: "/Api/GetProfile",
         data: obj,
         dataType: "json",
+        timeout: 5000,
         success: function(response) {
             let x = localStorage.referrer;
             let container = '';
@@ -91,13 +92,14 @@ function getAdmin(x) {
     $("#fa-users-cog").addClass("active");
     $("#admin-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
-    if (!x) {
-        $("#spinner").show();
-    }
+    // if (!x) {
+    //     $("#spinner").show();
+    // }
     $.ajax({
         type: "GET",
         url: "/Api/GetAdmin",
         dataType: "json",
+        timeout: 5000,
         success: function(response) {
             let container = '';
             for (i = 0; i < response.length; i++) { // Maps response items into containers for display.
@@ -170,9 +172,9 @@ function getUsers(x) { // Gets list of all registered users.
     $("#fa-home").addClass("active");
     $("#home-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
-    if (!x) {
-        $("#spinner").show();
-    }
+    // if (!x) {
+    //     $("#spinner").show();
+    // }
     $.ajax({
         type: "GET",
         url: "/Api/GetUsers", 
@@ -250,15 +252,15 @@ function getMailbox(x) { // Gets list of messages from users.
     $("#fa-comment").addClass("active");
     $("#mail-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
-    if (!x) {
-        //$("#mailbox").empty();
-        $("#spinner").show();
-    }
+    // if (!x) {
+    //     //$("#mailbox").empty();
+    //     $("#spinner").show();
+    // }
     $.ajax({
         type: "GET",
         url: "/Api/GetMailbox", 
         dataType: "json",
-        timeout: 7000,
+        timeout: 5000,
         success: function(response) {
             let container = "";
             let color = "#000000!important";
@@ -306,7 +308,7 @@ function getChat(id, x) { // Gets list of chat messages between two users.
     //getMessageCount();
     clearInterval(getChat);
     $("#chat-page").show().siblings().hide();
-    $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
+    $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $("#nav-back-btn").click(function() {
         //getMailbox();
         $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
@@ -316,17 +318,17 @@ function getChat(id, x) { // Gets list of chat messages between two users.
         $("#chat-picture").empty();
         $("#message-container").empty();
     });
-    if (!x) {
-        $("#message-container").empty();
-        $("#spinner").show();
-    }
+    // if (!x) {
+    //     $("#message-container").empty();
+    //     $("#spinner").show();
+    // }
     let obj = new Object();
     obj.id = id;
     $.ajax({
         type: "GET",
         url: "/Api/GetChat", 
         data: obj,
-        timeout: 7000,
+        timeout: 5000,
         success: function(response) {
             localStorage.referrer = 2;
             $("#chat-picture").html(
@@ -459,10 +461,9 @@ function getMessageCount() { // Gets a count of unread messages.
                     $("#message-count").empty();
                     $("#message-count").val(response);
                     $("#message-count").show();
-                
-                    if ($("#mail-page").is(":visible")) { // If in the mailbox, get the new messages.
-                        getMailbox(1);
-                    }
+                }
+                if ($("#mail-page").is(":visible")) { // If in the mailbox, get the new messages.
+                    getMailbox(1);
                 }
                 if ($("#chat-page").is(":visible")) { // If in the chat, get the new messages.
                     let id = $("#chat-id").val();
@@ -506,10 +507,10 @@ function getFriends(x) { // Gets a list of users in friend list.
     $("#fa-users").addClass("active");
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $("#friend-page").show().siblings().hide();
-    if (!x) {
-        $("#friend-container").empty();
-        $("#spinner").show();
-    }
+    // $("#friend-container").empty();
+    // if (!x) {
+    //     $("#spinner").show();
+    // }
     $.ajax({
         type: "GET",
         url: "/Api/GetFriends", 
@@ -555,9 +556,8 @@ function getUser(x) {
     clearInterval(getUser);
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-user").addClass("active");
-    $("#user-page").show().siblings().hide();
     $("#user-container").empty();
-    $("#spinner").show();
+    //$("#spinner").show();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $.ajax({
         type: "GET",
@@ -663,10 +663,11 @@ function getUser(x) {
             // container += '</label>';
             // container += '</div>';
             // container += '</div>';
-            $("#spinner").hide();
-            $("#no-connection").hide();
+            // $("#spinner").hide();
+            // $("#no-connection").hide();
             $("#user-container").empty();
             $("#user-container").html(container);
+            $("#user-page").show().siblings().hide();
             $("#profile-text").append(response["profile"]);
         },
         error: function(jqXHR, textStatus) {

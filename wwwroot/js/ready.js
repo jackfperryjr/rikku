@@ -2,9 +2,12 @@ $(document).ready(function() { // Activating icon related to navigated screen up
     getUsers();
     // updateUserLocation();
 
-    $("#expand-menu").click(function() {
-        $("#extra-nav").slideToggle(150);
-    });
+    // $("#fa-home").click(function () {
+    //     $("#home-page").addClass("show-page").siblings().addClass("hide-page");
+    // });
+    // $("#fa-comment").click(function () {
+    //     $("#mail-page").addClass("show-page").siblings().addClass("hide-page");
+    // });
     
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").click(function() {
         if ($("#extra-nav").is(":visible")) {

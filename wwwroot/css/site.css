@@ -4,6 +4,12 @@ for details on configuring this project to bundle and minify static web assets. 
 #main {
   display: none;
 }
+.hide-page {
+    left: -100%;
+}
+.show-page {
+    left: 0%;
+}
 .message-reaction-container {
   display:none;
   min-width:190px;
@@ -212,6 +218,18 @@ for details on configuring this project to bundle and minify static web assets. 
   overflow-y:scroll;
   padding: 0;
 }
+/* #home-page,
+#mail-page,
+#chat-page,
+#admin-page,
+#friend-page
+#profile-page {
+  position: absolute;
+  top:100%;
+  left:100%;
+  transition: left .5s ease-out;
+  -webkit-transition: left .5s ease-out;
+} */
 .home-index-container {
   background-color:#101010!important;
   min-width:350px;
