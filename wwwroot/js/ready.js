@@ -17,6 +17,7 @@ $(document).ready(function() { // Activating icon related to navigated screen up
 
     (function mailChecker(){ // Self executing function that runs every 3 seconds.
         getMessageCount(); // Quick function to check for new messages.
+        clearInterval(mailChecker);
         setTimeout(mailChecker, 3000)
     })();
 });
