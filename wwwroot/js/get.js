@@ -30,13 +30,13 @@ function getProfile(id) {
                 location = "";
             }
             if (response["city"] != null && response["state"] != null) {
-                location = response[i]["city"] + ", " + response[i]["state"];
+                location = response["city"] + ", " + response["state"];
             }
             if (response["state"] == null && response["city"] != null) {
-                location = response[i]["city"];
+                location = response["city"];
             }
             if (response["city"] == null && response["state"] != null) {
-                location = response[i]["state"];
+                location = response["state"];
             }
             container += '<h5 class="text-center">'+location+'</h5>';
             container += '<h5></h5>';
