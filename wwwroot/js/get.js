@@ -1,4 +1,6 @@
 function getProfile(id) {
+    clearInterval(getMailbox);
+    clearInterval(getChat);
     clearInterval(getProfile);
     $("#profile-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
@@ -87,6 +89,8 @@ function getProfile(id) {
 }
 
 function getAdmin(x) {
+    clearInterval(getMailbox);
+    clearInterval(getChat);
     clearInterval(getAdmin);
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-users-cog").addClass("active");
@@ -167,6 +171,9 @@ function getAdmin(x) {
 }
 
 function getUsers(x) { // Gets list of all registered users.
+    clearInterval(getMailbox);
+    clearTimeout(getMailbox);
+    clearInterval(getChat);
     clearInterval(getUsers);
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-home").addClass("active");
@@ -233,11 +240,15 @@ function getUsers(x) { // Gets list of all registered users.
             if (jqXHR.status != 401) {
                 $("#spinner").show();
                 $("#no-connection").show();
+                clearInterval(getMailbox);
+                clearTimeout(getMailbox);
                 clearInterval(getUsers);
                 setTimeout(getUsers, 5000);
             } else if (jqXHR.status == 0) {
                 $("#spinner").show();
                 $("#no-connection").show();
+                clearInterval(getMailbox);
+                clearTimeout(getMailbox);
                 getUsers();
             }
         }
@@ -502,6 +513,8 @@ function isFriend(id) { // Check if user is in friend list.
 }
 
 function getFriends(x) { // Gets a list of users in friend list.
+    clearInterval(getMailbox);
+    clearInterval(getChat);
     clearInterval(getFriends);
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-users").addClass("active");
@@ -553,6 +566,8 @@ function getFriends(x) { // Gets a list of users in friend list.
 }
 
 function getUser(x) {
+    clearInterval(getMailbox);
+    clearInterval(getChat);
     clearInterval(getUser);
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-user").addClass("active");
