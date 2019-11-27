@@ -583,19 +583,21 @@ function getUser(x) {
             if (x) {
                 container += '<div id="status-message" class="status-message">Profile updated! <span onclick=this.parentNode.style.display="none">&times;</span></div>';
             }
+            container += '<form id="profile-form" enctype="multipart/form-data" method="post" name="form">';
             container += '<div class="row text-center" style="height: 150px;position:relative;margin:0;">';
             container += '<label>';
             container += '<img id="img-output-wallpaper" style="height:150px;width:100%;" src="'+response["wallpaper"]+'" style="cursor:pointer;">';
             container += '<i class="fas fa-camera" title="Change Image" style="cursor:pointer;position:absolute;bottom:3px;right:3px;z-index:200;"></i>';
-            container += '<input value="'+response["wallpaper"]+'" id="img-input-wallpaper" type="file" accept="image/*" name="wallpaper" style="display:none;" multiple/>';
+            container += '<input value="'+response["wallpaper"]+'" id="img-input-wallpaper" type="file" accept="image/*" name="wallpaper" style="display:none;" multiple />';
             container += '</label>';
             container += '<div class="col-md-4" style="margin: -150px auto 0 auto;">';
             container += '<label>';
+
             container += '<img id="img-output-user" class="user-img-lg bottom-margin" src="'+response["picture"]+'" title="Picture of you!" style="cursor:pointer;">';
             container += '<div class="user-img-overlay">';
             container += '<i class="fas fa-camera" title="Change Image" style="cursor:pointer;"></i>';
             container += '</div>';
-            container += '<input value="'+response["picture"]+'" id="img-input-user" type="file" accept="image/*" name="picture" style="display:none;" multiple/>';
+            container += '<input value="'+response["picture"]+'" id="img-input-user" type="file" accept="image/*" name="picture" style="display:none;" multiple />';
             container += '</label>';
             container += '</div>';
             container += '<div class="col-md-4" style="margin:0;font-size:8px;text-align:center;background-color: #00b0ff!important;">';
@@ -646,10 +648,10 @@ function getUser(x) {
             container += '</div>';
             container += '</div>';
             container += '<div class="form-group">';
-            container += '<input value="'+response["city"]+'" class="form-control" placeholder="City..." style="border-radius:25px;" />';
+            container += '<input id="profile-city" value="'+response["city"]+'" class="form-control" placeholder="City..." style="border-radius:25px;" />';
             container += '</div>';
             container += '<div class="form-group">';
-            container += '<input value="'+response["state"]+'" class="form-control" placeholder="State..." style="border-radius:25px;" />';
+            container += '<input id="profile-state" value="'+response["state"]+'" class="form-control" placeholder="State..." style="border-radius:25px;" />';
             container += '</div>';
             container += '<div class="form-group">';
             let date = response["birthDate"];
@@ -670,6 +672,7 @@ function getUser(x) {
             container += '<a asp-area="Identity" asp-page="/Account/Manage/DeletePersonalData" class="btn btn-danger" style="margin-top:15px;width:100%;background-color: #000!important;border:1px solid #455a64!important;">Delete Account</a>';
             container += '</div>';
             container += '</div>';
+            container += '</form>';
             // container += '<div class="row" style="margin:30px auto;">';
             // container += '<div class="col-xs-8" style="margin:0 15px 0 auto;">';
             // container += '<label class="switch">';
@@ -682,6 +685,14 @@ function getUser(x) {
             // $("#no-connection").hide();
             $("#user-container").empty();
             $("#user-container").html(container);
+            $("#img-input-user").change(function(event) { // Drops in a preview of user image before saving.
+                let imgPath = URL.createObjectURL(event.target.files[0]);
+                $("#img-output-user").fadeIn("fast").attr('src', imgPath); 
+            }); 
+            $("#img-input-wallpaper").change(function(event) { // Drops in a preview of user wallpaper before saving.
+                let imgPath = URL.createObjectURL(event.target.files[0]);
+                $("#img-output-wallpaper").fadeIn("fast").attr('src', imgPath); 
+            }); 
             $("#user-page").show().siblings().hide();
             $("#profile-text").append(response["profile"]);
         },

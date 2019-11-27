@@ -1,12 +1,3 @@
-$("#img-input-user").change(function(event) { // Drops in a preview of user image before saving.
-    let imgPath = URL.createObjectURL(event.target.files[0]);
-    $("#img-output-user").fadeIn("fast").attr('src',imgPath); 
-}); 
-$("#img-input-wallpaper").change(function(event) { // Drops in a preview of user wallpaper before saving.
-    let imgPath = URL.createObjectURL(event.target.files[0]);
-    $("#img-output-wallpaper").fadeIn("fast").attr('src',imgPath); 
-}); 
-
 function setGoBack(x, id) {
     if (x == 1) {
         $("#nav-back-btn").off("click").click(function(){

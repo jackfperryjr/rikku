@@ -541,15 +541,13 @@ namespace Rikku.Controllers
             return Ok(user);
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> UpdateUser(string firstName, 
                                                     string lastName, 
                                                     string city, 
-                                                    string state, 
-                                                    string zipCode, 
+                                                    string state,  
                                                     string profile,
                                                     string email,
-                                                    string phoneNumber,
                                                     string picture,
                                                     string wallpaper)
         {
@@ -572,15 +570,15 @@ namespace Rikku.Controllers
                 user.LastName = lastName;
             }
 
-            // if (city != user.City)
-            // {
-            //     user.City = city;
-            // }
+            if (city != user.City)
+            {
+                user.City = city;
+            }
 
-            // if (state != user.State)
-            // {
-            //     user.State = state;
-            // }
+            if (state != user.State)
+            {
+                user.State = state;
+            }
 
             // if (Input.Age != user.Age)
             // {
@@ -602,15 +600,15 @@ namespace Rikku.Controllers
                 }
             }
 
-            var userPhoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (phoneNumber != userPhoneNumber)
-            {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, phoneNumber);
-                if (!setPhoneResult.Succeeded)
-                {
-                    throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
-                }
-            }
+            // var userPhoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            // if (phoneNumber != userPhoneNumber)
+            // {
+            //     var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, phoneNumber);
+            //     if (!setPhoneResult.Succeeded)
+            //     {
+            //         throw new InvalidOperationException($"Unexpected error occurred setting phone number for user with ID '{userId}'.");
+            //     }
+            // }
 
             var account = _configuration["StorageConfig:AccountName"];
             var key = _configuration["StorageConfig:AccountKey"];

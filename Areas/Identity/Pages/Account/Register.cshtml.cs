@@ -59,10 +59,6 @@ namespace Rikku.Areas.Identity.Pages.Account
             [Display(Name = "First name")]
             public string FirstName { get; set; }
 
-            [Required]
-            [Display(Name = "Birthdate")]
-            public DateTime BirthDate { get; set; }
-
             public DateTime JoinDate { get; set; }
 
             [Required]
@@ -89,21 +85,21 @@ namespace Rikku.Areas.Identity.Pages.Account
             {
                 ApplicationUser user; 
 
-                var today = DateTime.Now;
-                var age = today.Year - Input.BirthDate.Year;
-                if (today.Month < Input.BirthDate.Month || ((today.Month == Input.BirthDate.Month) && (today.Day < Input.BirthDate.Day)))
-                {
-                    age--;
-                }
-                var ageString = age.ToString();
+                // var today = DateTime.Now;
+                // var age = today.Year - Input.BirthDate.Year;
+                // if (today.Month < Input.BirthDate.Month || ((today.Month == Input.BirthDate.Month) && (today.Day < Input.BirthDate.Day)))
+                // {
+                //     age--;
+                // }
+                // var ageString = age.ToString();
 
                 user = new ApplicationUser 
                         { 
                             UserName = Input.UserName, 
                             Email = Input.Email, 
                             FirstName = Input.FirstName,
-                            BirthDate = Input.BirthDate,
-                            Age = ageString,
+                            // BirthDate = Input.BirthDate,
+                            // Age = ageString,
                             Picture = "/icons/default/default-picture.jpg",
                             Wallpaper = "/icons/default/default-wallpaper.jpg",
                             JoinDate = DateTime.Now

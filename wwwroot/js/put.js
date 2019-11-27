@@ -133,19 +133,24 @@ function updateUserLocation() {
 }
 
 function updateUser() {
-    let obj = new Object();
-
-    obj.firstName = $("#user-firstname").val();
-    obj.lastName = $("#user-lastname").val();
-    obj.email = $("#user-email").val();
-    obj.profile = $("#profile-text").val();
-    obj.picture = $("#img-input-user").val();
-    obj.wallpaper = $("#img-input-wallpaper").val();
+    //let obj = new Object();
+    let obj = new FormData();
+    obj.append("picture", $("#img-input-user")[0].files[0]);
+    obj.append("wallpaper", $("#img-input-wallpaper")[0].files[0]);
+    obj.append("firstName", $("#user-firstname").val());
+    obj.append("lastName", $("#user-lastname").val());
+    obj.append("email", $("#user-email").val());
+    obj.append("profile", $("#profile-text").val());
+    obj.append("city", $("#profile-city").val());
+    obj.append("state", $("#profile-state").val());
 
     $.ajax({
-        type: "PUT",
+        type: "POST",
         url: "/Api/UpdateUser", 
+        enctype: 'multipart/form-data',
         data: obj,
+        processData: false,  
+        contentType: false, 
         success: function() {
             getUser(1);
         }
