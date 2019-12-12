@@ -165,7 +165,7 @@ for details on configuring this project to bundle and minify static web assets. 
 .message-count-bubble {
   font-size:12px!important;
   text-align:center!important;
-  border:1.5px solid #101010!important;
+  border:1.5px solid #121212!important;
   border-radius:50%!important;
   width:23px!important;
   height:23px!important;
@@ -191,10 +191,9 @@ for details on configuring this project to bundle and minify static web assets. 
 .title-bg-shroud {
   position:fixed;
   left:0;
-  background-color:#000000;
+  background-color:#121212;
   padding:0 0 5px 40%;
   width:100vw;
-  background-color: rgba(0,0,0,.9);
 }
 .modal-title-border-override {
   border:none!important;
@@ -231,7 +230,7 @@ for details on configuring this project to bundle and minify static web assets. 
   -webkit-transition: left .5s ease-out;
 } */
 .home-index-container {
-  background-color:#101010!important;
+  background-color:#121212!important;
   min-width:350px;
   max-width:500px;
   margin:0 auto;
@@ -239,7 +238,7 @@ for details on configuring this project to bundle and minify static web assets. 
 }
 .user-snippet-container {
   margin-bottom:30px;
-  background-color:#101010;
+  background-color:#121212;
   padding:20px 0;
 }
 .user-snippet-row-main {
@@ -253,7 +252,7 @@ for details on configuring this project to bundle and minify static web assets. 
 .user-snippet-container span,
 .user-snippet-row-main span,
 .user-snippet-row-secondary span {
-  background-color:#101010!important;
+  background-color:#121212!important;
 }
 .user-img-md {
   height:70px;
@@ -314,7 +313,7 @@ a:active,
 a:hover,
 a:visited,
 .navbar-fixed {
-  background-color:#000000;
+  background-color:#121212;
   color:#ffffff;
 }
 a,
@@ -326,14 +325,14 @@ a:focus {
 }
 .modal-header,
 .modal-body {
-  background-color:#212121!important;
+  background-color:#171f24!important;
 }
 .close {
   background-color:#212121!important;
   color:#ffffff!important;
 }
 .footer-nav * {
-  background-color:#101010!important;
+  background-color:#171f24!important;
   margin:0 auto;
 }
 .footer-nav,
@@ -341,7 +340,7 @@ a:focus {
 .footer-nav > a:active,
 .footer-nav > a:hover,
 .footer-nav > a:visited {
-    background-color:#101010!important;
+    background-color:#171f24!important;
     color:#ffffff!important;
     transition: all .1s ease-in-out;
 }
@@ -378,7 +377,7 @@ select {
   outline: none!important;
   border-radius: 5px;
   /* background-color:#263238!important; */
-  background-color:#000000!important;
+  background-color:#121212!important;
   color:#ffffff!important;
   transition: all .1s ease-in-out;
 }
@@ -393,7 +392,7 @@ textarea {
   outline: none!important;
   border-radius: 4px;
   /* background-color:#263238!important; */
-  background-color:#000000!important;
+  background-color:#121212!important;
   color:#ffffff!important;
   transition: all .1s ease-in-out;
 }
@@ -571,8 +570,8 @@ body {
 .message-input-chat {
   position:fixed;
   bottom:70px;
-  left:0;
-  width:100vw;
+  right:0;
+  width:85vw;
   font-size:16px;
   min-height: 40px!important;
   height:40px;
@@ -582,6 +581,7 @@ body {
   padding: 7px 70px 0 7px;
 }
 .message-input-chat:focus {
+  width:100vw;
   bottom:0;
   border-radius: 25px;
   border: 1px solid #455a64!important;

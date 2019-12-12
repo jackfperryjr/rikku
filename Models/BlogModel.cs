@@ -1,29 +1,21 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Rikku.Data;
 
 namespace Rikku.Models
 {
-    public class MessageModel
+    public class BlogModel
     {          
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int MessageId { get; set; }
+        public int BlogId { get; set; }
         public string UserId { get; set; }
-        public string SenderId { get; set; }
-        public string ReceiverId { get; set; }
         [MaxLength(255)]
         public string Content { get; set; }
-        public DateTime CreateDate { get; set; }
-        public int MessageReadFlg { get; set; } = 0;
-        public string DeletedBy1 { get; set; }
-        public string DeletedBy2 { get; set; }
+        public string PictureId { get; set; }
         public int IsLiked { get; set; }
         public int IsLoved { get; set; }
         public int IsDisliked { get; set; }
         public int IsSaddened { get; set; }
         public int IsLaughed { get; set; }
-        public string PicturePath { get; set; }
     }
 }

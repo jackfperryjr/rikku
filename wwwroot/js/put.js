@@ -140,9 +140,11 @@ function updateUser() {
     obj.append("firstName", $("#user-firstname").val());
     obj.append("lastName", $("#user-lastname").val());
     obj.append("email", $("#user-email").val());
-    obj.append("profile", $("#profile-text").val());
-    obj.append("city", $("#profile-city").val());
-    obj.append("state", $("#profile-state").val());
+    obj.append("profile", $("#user-profile").val());
+    obj.append("birthDate", $("#user-birthdate").val());
+    obj.append("age", $("#user-age").val());
+    obj.append("city", $("#user-city").val());
+    obj.append("state", $("#user-state").val());
 
     $.ajax({
         type: "POST",

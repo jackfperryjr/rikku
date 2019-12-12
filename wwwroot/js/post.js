@@ -18,69 +18,81 @@ function addFriend() { // Adds user to friend list.
     });
 }
 
-function sendMessage() {
+function prepareMessage() {
     clearInterval(sendMessage);
     let obj = new Object();
     if ($("#chat-page").is(":visible")) {
         obj.id = $("#chat-id").val();
-        obj.content = $("#message-input-chat").val();
+        obj.content = $("#message-input-chat").text();
+        obj.content = obj.content.trim();
+        if ($("#message-input-chat").find("img").length) {
+            uploadImage(obj);
+        } else {
+            $(".message-input-chat").height(30);
+            if (obj.content.length != 0) {
+                sendMessage(obj);
+            }
+        }
     }
     if ($("#profile-page").is(":visible")) {
         obj.id = $("#profile-id").val();
         obj.content = $("#message-input-profile").val();
+        if (obj.content.length != 0) {
+            sendMessage(obj);
+        }
     }
-    $(".message-input-chat").height(30);
-    if (obj.content.length != 0) {
-        $.ajax({
-            type: "POST",
-            url: "/Api/SendMessage", 
-            data: obj,
-            timeout: 5000,
-            success: function(response, jqXHR) {
+}
+
+function sendMessage(obj) {
+    $.ajax({
+        type: "POST",
+        url: "/Api/SendMessage", 
+        data: obj,
+        timeout: 5000,
+        success: function(response, jqXHR) {
+            if ($("#profile-page").is(":visible")) {
+                $("#no-connection-profile").hide();
+                $("#message-input-profile").val("");
+                $("#newMessageModal").modal("hide");
+            }
+            if ($("#chat-page").is(":visible")) { // If in the chat, get the new messages.
+                $("#no-connection-chat").hide();
+                $("#message-input-chat").empty();
+                getChat(obj.id, 2);
+            }
+            if (response == 1) {
+                let responseTime = Math.floor(Math.random() * (60000 - 3000 + 1)) + 3000;
+                setTimeout(function() {
+                    sendResponse(obj.id);
+                }, responseTime)
+            } 
+        },
+        error: function(jqXHR, textStatus) {
+            if (jqXHR.status == 0) {
+                if ($("#chat-page").is(":visible")) {
+                    $("#no-connection-chat").show();
+                    clearInterval(sendMessage);
+                    setTimeout(sendMessage, 5000);
+                }
                 if ($("#profile-page").is(":visible")) {
-                    $("#no-connection-profile").hide();
-                    $("#message-input-profile").val("");
-                    $("#newMessageModal").modal("hide");
+                    $("#no-connection-profile").show();
+                    clearInterval(sendMessage);
+                    setTimeout(sendMessage,5000);
                 }
-                if ($("#chat-page").is(":visible")) { // If in the chat, get the new messages.
-                    $("#no-connection-chat").hide();
-                    $("#message-input-chat").val("");
-                    getChat(obj.id, 2);
+            } else {
+                if ($("#chat-page").is(":visible")) {
+                    $("#no-connection-chat").show();
+                    clearInterval(sendMessage);
+                    sendMessage();
                 }
-                if (response == 1) {
-                    let responseTime = Math.floor(Math.random() * (60000 - 3000 + 1)) + 3000;
-                    setTimeout(function() {
-                        sendResponse(obj.id);
-                    }, responseTime)
-                } 
-            },
-            error: function(jqXHR, textStatus) {
-                if (jqXHR.status == 0) {
-                    if ($("#chat-page").is(":visible")) {
-                        $("#no-connection-chat").show();
-                        clearInterval(sendMessage);
-                        setTimeout(sendMessage, 5000);
-                    }
-                    if ($("#profile-page").is(":visible")) {
-                        $("#no-connection-profile").show();
-                        clearInterval(sendMessage);
-                        setTimeout(sendMessage,5000);
-                    }
-                } else {
-                    if ($("#chat-page").is(":visible")) {
-                        $("#no-connection-chat").show();
-                        clearInterval(sendMessage);
-                        sendMessage();
-                    }
-                    if ($("#profile-page").is(":visible")) {
-                        $("#no-connection-profile").show();
-                        clearInterval(sendMessage);
-                        sendMessage();
-                    }
+                if ($("#profile-page").is(":visible")) {
+                    $("#no-connection-profile").show();
+                    clearInterval(sendMessage);
+                    sendMessage();
                 }
             }
-        });
-    }
+        }
+    });
 }
 
 function sendResponse(id) {
@@ -95,6 +107,26 @@ function sendResponse(id) {
                 let id = $("#chat-id").val();
                 getChat(id, 2);
             }
+        }
+    });
+}
+
+function uploadImage(obj) {
+    let imgObj = new FormData();
+    imgObj.append("image", $("#img-input-chat")[0].files[0]);
+    $.ajax({
+        type: "POST",
+        url: "/Api/UploadImage", 
+        enctype: 'multipart/form-data',
+        data: imgObj,
+        processData: false,  
+        contentType: false, 
+        success: function(response) {
+            obj.PicturePath = response;
+            sendMessage(obj);
+        },
+        error: function(jqXHR, textStatus) {
+            //
         }
     });
 }

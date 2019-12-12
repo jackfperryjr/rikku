@@ -1,7 +1,5 @@
 function getProfile(id) {
-    clearInterval(getMailbox);
-    clearInterval(getChat);
-    clearInterval(getProfile);
+    clearUtility();
     $("#profile-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#ffffff").css("pointer-events", "auto");
     $("#profile-container").empty();
@@ -89,9 +87,7 @@ function getProfile(id) {
 }
 
 function getAdmin(x) {
-    clearInterval(getMailbox);
-    clearInterval(getChat);
-    clearInterval(getAdmin);
+    clearUtility();
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-users-cog").addClass("active");
     $("#admin-page").show().siblings().hide();
@@ -171,10 +167,7 @@ function getAdmin(x) {
 }
 
 function getUsers(x) { // Gets list of all registered users.
-    clearInterval(getMailbox);
-    clearTimeout(getMailbox);
-    clearInterval(getChat);
-    clearInterval(getUsers);
+    clearUtility();
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-home").addClass("active");
     $("#home-page").show().siblings().hide();
@@ -256,7 +249,7 @@ function getUsers(x) { // Gets list of all registered users.
 }
 
 function getMailbox(x) { // Gets list of messages from users.
-    clearInterval(getMailbox);
+    clearUtility();
     $("#message-container").empty();
     $("#chat-picture").empty();
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
@@ -274,33 +267,52 @@ function getMailbox(x) { // Gets list of messages from users.
         timeout: 5000,
         success: function(response) {
             let container = "";
-            let color = "#000000!important";
             for (i = 0; i < response.length; i++) { // Maps response items into containers for display.
-                if (response[i]["messageReadFlg"] == 0) { // Changes the background color for unread messages.
-                    color = "#212121!important";
-                } else {
-                    color = "#000000!important";
-                }
                 let id = response[i]["id"];
-                container += '<div class="row" style="margin:0 0 20px 0;background-color:'+color+';border-radius:40px;padding:5px;">';
-                container += '<a onclick=getChat("'+id+'") style="display:inherit;background-color:'+color+';border-radius:50%;">';
-                container += '<div class="col-xs-4" style="background-color:'+color+';margin:0 20px 0 0;padding-left:10px;border-radius:50%;">';
+                container += '<a onclick=getChat("'+id+'") style="height:75px;display:inherit;margin:0 auto;border-bottom:2px solid #121212;border-left-width: 0;border-right-width: 0;border-image: linear-gradient(to right, #121212, #00b0ff) 1 stretch;">';
+                container += '<div class="row" style="margin:0 10px 20px 10px;border-radius:40px;padding:5px;">';
+                container += '<div class="col-xs-4" style="margin:0;border-radius:50%;">';
                 if (response[i]["messageReadFlg"] == 0) { // Adds color gradient around user image of unread messages.
-                    container += '<div style="position:relative;border-radius:50%;height:55px;width:55px;background:linear-gradient(40deg,#4a148c,#098cff)!important;">';
-                    container += '<img src="'+response[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
+                    container += '<div style="position:relative;border-radius:50%;height:65px;width:65px;background:linear-gradient(40deg,#4a148c,#098cff)!important;">';
+                    container += '<img src="'+response[i]["picture"]+'" style="border-radius:50%;width:60px;height:60px;margin:auto;position:absolute;top:-50%;right:-50%;bottom:-50%;left:-50%;">';
                     container += '</div>';
                 } else {
-                    container += '<img src="'+response[i]["picture"]+'" style="border-radius:50%;width:50px;height:50px;">';
+                    container += '<img src="'+response[i]["picture"]+'" style="border-radius:50%;width:60px;height:60px;">';
                 }       
                 container += '</div>';
-                container += '<div class="col-xs-6" style="background-color:'+color+';margin:0;padding-top:5px;padding-right:100px;text-align:left;">';
-                container += '<span style="font-size: 14px;background-color:'+color+';">'+response[i]["userName"]+'</span><br/>';
+                container += '<div class="col-xs-4" style="margin:0 0 0 50px;padding-top:5px;">';
+                if (response[i]["messageReadFlg"] == 0) { // Changes the font weight.
+                    container += '<span class="text-left" style="font-size: 16px;font-weight:bolder;">'+response[i]["userName"]+'</span><br/>';
+                } else {
+                    container += '<span class="text-left" style="font-size: 16px;">'+response[i]["userName"]+'</span><br/>';
+                }
+                container += '</div>';
+                container += '<div class="col-xs-4" style="margin:0 0 0 auto;padding-top:5px;">';
                 let date = response[i]["createDate"];
                 date = formatDate(date);
-                container += '<span style="font-size: 12px;background-color:'+color+';">'+date+'</span>';
+                let today = new Date();
+                today = formatDate(today);
+                
+                if (date.split(" ")[0] === today.split(" ")[0]) {
+                    date = "Today";
+                } 
+
+                let yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                yesterday = formatDate(yesterday);
+
+                if (date.split(" ")[0] === yesterday.split(" ")[0]) {
+                    date = "Yesterday";
+                }
+                
+                if (response[i]["messageReadFlg"] == 0) { // Changes the font weight.
+                    container += '<span style="font-size: 14spx;font-weight:bolder;">'+date+'</span>';
+                } else {
+                    container += '<span style="font-size: 14spx;">'+date+'</span>';
+                }
+                container += '</div>';
                 container += '</div>';
                 container += '</a>';
-                container += '</div>';
             }
             $("#spinner").hide();
             $("#no-connection").hide();
@@ -317,7 +329,7 @@ function getMailbox(x) { // Gets list of messages from users.
 
 function getChat(id, x) { // Gets list of chat messages between two users.
     //getMessageCount();
-    clearInterval(getChat);
+    clearUtility();
     $("#chat-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $("#nav-back-btn").click(function() {
@@ -356,12 +368,21 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                 let loved = response[i]["isLoved"];
                 let laughed = response[i]["isLaughed"];
                 let saddened = response[i]["isSaddened"];
+                let picture = response[i]["picturePath"];
+                let content = response[i]["content"];
 
                 if (senderId == userId) {
                     container += '<div class="row message-container-row">';
                     container += '<div class="col-sm-12" style="margin:0;padding:0;">';
-                    container += '<img style="float:right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><div class="float-right bg-primary text-white" style="position:relative;background-color:#263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
+                    container += '<img style="float:right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><div class="float-right bg-primary text-white" style="position:relative;background-color:#263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">';
                     
+                    if (picture !== null) {
+                        container += '<img style="height:200px;width:auto;border-radius:5px;" src='+picture+'>';
+                    }
+                    if (content !== null) {
+                        container += content;
+                    }
+                    container += '</div>';
                     if (liked === 1) { // Liked.
                         container += '<i class="fas fa-thumbs-up message-reaction-liked-left" aria-hidden="true"></i>';
                     }
@@ -391,8 +412,15 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                     container += '<div class="row message-container-row">';
                     container += '<div class="col-sm-12" style="margin:0;padding:0;">';
 
-                    container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+id+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left bg-success text-white" style="position:relative;border:2px solid #263238!important;background-color:#000000!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">'+response[i]["content"]+'';
-
+                    container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+id+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left text-white" style="position:relative;border:2px solid #263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">';
+                    
+                    if (picture !== null) {
+                        container += '<img style="height:200px;width:auto;border-radius:5px;" src='+picture+'>';
+                    }
+                    if (content !== null) {
+                        container += content;
+                    }
+                    container += '</div>';
                     // Container to display message reaction options.
                     container += '<div id="reaction'+messageId+'" class="message-reaction-container">';
                     container += '<i id="like'+messageId+'" class="fas fa-thumbs-up message-reaction-like" aria-hidden="true"></i>';
@@ -437,19 +465,24 @@ function getChat(id, x) { // Gets list of chat messages between two users.
             if (x && x == 2) {
                 messageScroll();
             }
+            $("#img-input-chat").off().on("change", function(e) { // Drops in a preview of user image before saving.
+                addImage(e);
+            }); 
             $(".message-input-chat").focus(function() { // Hides navigation when text input is focused.
                 $(".footer-nav").hide();
+                $("#chat-camera").hide();
                 $("#send-button").addClass("move-bottom");
                 $(this).height((this.scrollHeight - 7) + "px");
             });
             $(".message-input-chat").blur(function() { // Shows navigation when text input is no longer focused.
                 $(".footer-nav").show();
+                $("#chat-camera").show();
                 $("#send-button").removeClass("move-bottom");
                 $(this).height(30);
                 $(".message-input-chat").scrollTop($(".message-input-chat")[0].scrollHeight);
             });
             $("#send-button").off("mousedown").mousedown(function() {
-                sendMessage();
+                prepareMessage();
             });
         },
         error: function(jqXHR, textStatus) {
@@ -478,7 +511,7 @@ function getMessageCount() { // Gets a count of unread messages.
                 }
                 if ($("#chat-page").is(":visible")) { // If in the chat, get the new messages.
                     let id = $("#chat-id").val();
-                    getChat(id, 2);
+                    getChat(id, 1)
                 }
             } else {
                 $("#message-count").empty();
@@ -513,9 +546,7 @@ function isFriend(id) { // Check if user is in friend list.
 }
 
 function getFriends(x) { // Gets a list of users in friend list.
-    clearInterval(getMailbox);
-    clearInterval(getChat);
-    clearInterval(getFriends);
+    clearUtility();
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-users").addClass("active");
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
@@ -566,9 +597,7 @@ function getFriends(x) { // Gets a list of users in friend list.
 }
 
 function getUser(x) {
-    clearInterval(getMailbox);
-    clearInterval(getChat);
-    clearInterval(getUser);
+    clearUtility();
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users").removeClass("active");
     $("#fa-user").addClass("active");
     $("#user-container").empty();
@@ -634,9 +663,9 @@ function getUser(x) {
             container += '<input id="user-firstname" value="'+response["firstName"]+'" class="form-control" style="border-radius:25px;width: 45%; margin-right: 10%;" placeholder="First..." />';
 
             if (response["lastName"] != null) {
-                container += '<input id="user-lastname" value="'+response["lastName"]+'" class="form-control" style="border-radius:25px;width: 45%;" placeholder="Last..." />';
+                container += '<input id="user-lastname" value="'+response["lastName"]+'" class="form-control" style="border-radius:25px;width: 45%;" />';
             } else {
-                container += '<input id="user-lastname" value="" class="form-control" style="border-radius:25px;width: 45%;" placeholder="Last name..." />';
+                container += '<input id="user-lastname" value="" class="form-control" style="border-radius:25px;width: 45%;" placeholder="Last name" />';
             }
             
             container += '</div>';
@@ -648,21 +677,38 @@ function getUser(x) {
             container += '</div>';
             container += '</div>';
             container += '<div class="form-group">';
-            container += '<input id="profile-city" value="'+response["city"]+'" class="form-control" placeholder="City..." style="border-radius:25px;" />';
+            if (response["city"] != null) {
+                container += '<input id="user-city" value="'+response["city"]+'" class="form-control" style="border-radius:25px;" />';
+            } else {
+                container += '<input id="user-city" class="form-control" placeholder="City" style="border-radius:25px;" />';
+            }
             container += '</div>';
             container += '<div class="form-group">';
-            container += '<input id="profile-state" value="'+response["state"]+'" class="form-control" placeholder="State..." style="border-radius:25px;" />';
+            if (response["state"] != null) {
+                container += '<input id="user-state" value="'+response["state"]+'" class="form-control" style="border-radius:25px;" />';
+            } else {
+                container += '<input id="user-state" class="form-control" placeholder="State" style="border-radius:25px;" />';
+            }
             container += '</div>';
             container += '<div class="form-group">';
             let date = response["birthDate"];
             date = formatDate(date, 1);
-            container += '<input type="date" value="'+date+'" class="form-control" style="border-radius:25px;" />';
+            
+            if (response["birthDate"].toString() != "0001-01-01T00:00:00") {
+                container += '<input id="user-birthdate" type="date" value="'+date+'" class="form-control" style="border-radius:25px;" />';
+            } else {
+                container += '<input id="user-birthdate" onfocus=(this.type="date") onblur=if(this.value==""){this.type="text"} class="form-control" style="border-radius:25px; "placeholder="Birthday" />';
+            }
             container += '</div>';
             container += '<div class="form-group">';
-            container += '<input value="'+response["age"]+'" class="form-control" placeholder="Age..." style="border-radius:25px;" />';
+            if (response["age"] != null) {
+                container += '<input id="user-age" value="'+response["age"]+'" class="form-control" style="border-radius:25px;" />';
+            } else {
+                container += '<input id="user-age" class="form-control" placeholder="Age" style="border-radius:25px;" />';
+            }
             container += '</div>';
             container += '<div class="form-group">';
-            container += '<textarea id="profile-text" class="form-control" style="height:92px!important;resize: none;border-radius:25px;" placeholder="Write something about yourself! Up to 255 characters..."></textarea>';
+            container += '<textarea id="user-profile" class="form-control" style="height:92px!important;resize: none;border-radius:25px;" placeholder="Write something about yourself! Up to 255 characters..."></textarea>';
             container += '</div>';
             container += '</div>';
             container += '</div>';
@@ -685,16 +731,16 @@ function getUser(x) {
             // $("#no-connection").hide();
             $("#user-container").empty();
             $("#user-container").html(container);
-            $("#img-input-user").change(function(event) { // Drops in a preview of user image before saving.
-                let imgPath = URL.createObjectURL(event.target.files[0]);
+            $("#img-input-user").change(function(e) { // Drops in a preview of user image before saving.
+                let imgPath = URL.createObjectURL(e.target.files[0]);
                 $("#img-output-user").fadeIn("fast").attr('src', imgPath); 
             }); 
-            $("#img-input-wallpaper").change(function(event) { // Drops in a preview of user wallpaper before saving.
-                let imgPath = URL.createObjectURL(event.target.files[0]);
+            $("#img-input-wallpaper").change(function(e) { // Drops in a preview of user wallpaper before saving.
+                let imgPath = URL.createObjectURL(e.target.files[0]);
                 $("#img-output-wallpaper").fadeIn("fast").attr('src', imgPath); 
             }); 
             $("#user-page").show().siblings().hide();
-            $("#profile-text").append(response["profile"]);
+            $("#user-profile").append(response["profile"]);
         },
         error: function(jqXHR, textStatus) {
             $("#spinner").show();

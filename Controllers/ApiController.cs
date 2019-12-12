@@ -450,7 +450,8 @@ namespace Rikku.Controllers
                                 IsDisliked = message.IsDisliked,
                                 IsLoved = message.IsLoved,
                                 IsLaughed = message.IsLaughed,
-                                IsSaddened = message.IsSaddened
+                                IsSaddened = message.IsSaddened,
+                                PicturePath = message.PicturePath
                             }).Select(m => new MessageModel()  
                             {  
                                 MessageId = m.MessageId,
@@ -463,7 +464,8 @@ namespace Rikku.Controllers
                                 IsDisliked = m.IsDisliked,
                                 IsLoved = m.IsLoved,
                                 IsLaughed = m.IsLaughed,
-                                IsSaddened = m.IsSaddened
+                                IsSaddened = m.IsSaddened,
+                                PicturePath = m.PicturePath
                             })
                             .Where(c => (c.ReceiverId == id && c.SenderId == userId.ToString()) ||
                                         (c.ReceiverId == userId.ToString() && c.SenderId == id)
@@ -480,7 +482,7 @@ namespace Rikku.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendMessage(string id, string content, MessageModel message)
+        public async Task<IActionResult> SendMessage(string id, string content, string picturePath, MessageModel message)
         {
             var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
             var friend = await _userManager.FindByIdAsync(id);
@@ -489,6 +491,7 @@ namespace Rikku.Controllers
             message.Content = content;
             message.SenderId = userId;
             message.UserId = userId;
+            message.PicturePath = picturePath;
             var date = DateTime.Now;
             message.CreateDate = date.ToLocalTime();
 
@@ -542,12 +545,57 @@ namespace Rikku.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> UploadImage(string image, PictureModel picture)
+        {
+            var userId =  User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var account = _configuration["StorageConfig:AccountName"];
+            var key = _configuration["StorageConfig:AccountKey"];
+            var storageCredentials = new StorageCredentials(account, key);
+            var cloudStorageAccount = new CloudStorageAccount(storageCredentials, true);
+            var cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
+            var container = cloudBlobClient.GetContainerReference("images");
+            await container.CreateIfNotExistsAsync();
+
+            var files = HttpContext.Request.Form.Files;
+
+            picture.UserId = userId;
+
+            _context.Pictures.Add(picture);
+            _context.SaveChanges();
+            
+            if (files.Count != 0) 
+            {
+                for (var i = 0; i < files.Count; i++)
+                {
+                    if (files[i].Name == "image")
+                    {
+                        var newBlob = container.GetBlockBlobReference(picture.PictureId + ".png");
+
+                        using (var filestream = new MemoryStream())
+                        {   
+                            files[i].CopyTo(filestream);
+                            filestream.Position = 0;
+                            await newBlob.UploadFromStreamAsync(filestream);
+                        }
+                        picture.Path = "https://rikku.blob.core.windows.net/images/" + picture.PictureId + ".png";
+                        _context.SaveChanges();
+                    }
+                }
+            }
+
+            return Ok(picture.Path);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> UpdateUser(string firstName, 
                                                     string lastName, 
                                                     string city, 
                                                     string state,  
                                                     string profile,
                                                     string email,
+                                                    string birthDate,
+                                                    string age,
                                                     string picture,
                                                     string wallpaper)
         {
@@ -580,10 +628,15 @@ namespace Rikku.Controllers
                 user.State = state;
             }
 
-            // if (Input.Age != user.Age)
-            // {
-            //     user.Age = Input.Age;
-            // }
+            if (Convert.ToDateTime(birthDate) != user.BirthDate)
+            {
+                user.BirthDate = Convert.ToDateTime(birthDate);
+            }
+
+            if (age != user.Age)
+            {
+                user.Age = age;
+            }
 
             if (profile != user.Profile)
             {

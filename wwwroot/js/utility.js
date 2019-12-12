@@ -16,6 +16,13 @@ function setGoBack(x, id) {
     }
 }
 
+function clearUtility() {
+    $("#newMessageModal").modal("hide");
+    clearInterval(getMailbox);
+    clearInterval(getChat);
+    clearInterval(getProfile);
+}
+
 function getHome() {
     location ="../../";
     $("#fa-home, #fa-user, #fa-users-cog, #fa-comment, #fa-users, #fa-info").removeClass("active");
@@ -68,4 +75,11 @@ function formatDate(d, x) {
     } else {
         return `${month}.${dayOfMonth}.${year} ${hh}:${minutes}${dd}`;
     }
+}
+
+function addImage(e) {
+    let imgPath = URL.createObjectURL(e.target.files[0]);
+    let img = '<form id="chat-image" enctype="multipart/form-data" method="post" name="form"><img id="img-output-chat" style="height:100px;width:auto;" src='+imgPath+'></form>';
+    $("#message-input-chat").append(img);
+    $("#message-input-chat").css("height","210px");
 }

@@ -26,14 +26,14 @@
     </div>
 
     <div id="mail-page" style="display:none;">
-        <h3 class="ffapp" style="position:fixed;left:0;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);color:#ffffff!important;">messages</h3>
+        <h3 class="ffapp" style="position:fixed;left:0;padding:0 0 5px 40%;width:100vw;color:#ffffff!important;">messages</h3>
         <div class="container" style="padding:40px 0 0 0;">
             <div id="mailbox" class="container" style="padding:0;"></div>
         </div>
     </div>
 
     <div id="friend-page" style="display:none;">
-        <h3 class="ffapp" style="position:fixed;left:0;padding:0 0 5px 40%;width:100vw;background-color: rgba(0,0,0,.9);color:#ffffff!important;">friends</h3>
+        <h3 class="ffapp" style="position:fixed;left:0;padding:0 0 5px 40%;width:100vw;color:#ffffff!important;">friends</h3>
         <div class="container" style="padding-top:40px;">
             <div id="friend-container" class="container"></div>
         </div>
@@ -41,14 +41,19 @@
 
     <div id="chat-page" style="display:none;">
         <div class="row">
-            <div id="chat-picture" class="col-md-2" style="position:fixed;top:60px;text-align:left;background-color: rgba(0,0,0,.9);z-index: 100;">
+            <div id="chat-picture" class="col-md-2" style="position:fixed;top:60px;text-align:left;z-index: 100;">
             </div>
         </div>
         <div id="message-container" class="message-container"></div>
         <div class="row form-group">
             <div id="no-connection-chat" style="display:none;font-size: 10px; position: absolute; bottom: 125px; left:10px;color: rgb(0, 176, 255) !important;">No connection. Retrying...</div>
             <div class="col-sm-12" style="display:inline-block;position:absolute;bottom:70px;">
-                <textarea id="message-input-chat" name="content" class="form-group input-group message-input-chat" placeholder="Type message here..." style="border-radius:25px!important;" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' required></textarea>
+                <label>
+                <i id="chat-camera" class="fa fa-camera" style="position:fixed;bottom:93px;left:0;width:15vw;color:#00b0ff;"></i>
+                <input value="" id="img-input-chat" type="file" accept="image/*" name="picture" style="display:none;" multiple=""/>
+                </label>
+                <div id="message-input-chat" name="content" contentEditable="true" class="form-group input-group message-input-chat" placeholder="Type message here..." style="border-radius:25px!important;" oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' required>
+                </div>
                 <button id="send-button" class="input-group-button btn btn-link">Send</button>
             </div>
         </div>
