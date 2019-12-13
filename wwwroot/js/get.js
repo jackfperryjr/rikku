@@ -415,7 +415,7 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                     container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+id+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left text-white" style="position:relative;border:2px solid #263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">';
                     
                     if (picture !== null) {
-                        container += '<img style="height:200px;width:auto;border-radius:5px;" src='+picture+'>';
+                        container += '<img style="height:200px;width:auto;border-radius:5px;" src='+picture+'><br/>';
                     }
                     if (content !== null) {
                         container += content;
@@ -502,19 +502,18 @@ function getMessageCount() { // Gets a count of unread messages.
             let count = $("#message-count").val();
             if (response > 0) {
                 if (response > count) {
-                    $("#message-count").empty();
                     $("#message-count").val(response);
                     $("#message-count").show();
-                }
-                if ($("#mail-page").is(":visible")) { // If in the mailbox, get the new messages.
-                    getMailbox(1);
-                }
-                if ($("#chat-page").is(":visible")) { // If in the chat, get the new messages.
-                    let id = $("#chat-id").val();
-                    getChat(id, 1)
+
+                    if ($("#mail-page").is(":visible")) { // If in the mailbox, get the new messages.
+                        getMailbox(1);
+                    }
+                    if ($("#chat-page").is(":visible")) { // If in the chat, get the new messages.
+                        let id = $("#chat-id").val();
+                        getChat(id, 1)
+                    }
                 }
             } else {
-                $("#message-count").empty();
                 $("#message-count").hide();
             }
         },

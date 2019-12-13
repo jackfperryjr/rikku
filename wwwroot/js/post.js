@@ -26,6 +26,7 @@ function prepareMessage() {
         obj.content = $("#message-input-chat").text();
         obj.content = obj.content.trim();
         if ($("#message-input-chat").find("img").length) {
+            $(".message-input-chat").height(30);
             uploadImage(obj);
         } else {
             $(".message-input-chat").height(30);
@@ -114,6 +115,7 @@ function sendResponse(id) {
 function uploadImage(obj) {
     let imgObj = new FormData();
     imgObj.append("image", $("#img-input-chat")[0].files[0]);
+    $("#img-input-chat").empty();
     $.ajax({
         type: "POST",
         url: "/Api/UploadImage", 

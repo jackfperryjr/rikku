@@ -78,8 +78,9 @@ function formatDate(d, x) {
 }
 
 function addImage(e) {
+    $("#chat-image").remove();
     let imgPath = URL.createObjectURL(e.target.files[0]);
-    let img = '<form id="chat-image" enctype="multipart/form-data" method="post" name="form"><img id="img-output-chat" style="height:100px;width:auto;" src='+imgPath+'></form>';
-    $("#message-input-chat").append(img);
-    $("#message-input-chat").css("height","210px");
+    let img = '<form id="chat-image" enctype="multipart/form-data" method="post" name="form"><img id="img-output-chat" style="margin:5px 5px 10px 5px;height:100px;width:auto;display:block;" src='+imgPath+'></form>';
+    $("#message-input-chat").prepend(img);
+    $("#message-input-chat").append("").focus();
 }

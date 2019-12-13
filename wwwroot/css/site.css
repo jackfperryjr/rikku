@@ -578,7 +578,7 @@ body {
   max-height:80px!important;
   border-radius: 25px;
   border: 1px solid #455a64;
-  padding: 7px 70px 0 7px;
+  padding: 10px 70px 0 10px;
 }
 .message-input-chat:focus {
   width:100vw;
@@ -587,8 +587,8 @@ body {
   border: 1px solid #455a64!important;
   min-height:40px!important;
   height:40px;
-  max-height:80px!important;
-  padding: 5px 70px 0 7px;
+  max-height:135px!important;
+  padding: 10px 70px 0 10px;
 }
 .message-input-profile {
   position:absolute;
