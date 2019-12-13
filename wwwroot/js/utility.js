@@ -82,5 +82,5 @@ function addImage(e) {
     let imgPath = URL.createObjectURL(e.target.files[0]);
     let img = '<form id="chat-image" enctype="multipart/form-data" method="post" name="form"><img id="img-output-chat" style="margin:5px 5px 10px 5px;height:100px;width:auto;display:block;" src='+imgPath+'></form>';
     $("#message-input-chat").prepend(img);
-    $("#message-input-chat").append("").focus();
+    $("#message-input-chat").focus();
 }

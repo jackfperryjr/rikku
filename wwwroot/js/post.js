@@ -27,6 +27,7 @@ function prepareMessage() {
         obj.content = obj.content.trim();
         if ($("#message-input-chat").find("img").length) {
             $(".message-input-chat").height(30);
+            $("#chat-image").css("z-index", "-1000");
             uploadImage(obj);
         } else {
             $(".message-input-chat").height(30);
