@@ -46,6 +46,7 @@ function prepareMessage() {
 }
 
 function sendMessage(obj) {
+    $("#send-button").off();
     $.ajax({
         type: "POST",
         url: "/Api/SendMessage", 

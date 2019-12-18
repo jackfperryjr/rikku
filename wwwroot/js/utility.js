@@ -83,4 +83,9 @@ function addImage(e) {
     let img = '<form id="chat-image" enctype="multipart/form-data" method="post" name="form"><img id="img-output-chat" style="margin:5px 5px 10px 5px;height:100px;width:auto;display:block;" src='+imgPath+'></form>';
     $("#message-input-chat").prepend(img);
     $("#message-input-chat").focus();
+
+    let right = $.Event("keydown", { keyCode: 39 });
+    setTimeout(function() {
+        $(document).trigger(right);
+    }, 2000); // Arbitrary. Just testing it out.
 }

@@ -330,6 +330,7 @@ function getMailbox(x) { // Gets list of messages from users.
 function getChat(id, x) { // Gets list of chat messages between two users.
     //getMessageCount();
     clearUtility();
+    $("#message-input-chat").empty();
     $("#chat-page").show().siblings().hide();
     $("#nav-back-btn").css("color", "#000000").css("pointer-events", "none");
     $("#nav-back-btn").click(function() {
@@ -377,10 +378,10 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                     container += '<img style="float:right;border-radius: 50%; height: 30px; width: 30px;margin-left:5px;" src="https://rikku.blob.core.windows.net/images/User-'+userId+'.png"><div class="float-right bg-primary text-white" style="position:relative;background-color:#263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">';
                     
                     if (picture !== null) {
-                        container += '<img style="height:200px;width:auto;border-radius:5px;" src='+picture+'>';
+                        container += '<img async="on" style="height:200px;width:auto;border-radius:5px;" src='+picture+'>';
                     }
                     if (content !== null) {
-                        container += content;
+                        container += '<p class="text-right" style="margin:0;">'+content+'</p>';
                     }
                     container += '</div>';
                     if (liked === 1) { // Liked.
@@ -415,10 +416,10 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                     container += '<img style="float: left;border-radius: 50%; height: 30px; width: 30px;margin-right:5px;" src="https://rikku.blob.core.windows.net/images/User-'+id+'.png"><div onclick=addMessageReaction('+messageId+') class="response float-left text-white" style="position:relative;border:2px solid #263238!important;font-size:16px;width: auto;border-radius:25px;padding:7px 15px;">';
                     
                     if (picture !== null) {
-                        container += '<img style="height:200px;width:auto;border-radius:5px;" src='+picture+'><br/>';
+                        container += '<img async="on" style="height:200px;width:auto;border-radius:5px;" src='+picture+'>';
                     }
                     if (content !== null) {
-                        container += content;
+                        container += '<p style="margin:0;">'+content+'</p>';
                     }
                     container += '</div>';
                     // Container to display message reaction options.

@@ -2,8 +2,8 @@
     "name": "ffriendster",
     "short_name": "ffriendster",
     "description": "ffriendster",
-    "background_color": "#000000",
-    "theme_color": "#000000",
+    "background_color": "#121212",
+    "theme_color": "#121212",
     "icons": [
       {
         "src": "/icons/ffapp/ff-square-192.png",
