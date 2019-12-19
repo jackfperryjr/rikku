@@ -53,6 +53,7 @@ function sendMessage(obj) {
         data: obj,
         timeout: 5000,
         success: function(response, jqXHR) {
+            $("#no-connection-chat").hide();
             if ($("#profile-page").is(":visible")) {
                 $("#no-connection-profile").hide();
                 $("#message-input-profile").val("");

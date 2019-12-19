@@ -458,7 +458,7 @@ function getChat(id, x) { // Gets list of chat messages between two users.
                 }
             }
             $("#spinner").hide();
-            $("#no-connection").hide();
+            $("#no-connection-chat").hide();
             $("#message-container").html(container);
             if (!x) {
                 messageScroll();
